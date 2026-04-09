@@ -1,0 +1,330 @@
+"use client";
+
+import { useRef } from "react";
+import { motion, useInView } from "framer-motion";
+
+const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
+
+// ── BAMBOO LEAF DATA ──────────────────────────────────────────────────────────
+// Fewer leaves, slow and deliberate — bamboo falls calmly, not like petals.
+const BAMBOO_LEAVES = [
+  { id: 0, left:  6, size: 17, delay:   0, dur: 28, rot:  18, drift:  26, opacity: 0.72 },
+  { id: 1, left: 22, size: 13, delay: -10, dur: 34, rot: -22, drift: -20, opacity: 0.62 },
+  { id: 2, left: 48, size: 15, delay:  -6, dur: 30, rot:  30, drift:  32, opacity: 0.68 },
+  { id: 3, left: 70, size: 12, delay: -19, dur: 36, rot: -14, drift: -28, opacity: 0.60 },
+  { id: 4, left: 86, size: 16, delay:  -3, dur: 26, rot:  22, drift:  18, opacity: 0.65 },
+  { id: 5, left: 38, size: 11, delay: -24, dur: 32, rot: -38, drift: -24, opacity: 0.58 },
+  { id: 6, left: 58, size: 14, delay: -14, dur: 29, rot:  12, drift:  22, opacity: 0.63 },
+];
+
+const BAMBOO_CSS = `
+  /* ── ARTIST PORTRAIT ──────────────────────────────────────────────────── */
+  .artist-img-wrap {
+    overflow: hidden;
+    position: relative;
+    border-radius: 3px;
+  }
+  .artist-img-wrap img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    filter: grayscale(100%);
+    transform: scale(1.0);
+    transition:
+      filter   0.90s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.90s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .artist-img-wrap:hover img {
+    filter: grayscale(0%);
+    transform: scale(1.06);
+  }
+
+  /* ── BAMBOO LEAF KEYFRAMES ────────────────────────────────────────────── */
+  ${BAMBOO_LEAVES.map(({ id, rot, drift }) => `
+  @keyframes bamboo-leaf-${id} {
+    0%   { transform: translateY(-70px) translateX(0px) rotate(${rot}deg); opacity: 0; }
+    10%  { opacity: 1; }
+    85%  { opacity: 0.85; }
+    100% { transform: translateY(calc(100svh + 120px)) translateX(${drift}px) rotate(${rot + 200}deg); opacity: 0; }
+  }`).join("")}
+
+  /* ── RESPONSIVE ───────────────────────────────────────────────────────── */
+  @media (max-width: 860px) {
+    #artist-grid { grid-template-columns: 1fr !important; }
+    #artist-grid > *:first-child { max-width: 420px; margin: 0 auto; width: 100%; }
+  }
+`;
+
+export default function ArtistSection() {
+  const ref = useRef<HTMLElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-60px" });
+
+  return (
+    <section
+      ref={ref}
+      id="experience"
+      style={{
+        background: "#ECEAE7",
+        position: "relative",
+        overflow: "hidden",
+        padding: "clamp(64px, 9vh, 112px) clamp(24px, 7vw, 96px) clamp(72px, 10vh, 120px)",
+      }}
+    >
+      <style dangerouslySetInnerHTML={{ __html: BAMBOO_CSS }} />
+
+      {/* ── BG LAYER 1: GREYSCALE IMAGE — matches surrounding section tone ──────── */}
+      <div aria-hidden="true" style={{ position: "absolute", inset: 0, zIndex: 0 }}>
+        <img
+          src="/artist-bg.png"
+          alt=""
+          style={{
+            width: "100%", height: "100%",
+            objectFit: "cover", objectPosition: "center",
+            display: "block",
+            filter: "grayscale(100%) brightness(1.04) contrast(0.92)",
+            opacity: 0.55,
+          }}
+        />
+      </div>
+
+      {/* ── BG LAYER 2: COLOR RESTORATION — bamboo green bleeds through ──────────
+           mix-blend-mode: color applies hue+saturation from this layer onto the
+           greyscale luminosity below. Bamboo is the most saturated element so it
+           shows through as natural green while grey areas stay neutral.            */}
+      <div aria-hidden="true" style={{ position: "absolute", inset: 0, zIndex: 1 }}>
+        <img
+          src="/artist-bg.png"
+          alt=""
+          style={{
+            width: "100%", height: "100%",
+            objectFit: "cover", objectPosition: "center",
+            display: "block",
+            opacity: 0.28,
+            mixBlendMode: "color",
+          }}
+        />
+      </div>
+
+      {/* ── BG LAYER 3: SECTION BLEND WASH — ties tone to #ECEAE7 neighbours ───── */}
+      <div aria-hidden="true" style={{
+        position: "absolute", inset: 0, zIndex: 2, pointerEvents: "none",
+        background: "linear-gradient(to bottom, rgba(236,234,231,0.60) 0%, rgba(236,234,231,0.28) 30%, rgba(236,234,231,0.22) 70%, rgba(236,234,231,0.60) 100%)",
+      }} />
+
+      {/* ── BG LAYER 4: SUBTLE GOLD ACCENT — right warmth ───────────────────────── */}
+      <div aria-hidden="true" style={{
+        position: "absolute", inset: 0, zIndex: 2, pointerEvents: "none",
+        background: "radial-gradient(ellipse 55% 60% at 80% 55%, rgba(198,167,107,0.06) 0%, transparent 70%)",
+      }} />
+
+      {/* ── BAMBOO LEAVES FALLING ────────────────────────────────────────────────── */}
+      <div aria-hidden="true" style={{
+        position: "absolute", inset: 0, overflow: "hidden",
+        pointerEvents: "none", zIndex: 3,
+      }}>
+        {BAMBOO_LEAVES.map(l => (
+          <div
+            key={l.id}
+            style={{
+              position: "absolute",
+              left: `${l.left}%`,
+              top: 0,
+              animation: `bamboo-leaf-${l.id} ${l.dur}s ${l.delay}s linear infinite`,
+              willChange: "transform, opacity",
+            }}
+          >
+            <BambooLeafSVG size={l.size} opacity={l.opacity} />
+          </div>
+        ))}
+      </div>
+
+      {/* ── CONTENT ──────────────────────────────────────────────────────────────── */}
+      <div style={{ maxWidth: 1280, margin: "0 auto", position: "relative", zIndex: 4 }}>
+
+        {/* ── SECTION HEADING ─────────────────────────────────────────────────── */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.9, ease: EASE }}
+          style={{ marginBottom: "clamp(40px, 6vh, 64px)" }}
+        >
+          <p style={{
+            fontFamily: "'Inter', sans-serif",
+            fontSize: "0.62rem", fontWeight: 500,
+            letterSpacing: "0.30em", textTransform: "uppercase",
+            color: "#C6A76B", marginBottom: 8,
+          }}>
+            Meet the Artist
+          </p>
+          <h2 style={{
+            fontFamily: "'Cormorant Garamond', Georgia, serif",
+            fontSize: "clamp(2.8rem, 6vw, 5.2rem)",
+            fontWeight: 600, lineHeight: 1.0,
+            letterSpacing: "0.01em", color: "#1A1208", marginBottom: 14,
+          }}>
+            Our <em>Artist</em>
+          </h2>
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <div style={{ height: 1, width: 44, background: "linear-gradient(to right, transparent, rgba(198,167,107,0.65))" }} />
+            <div style={{ width: 4, height: 4, borderRadius: "50%", background: "#C6A76B", opacity: 0.78 }} />
+            <div style={{ height: 1, width: 44, background: "linear-gradient(to left, transparent, rgba(198,167,107,0.65))" }} />
+          </div>
+        </motion.div>
+
+        {/* ── TWO-COLUMN GRID ─────────────────────────────────────────────────── */}
+        <div
+          id="artist-grid"
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1.25fr",
+            gap: "clamp(40px, 7vw, 96px)",
+            alignItems: "stretch",
+          }}
+        >
+          {/* ── LEFT: PORTRAIT ──────────────────────────────────────────────── */}
+          <motion.div
+            initial={{ opacity: 0, x: -28 }}
+            animate={inView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 1.1, ease: EASE, delay: 0.14 }}
+            style={{ display: "flex", flexDirection: "column", height: "100%" }}
+          >
+            <div
+              className="artist-img-wrap"
+              style={{
+                flex: 1,
+                minHeight: 0,
+                boxShadow: "0 28px 72px rgba(26,18,8,0.16), 0 4px 18px rgba(26,18,8,0.08)",
+                border: "1px solid rgba(198,167,107,0.22)",
+              }}
+            >
+              <img
+                src="/oscar.jpg"
+                alt="Oscar 'Victor' Landicho — Co-Founder & Master Stylist, Shear Madness Hoboken"
+              />
+            </div>
+
+            <div style={{ marginTop: 14, paddingLeft: 2 }}>
+              <p style={{
+                fontFamily: "'Inter', sans-serif",
+                fontSize: "0.60rem", fontWeight: 500,
+                letterSpacing: "0.22em", textTransform: "uppercase",
+                color: "rgba(26,18,8,0.36)",
+              }}>
+                Co-Founder &amp; Manager · Shear Madness Hoboken
+              </p>
+            </div>
+          </motion.div>
+
+          {/* ── RIGHT: TEXT ─────────────────────────────────────────────────── */}
+          <motion.div
+            initial={{ opacity: 0, x: 28 }}
+            animate={inView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 1.1, ease: EASE, delay: 0.26 }}
+            style={{ display: "flex", flexDirection: "column", gap: "clamp(20px, 3vh, 28px)" }}
+          >
+            <div>
+              <h3 style={{
+                fontFamily: "'Cormorant Garamond', Georgia, serif",
+                fontSize: "clamp(2.0rem, 3.2vw, 3.0rem)",
+                fontWeight: 600, lineHeight: 1.1,
+                letterSpacing: "0.01em", color: "#1A1208", marginBottom: 8,
+              }}>
+                Oscar <em>"Victor"</em> Landicho
+              </h3>
+              <p style={{
+                fontFamily: "'Inter', sans-serif",
+                fontSize: "0.62rem", fontWeight: 500,
+                letterSpacing: "0.26em", textTransform: "uppercase",
+                color: "#C6A76B",
+              }}>
+                Master Stylist · Co-Founder · Manager
+              </p>
+            </div>
+
+            <div style={{ height: 1, background: "linear-gradient(to right, rgba(198,167,107,0.45), transparent)" }} />
+
+            <blockquote style={{
+              margin: 0,
+              padding: "0 0 0 clamp(16px, 2vw, 22px)",
+              borderLeft: "2px solid rgba(198,167,107,0.55)",
+            }}>
+              <p style={{
+                fontFamily: "'Cormorant Garamond', Georgia, serif",
+                fontSize: "clamp(1.2rem, 1.9vw, 1.55rem)",
+                fontWeight: 400, fontStyle: "italic",
+                lineHeight: 1.6, color: "#1A1208",
+                letterSpacing: "0.01em",
+              }}>
+                "Great style should feel effortless, personal, and quietly confident."
+              </p>
+            </blockquote>
+
+            <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+              <p style={{
+                fontFamily: "'Inter', sans-serif",
+                fontSize: "clamp(1.0rem, 1.05vw, 1.06rem)",
+                fontWeight: 400, lineHeight: 1.78,
+                color: "#111111", letterSpacing: "0.012em",
+                textShadow: "0 1px 2px rgba(255,255,255,0.4)",
+              }}>
+                Co-founding Shear Madness in 2003, Oscar "Victor" Landicho has helped shape the salon into
+                one of Hoboken's most trusted beauty destinations. As Manager and Partner, he continues to
+                serve his longstanding clientele while also welcoming new guests through personal referrals
+                and word of mouth.
+              </p>
+              <p style={{
+                fontFamily: "'Inter', sans-serif",
+                fontSize: "clamp(1.0rem, 1.05vw, 1.06rem)",
+                fontWeight: 400, lineHeight: 1.78,
+                color: "#111111", letterSpacing: "0.012em",
+                textShadow: "0 1px 2px rgba(255,255,255,0.4)",
+              }}>
+                With nearly three decades of experience — including almost two decades in Hoboken — Oscar
+                has become known for his precision, consistency, and intuitive understanding of personal
+                style. His expertise in cut and color has made him especially sought after, earning the
+                trust of both longtime clients and first-time visitors alike.
+              </p>
+            </div>
+
+            <p style={{
+              fontFamily: "'Cormorant Garamond', Georgia, serif",
+              fontSize: "clamp(1.05rem, 1.55vw, 1.3rem)",
+              fontWeight: 600, fontStyle: "italic",
+              color: "#111111", letterSpacing: "0.01em",
+              marginTop: 4,
+            }}>
+              If the lights are on, Oscar is in.
+            </p>
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ── BAMBOO LEAF SVG ───────────────────────────────────────────────────────────
+// Elongated, slightly asymmetric leaf — natural bamboo shape with center vein.
+// Color matches the bamboo in the background image: deep forest green.
+function BambooLeafSVG({ size, opacity }: { size: number; opacity: number }) {
+  const h = Math.round(size * 3.6);
+  const green = `rgba(78,108,52,${opacity})`;
+  const vein  = `rgba(52,78,32,${opacity * 0.45})`;
+  return (
+    <svg width={size} height={h} viewBox="0 0 12 44" fill="none" style={{ display: "block" }}>
+      {/* Main leaf body — tapered at both ends, wider in upper third */}
+      <path
+        d="M6,1 C8.8,2 11,8 11,16 C11,26 8.5,38 6,43 C3.5,38 1,26 1,16 C1,8 3.2,2 6,1 Z"
+        fill={green}
+      />
+      {/* Slight highlight on upper surface */}
+      <ellipse cx="7" cy="14" rx="2.2" ry="6" fill={`rgba(140,175,90,${opacity * 0.18})`} />
+      {/* Center vein */}
+      <path d="M6,2 Q5.5,22 6,42" stroke={vein} strokeWidth="0.55" fill="none" />
+      {/* Two subtle side veins */}
+      <path d="M6,10 Q9,12 10,18" stroke={vein} strokeWidth="0.30" fill="none" />
+      <path d="M6,10 Q3,12 2,18"  stroke={vein} strokeWidth="0.30" fill="none" />
+    </svg>
+  );
+}

@@ -1,0 +1,86 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap');
+
+@import "tailwindcss";
+
+:root {
+  --color-cream: #FAF6EF;
+  --color-warm-white: #FDFAF6;
+  --color-sage: #8FA68C;
+  --color-sage-light: #B8CEBB;
+  --color-gold: #C4A96A;
+  --color-gold-light: #D9C08A;
+  --color-stone: #E4DDD4;
+  --color-charcoal: #3A3832;
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
+  --font-sans: 'Inter', system-ui, sans-serif;
+  /* Navbar height — used to offset first sections so content clears the fixed bar */
+  --navbar-h: 72px;
+}
+@media (max-width: 768px) {
+  :root { --navbar-h: 66px; }
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-warm-white);
+  color: var(--color-charcoal);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+.font-serif {
+  font-family: var(--font-serif);
+}
+
+.font-sans {
+  font-family: var(--font-sans);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-cream);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-gold);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-sage);
+}
+
+/* Custom luxury cursor — pointer/mouse devices only */
+@media (pointer: fine) {
+  *,
+  a,
+  button {
+    cursor: none !important;
+  }
+}
+
+/* Smooth image loading */
+img {
+  display: block;
+}
+
+/* Selection color */
+::selection {
+  background: rgba(196, 169, 106, 0.25);
+  color: var(--color-charcoal);
+}
