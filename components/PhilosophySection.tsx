@@ -113,7 +113,7 @@ export default function PhilosophySection() {
           </motion.p>
           <motion.h2
             {...fadeUp(0.22)}
-            className="font-serif text-[#2C2A25] leading-[1.06]"
+            className="font-serif text-[#556B2F] leading-[1.06]"
             style={{ fontSize: "clamp(2.2rem, 5vw, 4.2rem)", fontWeight: 300 }}
           >
             A Philosophy of
@@ -173,7 +173,7 @@ export default function PhilosophySection() {
 
               {/* Title */}
               <h3
-                className="font-serif text-[#2C2A25]"
+                className="font-serif text-[#556B2F]"
                 style={{ fontSize: "1.18rem", fontWeight: 400, lineHeight: 1.3 }}
               >
                 {pillar.title}

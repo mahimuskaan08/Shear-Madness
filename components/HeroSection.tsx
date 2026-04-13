@@ -195,82 +195,61 @@ export default function HeroSection() {
           initial={{ opacity: 0, y: 28 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.5, ease: EASE, delay: 0.4 }}
-          style={{ position: "relative", display: "inline-block", marginTop: "8%" }}
+          style={{ display: "flex", flexDirection: "column", alignItems: "center", marginTop: "8%", gap: 0 }}
         >
-          <img
-            src="/hero-logo.png"
-            alt="Shear Madness"
+          {/* Name */}
+          <h1
             style={{
-              width: "clamp(208px, 40vw, 528px)",
-              height: "auto",
-              display: "block",
-              filter: "drop-shadow(0 2px 16px rgba(60,44,30,0.13))",
-            }}
-          />
-          <p
-            style={{
-              position: "absolute",
-              bottom: "13%",
-              left: 0,
-              right: 0,
-              textAlign: "center",
-              fontFamily: "'Bebas Neue', sans-serif",
-              fontSize: "clamp(1.0rem, 2.0vw, 1.34rem)",
-              fontWeight: 400,
-              letterSpacing: "2px",
+              fontFamily: "'Cormorant Garamond', Georgia, serif",
+              fontSize: "clamp(2.56rem, 7.2vw, 6.4rem)",
+              fontWeight: 700,
+              letterSpacing: "0.12em",
               textTransform: "uppercase",
-              color: "#2C2A28",
+              color: "#000",
+              lineHeight: 1.0,
+              textAlign: "center",
+              textShadow: "none",
+              margin: 0,
             }}
           >
-            A Salon For Men &amp; Women
-          </p>
-        </motion.div>
+            Shear<br />Madness
+          </h1>
 
-        <div
-          style={{
-            marginTop: "-50px",
-            marginBottom: "45px",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <motion.div
-            initial={{ opacity: 0, scaleX: 0 }}
-            animate={{ opacity: 1, scaleX: 1 }}
-            transition={{ duration: 1.2, ease: EASE, delay: 0.95 }}
-            className="flex items-center justify-center gap-3"
-            style={{ marginBottom: "2px" }}
-          >
+          {/* Divider */}
+          <div className="flex items-center justify-center gap-3" style={{ marginTop: 13, marginBottom: 10 }}>
             <div className="h-px w-14" style={{ background: "linear-gradient(to right, transparent, rgba(198,167,107,0.66))" }} />
             <div className="w-1.5 h-1.5 rounded-full" style={{ background: "#C6A76B", opacity: 0.76 }} />
             <div className="h-px w-14" style={{ background: "linear-gradient(to left, transparent, rgba(198,167,107,0.66))" }} />
-          </motion.div>
+          </div>
 
-          <motion.p
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.2, ease: EASE, delay: 1.1 }}
-            className="font-serif italic"
-            style={{
-              marginTop: "2px",
-              fontSize: "clamp(1.05rem, 2.5vw, 1.65rem)",
-              fontWeight: 700,
-              letterSpacing: "0.02em",
-              lineHeight: 1.2,
-              color: "#2C2A28",
-              textShadow: "0 1px 22px rgba(253,250,246,0.92)",
-            }}
-          >
+          {/* Taglines */}
+          <p style={{
+            fontFamily: "'Cormorant Garamond', Georgia, serif",
+            fontSize: "clamp(1.0rem, 2.0vw, 1.34rem)",
+            fontWeight: 600,
+            letterSpacing: "0.18em",
+            textTransform: "uppercase",
+            color: "#000",
+            textShadow: "none",
+            marginBottom: 6,
+          }}>
+            A Salon For Men &amp; Women
+          </p>
+
+          <p className="font-serif italic" style={{
+            fontSize: "clamp(1.05rem, 2.5vw, 1.55rem)",
+            fontWeight: 700,
+            letterSpacing: "0.02em",
+            color: "#000",
+            textShadow: "none",
+            marginBottom: 28,
+          }}>
             Where Style Meets Balance
-          </motion.p>
+          </p>
 
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.1, ease: EASE, delay: 1.35 }}
+          {/* Buttons */}
+          <div
             className="flex flex-col sm:flex-row items-center justify-center gap-4"
-            style={{ marginTop: "22px" }}
           >
             <a
               href="#booking"
@@ -320,8 +299,8 @@ export default function HeroSection() {
             >
               Contact Us
             </a>
-          </motion.div>
-        </div>
+          </div>
+        </motion.div>
       </motion.div>
 
       {/* ── SCROLL INDICATOR ─────────────────────────────────────────────── */}

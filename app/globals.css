@@ -28,6 +28,7 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
@@ -47,9 +48,10 @@ body {
   font-family: var(--font-sans);
 }
 
-/* Custom scrollbar */
+/* Custom scrollbar — vertical only */
 ::-webkit-scrollbar {
   width: 6px;
+  height: 0px;
 }
 
 ::-webkit-scrollbar-track {
@@ -65,15 +67,6 @@ body {
   background: var(--color-sage);
 }
 
-/* Custom luxury cursor — pointer/mouse devices only */
-@media (pointer: fine) {
-  *,
-  a,
-  button {
-    cursor: none !important;
-  }
-}
-
 /* Smooth image loading */
 img {
   display: block;
@@ -83,4 +76,13 @@ img {
 ::selection {
   background: rgba(196, 169, 106, 0.25);
   color: var(--color-charcoal);
+}
+
+/* Hide scrollbar on horizontal carousels while keeping scroll/transform functionality */
+.hide-scrollbar {
+  -ms-overflow-style: none;   /* IE / Edge */
+  scrollbar-width: none;      /* Firefox */
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;              /* Chrome / Safari / Opera */
 }

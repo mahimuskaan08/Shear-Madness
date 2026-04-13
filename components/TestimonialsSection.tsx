@@ -16,7 +16,7 @@ const testimonials = [
     location: "Jersey City, NJ",
     rating: 5,
     text: "The most peaceful salon experience I've ever had. The atmosphere is stunning, the stylists are true artists, and the results speak for themselves. I won't go anywhere else.",
-    service: "Bridal Styling",
+    service: "Updo & Styling",
   },
   {
     name: "Natalie R.",
@@ -83,7 +83,7 @@ export default function TestimonialsSection() {
             initial={{ opacity: 0, y: 24 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
-            className="font-serif text-[#3A3832] leading-[1.1]"
+            className="font-serif text-[#556B2F] leading-[1.1]"
             style={{ fontSize: "clamp(2rem, 4vw, 3.5rem)", fontWeight: 300 }}
           >
             Words from

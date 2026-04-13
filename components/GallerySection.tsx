@@ -7,7 +7,7 @@ import { useRef } from "react";
 const galleryItems = [
   { id: 1, caption: "Precision cut", aspect: "aspect-[4/5]", delay: 0 },
   { id: 2, caption: "Balayage blend", aspect: "aspect-square", delay: 0.08 },
-  { id: 3, caption: "Bridal styling", aspect: "aspect-[3/4]", delay: 0.16 },
+  { id: 3, caption: "Updo styling", aspect: "aspect-[3/4]", delay: 0.16 },
   { id: 4, caption: "Color artistry", aspect: "aspect-square", delay: 0.24 },
   { id: 5, caption: "The salon", aspect: "aspect-[4/3]", delay: 0.1 },
   { id: 6, caption: "Treatment ritual", aspect: "aspect-[3/4]", delay: 0.18 },
@@ -51,7 +51,7 @@ export default function GallerySection() {
               initial={{ opacity: 0, y: 24 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
-              className="font-serif text-[#3A3832] leading-[1.1]"
+              className="font-serif text-[#556B2F] leading-[1.1]"
               style={{ fontSize: "clamp(2rem, 4vw, 3.5rem)", fontWeight: 300 }}
             >
               The Archive

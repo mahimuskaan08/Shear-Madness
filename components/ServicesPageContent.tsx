@@ -75,17 +75,10 @@ const TREATMENTS: Service[] = [
   { name: "Brazilian Keratin Treatment",      price: "By Consultation",  descriptor: "Frizz-free smoothing for lasting silk",             imageSrc: "/services/treatments-keratin-treatment.jpg", imageAlt: "Brazilian keratin treatment",      placeholderGradient: PH.sage,  imagePosition: "center top" },
 ];
 
-const BRIDAL: Service[] = [
-  { name: "Bride's Hair Trial",   price: "$125",            descriptor: "A preview of your perfect wedding-day look",                 imageSrc: "/services/bridal-hair-trial.png",   imageAlt: "Bride's hair trial",   placeholderGradient: PH.blush },
-  { name: "Bride's Make-Up Trial", price: "$125",           descriptor: "Full bridal makeup rehearsal for flawless confidence",        imageSrc: "/services/bridal-makeup-trial.png", imageAlt: "Bride's makeup trial", placeholderGradient: PH.blush },
-  { name: "Bridal Packages",      price: "By Consultation", descriptor: "Wedding services available at your location or ours.",        imageSrc: "/services/bridal-packages.png",     imageAlt: "Bridal packages",      placeholderGradient: PH.blush, imagePosition: "center top" },
-];
-
 const CATEGORIES: CategoryData[] = [
   { id: "womens",     eyebrow: "For Her",          title: "Women's Services",  description: "Thoughtfully tailored cuts, color, and styling services designed to enhance your natural beauty with precision and artistry.", note: "Color services include Toner/Glaze & Blowout ($95 value)", services: WOMENS,     bg: "transparent", accentBg: "transparent" },
   { id: "mens",       eyebrow: "For Him",          title: "Men's Services",    description: "Clean, polished grooming and color services crafted with comfort, detail, and modern style in mind.",                           services: MENS,       bg: "transparent", accentBg: "transparent" },
   { id: "treatments", eyebrow: "Restore & Refine", title: "Hair Treatments",   description: "Restorative treatments designed to nourish, strengthen, and refine the hair from root to finish.",                             services: TREATMENTS, bg: "transparent", accentBg: "transparent" },
-  { id: "bridal",     eyebrow: "Your Special Day", title: "Bridal Services",   description: "Beautifully curated bridal styling and makeup services for your most memorable day.",                                          services: BRIDAL,     bg: "transparent", accentBg: "transparent" },
 ];
 
 const NOTES = [
@@ -102,6 +95,7 @@ const NOTES = [
 const BRANDS = [
   {
     name: "Wella Professionals",
+    src: "/logos/wella.png",
     sub: "Since 1880",
     font: "'Cormorant Garamond', Georgia, serif",
     weight: 300,
@@ -111,6 +105,7 @@ const BRANDS = [
   },
   {
     name: "Sebastian",
+    src: "/logos/sebastian.png",
     sub: "Professional",
     font: "'Inter', sans-serif",
     weight: 200,
@@ -120,6 +115,7 @@ const BRANDS = [
   },
   {
     name: "Nioxin",
+    src: "/logos/nioxin.png",
     sub: "Scalp + Hair",
     font: "'Inter', sans-serif",
     weight: 600,
@@ -129,6 +125,7 @@ const BRANDS = [
   },
   {
     name: "Tea Tree",
+    src: "/logos/tea-tree.png",
     sub: "Special",
     font: "'Cormorant Garamond', Georgia, serif",
     weight: 500,
@@ -138,6 +135,7 @@ const BRANDS = [
   },
   {
     name: "Kevin.Murphy",
+    src: "/logos/kevin-murphy.png",
     sub: "Sustainable Beauty",
     font: "'Inter', sans-serif",
     weight: 300,
@@ -147,6 +145,7 @@ const BRANDS = [
   },
   {
     name: "d:fi",
+    src: "/logos/dfi.png",
     sub: "Hair Care",
     font: "'Cormorant Garamond', Georgia, serif",
     weight: 400,
@@ -156,6 +155,7 @@ const BRANDS = [
   },
   {
     name: "Marcia Teixeira",
+    src: "/logos/marcia.png",
     sub: "Brazilian Keratin",
     font: "'Cormorant Garamond', Georgia, serif",
     weight: 300,
@@ -425,7 +425,7 @@ function ServiceCard({ svc, catId }: { svc: Service; catId: string }) {
 
       {/* ── BODY ──────────────────────────────────────────────────────── */}
       <div style={{ padding:"clamp(14px,1.8vh,20px) clamp(16px,1.6vw,22px)", display:"flex", flexDirection:"column", gap:6 }}>
-        <h3 style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"clamp(1.05rem,1.4vw,1.25rem)", fontWeight:600, lineHeight:1.2, color:"#1A1208", letterSpacing:"0.01em" }}>
+        <h3 style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"clamp(1.05rem,1.4vw,1.25rem)", fontWeight:600, lineHeight:1.2, color:"#556B2F", letterSpacing:"0.01em" }}>
           {svc.name}
         </h3>
         {svc.descriptor && (
@@ -481,7 +481,7 @@ function CategorySection({ cat }: { cat: CategoryData }) {
               {cat.eyebrow}
             </p>
             <div>
-              <h2 style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"clamp(2.2rem,4vw,3.4rem)", fontWeight:600, lineHeight:1.1, letterSpacing:"0.01em", color:"#0A0A0A", marginBottom:14 }}>
+              <h2 style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"clamp(2.2rem,4vw,3.4rem)", fontWeight:600, lineHeight:1.1, letterSpacing:"0.01em", color:"#556B2F", marginBottom:14 }}>
                 {cat.title}
               </h2>
               <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:14 }}>
@@ -529,7 +529,7 @@ function NotesSection() {
           <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"0.58rem", fontWeight:500, letterSpacing:"0.34em", textTransform:"uppercase", color:"#C6A76B", marginBottom:6 }}>
             Good to Know
           </p>
-          <h2 style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"clamp(1.4rem,2.2vw,2.0rem)", fontWeight:600, color:"#0A0A0A", letterSpacing:"0.01em" }}>
+          <h2 style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"clamp(1.4rem,2.2vw,2.0rem)", fontWeight:600, color:"#556B2F", letterSpacing:"0.01em" }}>
             Service Notes
           </h2>
         </FadeIn>
@@ -627,7 +627,7 @@ function HeroSection() {
           </motion.p>
 
           <motion.h1 initial={{ opacity:0, y:26 }} animate={{ opacity:1, y:0 }} transition={{ duration:1.1, ease:EASE, delay:0.34 }}
-            style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"clamp(2.8rem,6vw,5.0rem)", fontWeight:600, lineHeight:1.0, letterSpacing:"0.01em", color:"#0A0A0A", marginBottom:18 }}>
+            style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"clamp(2.8rem,6vw,5.0rem)", fontWeight:600, lineHeight:1.0, letterSpacing:"0.01em", color:"#556B2F", marginBottom:18 }}>
             Salon <em>Services</em>
           </motion.h1>
 
@@ -681,11 +681,12 @@ export default function ServicesPageContent() {
           {/* Layer 1: fixed bg image — covers entire page from top */}
           <div aria-hidden style={{
             position: "absolute", inset: 0,
-            backgroundImage: "url('/services-sections-bg.jpg')",
+            backgroundImage: "url('/services-page-bg.jpg')",
             backgroundAttachment: "fixed",
             backgroundPosition: "center top",
             backgroundRepeat: "no-repeat",
             backgroundSize: "cover",
+            opacity: 0.5,
             filter: "brightness(1.12) contrast(0.88) blur(4px)",
             zIndex: 1,
           }} />

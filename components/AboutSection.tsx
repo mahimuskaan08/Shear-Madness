@@ -19,7 +19,7 @@ const GALLERY = [
   { id: 2, src: "/about/about-3.png", alt: "Color treatment",  bg: "rgba(165,161,157,0.22)" },
   { id: 3, src: "/about/about-4.png", alt: "Precision cut",    bg: "rgba(178,174,170,0.20)" },
   { id: 4, src: "/about/about-5.png", alt: "Blowout finish",   bg: "rgba(170,166,162,0.22)" },
-  { id: 5, src: "/about/about-6.png", alt: "Bridal style",     bg: "rgba(162,158,154,0.20)" },
+  { id: 5, src: "/about/about-6.png", alt: "Elegant updo",     bg: "rgba(162,158,154,0.20)" },
 ];
 
 const ABOUT_PETALS = [
@@ -174,7 +174,7 @@ export default function AboutSection() {
                 fontWeight: 600,
                 lineHeight: 1.15,
                 letterSpacing: "0.02em",
-                color: "#0A0A0A",
+                color: "#556B2F",
               }}
             >
               About{" "}
@@ -358,6 +358,26 @@ export default function AboutSection() {
             grid-template-columns: 1fr !important;
             overflow-y: auto;
           }
+        }
+
+        /* ── Premium thin scrollbar — dictionary block only ── */
+        .dict-scroll::-webkit-scrollbar {
+          width: 3px;
+        }
+        .dict-scroll::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        .dict-scroll::-webkit-scrollbar-thumb {
+          background: linear-gradient(to bottom, #C9A96E, #B8935A);
+          border-radius: 999px;
+        }
+        .dict-scroll::-webkit-scrollbar-thumb:hover {
+          background: linear-gradient(to bottom, #D4B87E, #C9A96E);
+        }
+        /* Firefox */
+        .dict-scroll {
+          scrollbar-width: thin;
+          scrollbar-color: #C9A96E transparent;
         }
       `}</style>
     </section>

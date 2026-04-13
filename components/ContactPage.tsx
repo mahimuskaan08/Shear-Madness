@@ -132,7 +132,7 @@ export default function ContactPage() {
             fontFamily: "'Cormorant Garamond', Georgia, serif",
             fontSize: "clamp(2.8rem, 6vw, 5.4rem)",
             fontWeight: 600, lineHeight: 1.0,
-            letterSpacing: "0.01em", color: "#1A1208", marginBottom: 18,
+            letterSpacing: "0.01em", color: "#556B2F", marginBottom: 18,
           }}>
             Location
           </h2>
@@ -190,7 +190,7 @@ export default function ContactPage() {
                   <p style={{
                     fontFamily: "'Cormorant Garamond', Georgia, serif",
                     fontSize: "clamp(1.15rem, 1.7vw, 1.4rem)",
-                    fontWeight: 400, color: "#111111", letterSpacing: "0.01em",
+                    fontWeight: 700, color: "#111111", letterSpacing: "0.01em",
                   }}>
                     {bullet}
                   </p>

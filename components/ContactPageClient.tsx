@@ -174,7 +174,7 @@ function ContactHero() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.15, ease: EASE, delay: 0.2 }}
-          className="font-serif text-[#2C2A25] leading-[1.0] mb-7"
+          className="font-serif text-[#556B2F] leading-[1.0] mb-7"
           style={{
             fontSize: "clamp(3.2rem, 7.5vw, 6.2rem)",
             fontWeight: 400,
@@ -346,7 +346,7 @@ function ContactInfoMap() {
           </motion.p>
           <motion.h2
             {...fadeUp(0.2)}
-            className="font-serif text-[#2C2A25] leading-[1.08]"
+            className="font-serif text-[#556B2F] leading-[1.08]"
             style={{ fontSize: "clamp(1.9rem, 4vw, 3.4rem)", fontWeight: 300 }}
           >
             Visit the Salon
@@ -584,7 +584,7 @@ function SocialSection() {
           initial={{ opacity: 0, y: 24 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.95, ease: EASE, delay: 0.18 }}
-          className="font-serif text-[#2C2A25] leading-[1.08] mb-5"
+          className="font-serif text-[#556B2F] leading-[1.08] mb-5"
           style={{ fontSize: "clamp(1.9rem, 4vw, 3.4rem)", fontWeight: 300 }}
         >
           Follow Our Work
@@ -786,7 +786,7 @@ function ContactBookingCTA() {
           initial={{ opacity: 0, y: 28 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 1, ease: EASE, delay: 0.22 }}
-          className="font-serif text-[#2C2A25] leading-[1.08] mb-5"
+          className="font-serif text-[#556B2F] leading-[1.08] mb-5"
           style={{ fontSize: "clamp(2.2rem, 5vw, 4rem)", fontWeight: 300 }}
         >
           Ready for Your

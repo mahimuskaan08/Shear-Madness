@@ -2,6 +2,7 @@
 
 import { motion, useScroll, useMotionValueEvent, AnimatePresence } from "framer-motion";
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
@@ -9,16 +10,21 @@ const SERVICE_ITEMS = [
   { label: "Women's Services", href: "/services#womens" },
   { label: "Men's Services",   href: "/services#mens" },
   { label: "Hair Treatments",  href: "/services#treatments" },
-  { label: "Bridal Services",  href: "/services#bridal" },
+];
+
+const GALLERY_ITEMS = [
+  { label: "Portfolio", href: "/gallery#portfolio" },
+  { label: "Reviews",   href: "/gallery#reviews"   },
+  { label: "Credits",   href: "/credits"            },
 ];
 
 const navLinks = [
-  { label: "Home",     href: "/",            dropdown: false },
-  { label: "About",    href: "/#our-story",  dropdown: false },
-  { label: "Services", href: "/services",    dropdown: true  },
-  { label: "Artist",   href: "/#experience", dropdown: false },
-  { label: "Gallery",  href: "/#gallery",    dropdown: false },
-  { label: "Join Us",  href: "/join-us",     dropdown: false },
+  { label: "Home",     href: "/",            dropdown: false, items: [] },
+  { label: "About",    href: "/#our-story",  dropdown: false, items: [] },
+  { label: "Services", href: "/services",    dropdown: true,  items: SERVICE_ITEMS },
+  { label: "Artist",   href: "/#experience", dropdown: false, items: [] },
+  { label: "Gallery",  href: "/gallery",     dropdown: true,  items: GALLERY_ITEMS },
+  { label: "Join Us",  href: "/join-us",     dropdown: false, items: [] },
 ];
 
 function NavPillButton({ href, label }: { href: string; label: string }) {
@@ -54,8 +60,10 @@ function NavPillButton({ href, label }: { href: string; label: string }) {
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [servicesOpen, setServicesOpen] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const { scrollY } = useScroll();
+  const pathname = usePathname();
+  const showBranding = pathname !== "/" || scrolled;
 
   useMotionValueEvent(scrollY, "change", (y) => {
     setScrolled(y > 50);
@@ -78,6 +86,31 @@ export default function Navbar() {
       >
         <div className="w-full px-6 md:px-10 flex items-center h-[66px] md:h-[72px] relative">
 
+          {/* ── LOGO — absolute left edge ─────────────────────────────── */}
+          <motion.a
+            href="/"
+            className="absolute left-6 md:left-10 z-10 flex items-center gap-3"
+            animate={{ opacity: showBranding ? 1 : 0, pointerEvents: showBranding ? "auto" : "none" }}
+            transition={{ duration: 0.4, ease: EASE }}
+          >
+            <img
+              src="/hero-logo.png"
+              alt="Shear Madness"
+              style={{ height: 38, width: "auto", objectFit: "contain" }}
+            />
+            <span style={{
+              fontFamily: "'Cormorant Garamond', Georgia, serif",
+              fontSize: "clamp(1.1rem, 1.4vw, 1.35rem)",
+              fontWeight: 600,
+              letterSpacing: "0.04em",
+              color: scrolled ? "#1A1208" : "#FDFAF6",
+              transition: "color 0.5s ease",
+              whiteSpace: "nowrap",
+            }}>
+              Shear <em>Madness</em>
+            </span>
+          </motion.a>
+
           {/* ── DESKTOP NAV — glass pill, truly centered ─────────────── */}
           <nav
             className="hidden md:flex items-center gap-6 absolute -translate-x-1/2"
@@ -98,8 +131,8 @@ export default function Navbar() {
                 <div
                   key={link.label}
                   className="relative"
-                  onMouseEnter={() => setServicesOpen(true)}
-                  onMouseLeave={() => setServicesOpen(false)}
+                  onMouseEnter={() => setOpenDropdown(link.label)}
+                  onMouseLeave={() => setOpenDropdown(null)}
                 >
                   <a
                     href={link.href}
@@ -110,14 +143,14 @@ export default function Navbar() {
                     <svg
                       width="10" height="10" viewBox="0 0 10 10" fill="none"
                       className="transition-transform duration-300"
-                      style={{ transform: servicesOpen ? "rotate(180deg)" : "rotate(0deg)" }}
+                      style={{ transform: openDropdown === link.label ? "rotate(180deg)" : "rotate(0deg)" }}
                     >
                       <path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                   </a>
 
                   <AnimatePresence>
-                    {servicesOpen && (
+                    {openDropdown === link.label && (
                       <motion.div
                         initial={{ opacity: 0, y: 8 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -134,10 +167,10 @@ export default function Navbar() {
                           borderRadius: 10,
                           boxShadow: "0 12px 40px rgba(58,56,50,0.12), 0 2px 8px rgba(58,56,50,0.06)",
                           padding: "8px 0",
-                          minWidth: 200,
+                          minWidth: 180,
                         }}>
                           <div style={{ height: 2, background: "linear-gradient(to right, transparent, rgba(196,169,106,0.50), transparent)", marginBottom: 4 }} />
-                          {SERVICE_ITEMS.map((item) => (
+                          {link.items.map((item) => (
                             <a
                               key={item.label}
                               href={item.href}
@@ -216,7 +249,7 @@ export default function Navbar() {
                   transition={{ duration: 0.38, ease: EASE, delay: 0.05 + i * 0.07 + 0.12 }}
                   className="flex flex-col items-center gap-2"
                 >
-                  {SERVICE_ITEMS.map((item) => (
+                  {link.items.map((item) => (
                     <a
                       key={item.label}
                       href={item.href}

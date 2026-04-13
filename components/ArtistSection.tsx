@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 
+
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
 // ── BAMBOO LEAF DATA ──────────────────────────────────────────────────────────
@@ -24,20 +25,49 @@ const BAMBOO_CSS = `
     position: relative;
     border-radius: 3px;
   }
+  /* shared base for all portrait images */
   .artist-img-wrap img {
     display: block;
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: center top;
+  }
+  /* primary (greyscale) image */
+  .artist-img-wrap .portrait-main {
     filter: grayscale(100%);
     transform: scale(1.0);
     transition:
-      filter   0.90s cubic-bezier(0.22, 1, 0.36, 1),
-      transform 0.90s cubic-bezier(0.22, 1, 0.36, 1);
+      filter   0.95s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.95s cubic-bezier(0.22, 1, 0.36, 1),
+      opacity   0.95s cubic-bezier(0.22, 1, 0.36, 1);
   }
-  .artist-img-wrap:hover img {
+  .artist-img-wrap:hover .portrait-main {
     filter: grayscale(0%);
+    transform: scale(1.06);
+  }
+  /* Oscar only — fade out main to reveal colour hover image beneath */
+  .artist-img-wrap.has-hover .portrait-main {
+    transition:
+      filter   0.95s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.95s cubic-bezier(0.22, 1, 0.36, 1),
+      opacity   0.95s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .artist-img-wrap.has-hover:hover .portrait-main {
+    opacity: 0;
+  }
+  /* hover / colour image — sits absolutely on top */
+  .artist-img-wrap .portrait-hover {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transform: scale(1.04);
+    transition:
+      opacity   0.95s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.95s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .artist-img-wrap:hover .portrait-hover {
+    opacity: 1;
     transform: scale(1.06);
   }
 
@@ -52,14 +82,18 @@ const BAMBOO_CSS = `
 
   /* ── RESPONSIVE ───────────────────────────────────────────────────────── */
   @media (max-width: 860px) {
-    #artist-grid { grid-template-columns: 1fr !important; }
-    #artist-grid > *:first-child { max-width: 420px; margin: 0 auto; width: 100%; }
+    #artist-grid  { grid-template-columns: 1fr !important; }
+    #artist-grid  > *:first-child { max-width: 420px; margin: 0 auto; width: 100%; }
+    #artist-grid2 { grid-template-columns: 1fr !important; }
+    #artist-grid2 > *:last-child  { max-width: 420px; margin: 0 auto; width: 100%; order: -1; }
   }
 `;
 
 export default function ArtistSection() {
-  const ref = useRef<HTMLElement>(null);
+  const ref    = useRef<HTMLElement>(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
+  const ref2    = useRef<HTMLDivElement>(null);
+  const inView2 = useInView(ref2, { once: true, margin: "-60px" });
 
   return (
     <section
@@ -68,76 +102,75 @@ export default function ArtistSection() {
       style={{
         background: "#ECEAE7",
         position: "relative",
-        overflow: "hidden",
+        overflow: "clip",
         padding: "clamp(64px, 9vh, 112px) clamp(24px, 7vw, 96px) clamp(72px, 10vh, 120px)",
       }}
     >
       <style dangerouslySetInnerHTML={{ __html: BAMBOO_CSS }} />
 
-      {/* ── BG LAYER 1: GREYSCALE IMAGE — matches surrounding section tone ──────── */}
-      <div aria-hidden="true" style={{ position: "absolute", inset: 0, zIndex: 0 }}>
-        <img
-          src="/artist-bg.png"
-          alt=""
-          style={{
-            width: "100%", height: "100%",
-            objectFit: "cover", objectPosition: "center",
-            display: "block",
-            filter: "grayscale(100%) brightness(1.04) contrast(0.92)",
-            opacity: 0.55,
-          }}
-        />
-      </div>
+      {/* ── STICKY BACKGROUND WRAPPER — locks bg while content scrolls ───────── */}
+      <div aria-hidden="true" style={{ position: "sticky", top: 0, height: 0, zIndex: 0 }}>
+        <div style={{ position: "absolute", top: 0, left: "50%", transform: "translateX(-50%)", width: "100vw", height: "100vh" }}>
 
-      {/* ── BG LAYER 2: COLOR RESTORATION — bamboo green bleeds through ──────────
-           mix-blend-mode: color applies hue+saturation from this layer onto the
-           greyscale luminosity below. Bamboo is the most saturated element so it
-           shows through as natural green while grey areas stay neutral.            */}
-      <div aria-hidden="true" style={{ position: "absolute", inset: 0, zIndex: 1 }}>
-        <img
-          src="/artist-bg.png"
-          alt=""
-          style={{
-            width: "100%", height: "100%",
-            objectFit: "cover", objectPosition: "center",
-            display: "block",
-            opacity: 0.28,
-            mixBlendMode: "color",
-          }}
-        />
-      </div>
-
-      {/* ── BG LAYER 3: SECTION BLEND WASH — ties tone to #ECEAE7 neighbours ───── */}
-      <div aria-hidden="true" style={{
-        position: "absolute", inset: 0, zIndex: 2, pointerEvents: "none",
-        background: "linear-gradient(to bottom, rgba(236,234,231,0.60) 0%, rgba(236,234,231,0.28) 30%, rgba(236,234,231,0.22) 70%, rgba(236,234,231,0.60) 100%)",
-      }} />
-
-      {/* ── BG LAYER 4: SUBTLE GOLD ACCENT — right warmth ───────────────────────── */}
-      <div aria-hidden="true" style={{
-        position: "absolute", inset: 0, zIndex: 2, pointerEvents: "none",
-        background: "radial-gradient(ellipse 55% 60% at 80% 55%, rgba(198,167,107,0.06) 0%, transparent 70%)",
-      }} />
-
-      {/* ── BAMBOO LEAVES FALLING ────────────────────────────────────────────────── */}
-      <div aria-hidden="true" style={{
-        position: "absolute", inset: 0, overflow: "hidden",
-        pointerEvents: "none", zIndex: 3,
-      }}>
-        {BAMBOO_LEAVES.map(l => (
-          <div
-            key={l.id}
+          {/* Layer 1: greyscale image */}
+          <img
+            src="/artist-bg.png"
+            alt=""
             style={{
-              position: "absolute",
-              left: `${l.left}%`,
-              top: 0,
-              animation: `bamboo-leaf-${l.id} ${l.dur}s ${l.delay}s linear infinite`,
-              willChange: "transform, opacity",
+              position: "absolute", inset: 0,
+              width: "100%", height: "100%",
+              objectFit: "cover", objectPosition: "center",
+              display: "block",
+              filter: "grayscale(100%) brightness(1.04) contrast(0.92)",
+              opacity: 0.55,
             }}
-          >
-            <BambooLeafSVG size={l.size} opacity={l.opacity} />
+          />
+
+          {/* Layer 2: colour restoration */}
+          <img
+            src="/artist-bg.png"
+            alt=""
+            style={{
+              position: "absolute", inset: 0,
+              width: "100%", height: "100%",
+              objectFit: "cover", objectPosition: "center",
+              display: "block",
+              opacity: 0.28,
+              mixBlendMode: "color",
+            }}
+          />
+
+          {/* Layer 3: blend wash */}
+          <div style={{
+            position: "absolute", inset: 0, pointerEvents: "none",
+            background: "linear-gradient(to bottom, rgba(236,234,231,0.60) 0%, rgba(236,234,231,0.28) 30%, rgba(236,234,231,0.22) 70%, rgba(236,234,231,0.60) 100%)",
+          }} />
+
+          {/* Layer 4: gold accent */}
+          <div style={{
+            position: "absolute", inset: 0, pointerEvents: "none",
+            background: "radial-gradient(ellipse 55% 60% at 80% 55%, rgba(198,167,107,0.06) 0%, transparent 70%)",
+          }} />
+
+          {/* Bamboo leaves */}
+          <div style={{ position: "absolute", inset: 0, overflow: "hidden", pointerEvents: "none" }}>
+            {BAMBOO_LEAVES.map(l => (
+              <div
+                key={l.id}
+                style={{
+                  position: "absolute",
+                  left: `${l.left}%`,
+                  top: 0,
+                  animation: `bamboo-leaf-${l.id} ${l.dur}s ${l.delay}s linear infinite`,
+                  willChange: "transform, opacity",
+                }}
+              >
+                <BambooLeafSVG size={l.size} opacity={l.opacity} />
+              </div>
+            ))}
           </div>
-        ))}
+
+        </div>
       </div>
 
       {/* ── CONTENT ──────────────────────────────────────────────────────────────── */}
@@ -162,7 +195,7 @@ export default function ArtistSection() {
             fontFamily: "'Cormorant Garamond', Georgia, serif",
             fontSize: "clamp(2.8rem, 6vw, 5.2rem)",
             fontWeight: 600, lineHeight: 1.0,
-            letterSpacing: "0.01em", color: "#1A1208", marginBottom: 14,
+            letterSpacing: "0.01em", color: "#556B2F", marginBottom: 14,
           }}>
             Our <em>Artist</em>
           </h2>
@@ -191,7 +224,7 @@ export default function ArtistSection() {
             style={{ display: "flex", flexDirection: "column", height: "100%" }}
           >
             <div
-              className="artist-img-wrap"
+              className="artist-img-wrap has-hover"
               style={{
                 flex: 1,
                 minHeight: 0,
@@ -200,15 +233,22 @@ export default function ArtistSection() {
               }}
             >
               <img
+                className="portrait-main"
                 src="/oscar.jpg"
                 alt="Oscar 'Victor' Landicho — Co-Founder & Master Stylist, Shear Madness Hoboken"
+              />
+              <img
+                className="portrait-hover"
+                src="/oscar-color.jpg"
+                alt=""
+                aria-hidden="true"
               />
             </div>
 
             <div style={{ marginTop: 14, paddingLeft: 2 }}>
               <p style={{
                 fontFamily: "'Inter', sans-serif",
-                fontSize: "0.60rem", fontWeight: 500,
+                fontSize: "0.60rem", fontWeight: 700,
                 letterSpacing: "0.22em", textTransform: "uppercase",
                 color: "rgba(26,18,8,0.36)",
               }}>
@@ -229,7 +269,7 @@ export default function ArtistSection() {
                 fontFamily: "'Cormorant Garamond', Georgia, serif",
                 fontSize: "clamp(2.0rem, 3.2vw, 3.0rem)",
                 fontWeight: 600, lineHeight: 1.1,
-                letterSpacing: "0.01em", color: "#1A1208", marginBottom: 8,
+                letterSpacing: "0.01em", color: "#556B2F", marginBottom: 8,
               }}>
                 Oscar <em>"Victor"</em> Landicho
               </h3>
@@ -268,6 +308,7 @@ export default function ArtistSection() {
                 fontWeight: 400, lineHeight: 1.78,
                 color: "#111111", letterSpacing: "0.012em",
                 textShadow: "0 1px 2px rgba(255,255,255,0.4)",
+                textAlign: "justify",
               }}>
                 Co-founding Shear Madness in 2003, Oscar "Victor" Landicho has helped shape the salon into
                 one of Hoboken's most trusted beauty destinations. As Manager and Partner, he continues to
@@ -280,11 +321,12 @@ export default function ArtistSection() {
                 fontWeight: 400, lineHeight: 1.78,
                 color: "#111111", letterSpacing: "0.012em",
                 textShadow: "0 1px 2px rgba(255,255,255,0.4)",
+                textAlign: "justify",
               }}>
-                With nearly three decades of experience — including almost two decades in Hoboken — Oscar
-                has become known for his precision, consistency, and intuitive understanding of personal
-                style. His expertise in cut and color has made him especially sought after, earning the
-                trust of both longtime clients and first-time visitors alike.
+                With nearly three decades of experience (since 1987) — including almost two decades in
+                Hoboken — Oscar has become known for his precision, consistency, and intuitive understanding
+                of personal style. His expertise in cut and color has made him especially sought after,
+                earning the trust of both longtime clients and first-time visitors alike.
               </p>
             </div>
 
@@ -295,10 +337,137 @@ export default function ArtistSection() {
               color: "#111111", letterSpacing: "0.01em",
               marginTop: 4,
             }}>
-              If the lights are on, Oscar is in.
+              If the lights are on, Oscar &ldquo;Victor&rdquo; is in.
             </p>
           </motion.div>
         </div>
+
+        {/* ── DIVIDER ─────────────────────────────────────────────────────── */}
+        <div style={{
+          margin: "clamp(56px, 8vh, 96px) 0",
+          display: "flex", alignItems: "center", gap: 16,
+        }}>
+          <div style={{ flex: 1, height: 1, background: "linear-gradient(to right, transparent, rgba(198,167,107,0.45))" }} />
+          <div style={{ width: 5, height: 5, borderRadius: "50%", background: "#C6A76B", opacity: 0.70 }} />
+          <div style={{ flex: 1, height: 1, background: "linear-gradient(to left, transparent, rgba(198,167,107,0.45))" }} />
+        </div>
+
+        {/* ── GEORGE FRAGGOS ──────────────────────────────────────────────────── */}
+        <div
+          id="artist-grid2"
+          ref={ref2}
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1.25fr 1fr",
+            gap: "clamp(40px, 7vw, 96px)",
+            alignItems: "stretch",
+          }}
+        >
+          {/* ── LEFT: TEXT ──────────────────────────────────────────────────── */}
+          <motion.div
+            initial={{ opacity: 0, x: -28 }}
+            animate={inView2 ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 1.1, ease: EASE, delay: 0.14 }}
+            style={{ display: "flex", flexDirection: "column", gap: "clamp(20px, 3vh, 28px)" }}
+          >
+            <div>
+              <h3 style={{
+                fontFamily: "'Cormorant Garamond', Georgia, serif",
+                fontSize: "clamp(2.0rem, 3.2vw, 3.0rem)",
+                fontWeight: 600, lineHeight: 1.1,
+                letterSpacing: "0.01em", color: "#556B2F", marginBottom: 8,
+              }}>
+                George <em>Fraggos</em>
+              </h3>
+              <p style={{
+                fontFamily: "'Inter', sans-serif",
+                fontSize: "0.62rem", fontWeight: 500,
+                letterSpacing: "0.26em", textTransform: "uppercase",
+                color: "#C6A76B",
+              }}>
+                Stylist
+              </p>
+            </div>
+
+            <div style={{ height: 1, background: "linear-gradient(to right, rgba(198,167,107,0.45), transparent)" }} />
+
+            <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+              <p style={{
+                fontFamily: "'Inter', sans-serif",
+                fontSize: "clamp(1.0rem, 1.05vw, 1.06rem)",
+                fontWeight: 400, lineHeight: 1.78,
+                color: "#111111", letterSpacing: "0.012em",
+                textShadow: "0 1px 2px rgba(255,255,255,0.4)",
+                textAlign: "justify",
+              }}>
+                George joined Shear Madness from the Spa at Port Liberté, bringing with him over 28 years
+                of experience in the beauty industry. His expertise extends beyond the salon, having worked
+                in the entertainment industry on Broadway and in film with renowned talents such as Melanie
+                Griffith, Raul Julia, Melissa Manchester, and Rosie Perez. He also served as a National
+                Educator for Glemby International, a major force in the salon industry associated with
+                prestigious retailers like Saks Fifth Avenue and Bergdorf Goodman.
+              </p>
+              <p style={{
+                fontFamily: "'Inter', sans-serif",
+                fontSize: "clamp(1.0rem, 1.05vw, 1.06rem)",
+                fontWeight: 400, lineHeight: 1.78,
+                color: "#111111", letterSpacing: "0.012em",
+                textShadow: "0 1px 2px rgba(255,255,255,0.4)",
+                textAlign: "justify",
+              }}>
+                Specializing in cut, color, and styling, George also offers make-up and massage services,
+                making him an exceptional choice for discerning clients seeking a comprehensive and
+                personalized experience.
+              </p>
+            </div>
+
+            <p style={{
+              fontFamily: "'Cormorant Garamond', Georgia, serif",
+              fontSize: "clamp(1.05rem, 1.55vw, 1.3rem)",
+              fontWeight: 600, fontStyle: "italic",
+              color: "#111111", letterSpacing: "0.01em",
+              marginTop: 4,
+            }}>
+              Accepting appointments Tuesday – Saturday, 10:00 AM until closing.
+            </p>
+          </motion.div>
+
+          {/* ── RIGHT: PORTRAIT ─────────────────────────────────────────────── */}
+          <motion.div
+            initial={{ opacity: 0, x: 28 }}
+            animate={inView2 ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 1.1, ease: EASE, delay: 0.26 }}
+            style={{ display: "flex", flexDirection: "column", height: "100%", padding: "10%" }}
+          >
+            <div
+              className="artist-img-wrap"
+              style={{
+                flex: 1,
+                minHeight: 0,
+                boxShadow: "0 28px 72px rgba(26,18,8,0.16), 0 4px 18px rgba(26,18,8,0.08)",
+                border: "1px solid rgba(198,167,107,0.22)",
+              }}
+            >
+              <img
+                className="portrait-main"
+                src="/george-fraggos.jpg"
+                alt="George Fraggos - Stylist"
+              />
+            </div>
+
+            <div style={{ marginTop: 14, paddingLeft: 2 }}>
+              <p style={{
+                fontFamily: "'Inter', sans-serif",
+                fontSize: "0.60rem", fontWeight: 500,
+                letterSpacing: "0.22em", textTransform: "uppercase",
+                color: "rgba(26,18,8,0.36)",
+              }}>
+                Stylist · Shear Madness Hoboken
+              </p>
+            </div>
+          </motion.div>
+        </div>
+
       </div>
     </section>
   );

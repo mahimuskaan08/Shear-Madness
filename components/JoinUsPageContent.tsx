@@ -162,7 +162,7 @@ function ApplicationForm() {
           fontFamily: "'Cormorant Garamond', Georgia, serif",
           fontSize: "clamp(1.6rem, 3vw, 2.2rem)",
           fontWeight: 700,
-          color: "#1A1208",
+          color: "#556B2F",
           marginBottom: 14,
           lineHeight: 1.2,
         }}>
@@ -172,6 +172,7 @@ function ApplicationForm() {
           fontFamily: "'Cormorant Garamond', Georgia, serif",
           fontSize: "clamp(0.95rem, 1.2vw, 1.08rem)",
           fontStyle: "italic",
+          fontWeight: 700,
           color: "rgba(26,18,8,0.55)",
           lineHeight: 1.75,
         }}>
@@ -223,7 +224,7 @@ function ApplicationForm() {
         <p style={{
           fontFamily: "'Inter', sans-serif",
           fontSize: "clamp(0.88rem, 1.05vw, 1.0rem)",
-          fontWeight: 500,
+          fontWeight: 700,
           color: "#000",
           textAlign: "center",
           lineHeight: 1.6,
@@ -268,7 +269,7 @@ export default function JoinUsPageContent() {
             style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", display: "block" }}
           />
           {/* Light wash so text stays legible over the pale painting */}
-          <div style={{ position: "absolute", inset: 0, background: "rgba(253,250,246,0.55)" }} />
+          <div style={{ position: "absolute", inset: 0, background: "rgba(253,250,246,0.78)" }} />
         </div>
 
         <div className="joi-grid" style={{ position: "relative", zIndex: 1 }}>
@@ -303,11 +304,11 @@ export default function JoinUsPageContent() {
                 fontWeight: 700,
                 lineHeight: 1.0,
                 letterSpacing: "0.01em",
-                color: "#1A1208",
+                color: "#000",
                 marginBottom: 22,
               }}
             >
-              Join Our<br /><em>Team</em>
+              <span style={{ color: "#556B2F" }}>Join</span> Our<br /><em>Team</em>
             </motion.h1>
 
             <motion.div
@@ -328,8 +329,8 @@ export default function JoinUsPageContent() {
                 fontFamily: "'Cormorant Garamond', Georgia, serif",
                 fontSize: "clamp(1.25rem, 2.0vw, 1.55rem)",
                 fontStyle: "italic",
-                fontWeight: 400,
-                color: "#111111",
+                fontWeight: 700,
+                color: "#556B2F",
                 lineHeight: 1.78,
                 marginBottom: 28,
               }}
@@ -349,8 +350,8 @@ export default function JoinUsPageContent() {
               <p style={{
                 fontFamily: "'Cormorant Garamond', Georgia, serif",
                 fontSize: "clamp(1.1rem, 1.55vw, 1.30rem)",
-                fontWeight: 400,
-                color: "#111111",
+                fontWeight: 700,
+                color: "#556B2F",
                 lineHeight: 1.78,
                 letterSpacing: "0.01em",
               }}>
@@ -397,8 +398,8 @@ export default function JoinUsPageContent() {
               <p style={{
                 fontFamily: "'Inter', sans-serif",
                 fontSize: "clamp(0.88rem, 1.1vw, 1.02rem)",
-                fontWeight: 500,
-                color: "#000",
+                fontWeight: 700,
+                color: "#556B2F",
                 lineHeight: 1.65,
               }}>
                 We&apos;re always looking for passionate individuals who value detail, care, and excellence.

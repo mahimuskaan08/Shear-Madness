@@ -8,27 +8,30 @@ const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 const SERVICES = [
   {
     id: 0,
-    title: "Hair & Styling",
-    preview: "Haircuts · Blowouts · Updos · Men & Kids",
+    title: "Women's Services",
+    preview: "Haircuts · Blowouts · Colour · Highlights · Extensions · Updos",
+    href: "/services#womens",
     video: "/videos/hair-styling.mp4",
     bg: "linear-gradient(160deg, #2C2420 0%, #1A1410 100%)",
     accent: "rgba(198,167,107,0.18)",
   },
   {
     id: 1,
-    title: "Color & Treatments",
-    preview: "Color · Highlights · Keratin · Conditioning",
-    video: "/videos/color-treatments.mp4",
+    title: "Men's Services",
+    preview: "Cuts · Colour · Relaxer · Highlights · Eyebrow Wax",
+    href: "/services#mens",
+    video: "/videos/men-services.mp4",
     bg: "linear-gradient(160deg, #22201E 0%, #141210 100%)",
     accent: "rgba(210,185,155,0.14)",
   },
   {
     id: 2,
-    title: "Bridal & Beauty",
-    preview: "Bridal Styling · Makeup · Finishing Touches",
-    video: "",
-    bg: "linear-gradient(160deg, #261E20 0%, #18100E 100%)",
-    accent: "rgba(220,175,175,0.14)",
+    title: "Hair Treatments",
+    preview: "Keratin · Conditioning · Tandem Texture",
+    href: "/services#treatments",
+    video: "/videos/hair-treatments.mp4",
+    bg: "linear-gradient(160deg, #1E2418 0%, #121610 100%)",
+    accent: "rgba(160,185,140,0.14)",
   },
 ];
 
@@ -126,7 +129,7 @@ export default function ServicesSection() {
             fontWeight: 600,
             lineHeight: 1.1,
             letterSpacing: "0.01em",
-            color: "#1A1208",
+            color: "#556B2F",
             marginBottom: 8,
           }}>
             Our{" "}
@@ -140,7 +143,7 @@ export default function ServicesSection() {
             fontWeight: 600,
             lineHeight: 1.45,
             letterSpacing: "0.025em",
-            color: "#1A1208",
+            color: "#000",
           }}>
             <span>Built on </span>
             <span style={{ fontStyle: "italic", fontWeight: 500 }}>craft.</span>
@@ -203,6 +206,7 @@ function ServiceCard({
   inView: boolean;
 }) {
   return (
+    <a href={svc.href} style={{ textDecoration: "none", display: "block" }}>
     <motion.div
       initial={{ opacity: 0, y: 36 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -331,5 +335,6 @@ function ServiceCard({
         </motion.span>
       </div>
     </motion.div>
+    </a>
   );
 }

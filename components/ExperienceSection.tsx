@@ -81,7 +81,7 @@ export default function ExperienceSection() {
             initial={{ opacity: 0, y: 26 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 1, ease: EASE, delay: 0.2 }}
-            className="font-serif text-[#2C2A25] leading-[1.08]"
+            className="font-serif text-[#556B2F] leading-[1.08]"
             style={{ fontSize: "clamp(2.1rem, 5vw, 4rem)", fontWeight: 300 }}
           >
             Step Into Calm.
@@ -165,7 +165,7 @@ export default function ExperienceSection() {
                   </div>
                   <div>
                     <h4
-                      className="font-serif text-[#2C2A25] mb-1.5 transition-colors duration-300 group-hover:text-[#C4A96A]"
+                      className="font-serif text-[#556B2F] mb-1.5 transition-colors duration-300 group-hover:text-[#C4A96A]"
                       style={{ fontSize: "1.1rem", fontWeight: 400 }}
                     >
                       {pillar.label}

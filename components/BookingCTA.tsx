@@ -86,7 +86,7 @@ export default function BookingCTA() {
           initial={{ opacity: 0, y: 28 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 1, ease: EASE, delay: 0.22 }}
-          className="font-serif text-[#2C2A25] leading-[1.08] mb-5"
+          className="font-serif text-[#556B2F] leading-[1.08] mb-5"
           style={{ fontSize: "clamp(2.2rem, 5vw, 4rem)", fontWeight: 300 }}
         >
           Ready for Your
