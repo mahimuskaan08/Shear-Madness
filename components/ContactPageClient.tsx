@@ -231,7 +231,7 @@ function ContactHero() {
         >
           {/* Book Now */}
           <a
-            href="#contact-booking"
+            href="/booking"
             className="group relative inline-flex items-center justify-center rounded-full font-sans text-[11px] tracking-[0.22em] uppercase font-medium text-white transition-all duration-400 hover:-translate-y-0.5 overflow-hidden"
             style={{
               padding: "14px 38px",
@@ -813,7 +813,7 @@ function ContactBookingCTA() {
         >
           {/* Book Now */}
           <a
-            href="#"
+            href="/booking"
             className="group relative inline-flex items-center justify-center gap-2.5 rounded-full font-sans text-[11px] tracking-[0.2em] uppercase font-medium text-white transition-all duration-400 hover:-translate-y-0.5 overflow-hidden"
             style={{
               padding: "15px 36px",

@@ -646,7 +646,7 @@ function HeroSection() {
           {/* Book CTA */}
           <motion.div initial={{ opacity:0, y:14 }} animate={{ opacity:1, y:0 }} transition={{ duration:1.0, ease:EASE, delay:0.78 }}
             style={{ marginTop:28 }}>
-            <a href="#booking"
+            <a href="/booking"
               style={{ display:"inline-flex", alignItems:"center", justifyContent:"center", fontFamily:"'Inter',sans-serif", fontSize:"0.72rem", fontWeight:600, letterSpacing:"0.22em", textTransform:"uppercase", color:"#0A0A0A", background:"linear-gradient(135deg,#C9A96E 0%,#B8935A 55%,#C4A96A 100%)", padding:"13px 38px", borderRadius:100, boxShadow:"0 4px 22px rgba(198,167,107,0.45)", transition:"box-shadow 0.4s ease,transform 0.4s ease", textDecoration:"none" }}
               onMouseEnter={e => { const el = e.currentTarget as HTMLAnchorElement; el.style.boxShadow="0 8px 32px rgba(198,167,107,0.65)"; el.style.transform="translateY(-2px)"; }}
               onMouseLeave={e => { const el = e.currentTarget as HTMLAnchorElement; el.style.boxShadow="0 4px 22px rgba(198,167,107,0.45)"; el.style.transform="translateY(0)"; }}

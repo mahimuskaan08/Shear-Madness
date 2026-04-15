@@ -197,30 +197,67 @@ export default function HeroSection() {
           transition={{ duration: 1.5, ease: EASE, delay: 0.4 }}
           style={{ display: "flex", flexDirection: "column", alignItems: "center", marginTop: "8%", gap: 0 }}
         >
-          {/* Name */}
-          <h1
-            style={{
-              fontFamily: "'Cormorant Garamond', Georgia, serif",
-              fontSize: "clamp(2.56rem, 7.2vw, 6.4rem)",
-              fontWeight: 700,
-              letterSpacing: "0.12em",
-              textTransform: "uppercase",
-              color: "#000",
-              lineHeight: 1.0,
-              textAlign: "center",
-              textShadow: "none",
-              margin: 0,
-            }}
-          >
-            Shear<br />Madness
-          </h1>
+          {/* Name — per-glyph tuned to match logo silhouette */}
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 0 }}>
+            <h1
+              style={{
+                fontFamily: "'Cinzel', 'Trajan Pro', Georgia, serif",
+                /* base size — small letters at 0.8em sit comfortably */
+                fontSize: "clamp(2.4rem, 7.8vw, 7.2rem)",
+                fontWeight: 400,
+                letterSpacing: 0,
+                fontKerning: "none" as const,
+                color: "#556B2F",
+                lineHeight: 1.0,
+                textAlign: "center",
+                /*
+                  Bevel / emboss stack:
+                  1. bright top-left highlight
+                  2. faint warm inner highlight
+                  3-5. dark edge shadow on bottom + sides
+                  6. ambient spread for depth
+                */
+                textShadow: "0 1px 0 rgba(255,255,255,0.35), 0 2px 8px rgba(0,0,0,0.12)",
+                margin: 0,
+                display: "inline-flex",
+                alignItems: "baseline",
+                whiteSpace: "nowrap",
+              }}
+            >
+              {/* ── S H E A R ───────────────────────── */}
+              <span style={{ fontSize: "1.10em" }}>S</span>
+              <span style={{ fontSize: "0.80em", marginLeft: "-0.010em" }}>H</span>
+              <span style={{ fontSize: "0.80em", marginLeft: "-0.005em" }}>E</span>
+              <span style={{ fontSize: "0.80em", marginLeft: "-0.010em" }}>A</span>
+              <span style={{ fontSize: "0.80em", marginLeft: "-0.010em" }}>R</span>
 
-          {/* Divider */}
-          <div className="flex items-center justify-center gap-3" style={{ marginTop: 13, marginBottom: 10 }}>
-            <div className="h-px w-14" style={{ background: "linear-gradient(to right, transparent, rgba(198,167,107,0.66))" }} />
-            <div className="w-1.5 h-1.5 rounded-full" style={{ background: "#C6A76B", opacity: 0.76 }} />
-            <div className="h-px w-14" style={{ background: "linear-gradient(to left, transparent, rgba(198,167,107,0.66))" }} />
+              {/* word gap — tighter than natural */}
+              <span style={{ display: "inline-block", width: "0.14em" }} />
+
+              {/* ── M A D N E S S ───────────────────── */}
+              <span style={{ fontSize: "1.08em" }}>M</span>
+              <span style={{ fontSize: "0.80em", marginLeft: "-0.015em" }}>A</span>
+              <span style={{ fontSize: "0.80em", marginLeft: "-0.008em" }}>D</span>
+              <span style={{ fontSize: "0.80em", marginLeft: "-0.010em" }}>N</span>
+              <span style={{ fontSize: "0.80em", marginLeft: "-0.006em" }}>E</span>
+              <span style={{ fontSize: "0.80em", marginLeft: "-0.008em" }}>S</span>
+              <span style={{ fontSize: "0.80em", marginLeft: "-0.012em" }}>S</span>
+            </h1>
+
+            {/* Bright ivory underline — thick, close, nearly full width */}
+            <div
+              style={{
+                marginTop: "0.30em",
+                width: "95%",
+                height: "1.5px",
+                background:
+                  "linear-gradient(to right, transparent, rgba(85,107,47,0.65) 4%, rgba(85,107,47,0.65) 96%, transparent)",
+              }}
+            />
           </div>
+
+          {/* Spacing */}
+          <div style={{ height: 12 }} />
 
           {/* Taglines */}
           <p style={{
@@ -252,7 +289,7 @@ export default function HeroSection() {
             className="flex flex-col sm:flex-row items-center justify-center gap-4"
           >
             <a
-              href="#booking"
+              href="/booking"
               className="inline-flex items-center justify-center rounded-full font-sans text-[11px] tracking-[0.22em] uppercase font-medium text-white"
               style={{
                 padding: "15px 40px",
@@ -277,7 +314,7 @@ export default function HeroSection() {
             </a>
 
             <a
-              href="#booking"
+              href="#contact"
               className="inline-flex items-center justify-center rounded-full font-sans text-[11px] tracking-[0.22em] uppercase font-semibold"
               style={{
                 padding: "14px 39px",

@@ -165,20 +165,18 @@ export default function GalleryPageContent() {
   return (
     <>
     <section
-      className="relative min-h-screen bg-[#FDFAF6] overflow-x-hidden"
-      style={{ paddingTop: "calc(var(--navbar-h, 80px) + 2.4rem)" }}
+      className="relative min-h-screen overflow-x-hidden"
+      style={{
+        paddingTop: "calc(var(--navbar-h, 80px) + 2.4rem)",
+        backgroundImage: "url('/gallery-bg2.png')",
+        backgroundAttachment: "fixed",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
     >
-      {/* ── Background image at 60% opacity ── */}
-      <div aria-hidden className="absolute inset-0 z-0 pointer-events-none" style={{ opacity: 0.42 }}>
-        <Image
-          src="/gallery-bg.png"
-          alt=""
-          fill
-          className="object-cover"
-          sizes="100vw"
-          priority
-        />
-      </div>
+      {/* ── Translucent overlay for 50% visibility ── */}
+      <div aria-hidden className="absolute inset-0 z-0 pointer-events-none"
+        style={{ background: "rgba(253,250,246,0.50)" }} />
 
       {/* ── All content above bg ── */}
       <div className="relative z-10">
@@ -681,12 +679,22 @@ function ReviewsSection() {
   return (
     <section
       id="reviews"
-      className="w-full bg-[#FDFAF6]"
-      style={{ padding: "clamp(1.75rem, 3vw, 2.5rem) 0 clamp(2rem, 4vw, 3rem)" }}
+      className="w-full relative overflow-hidden"
+      style={{
+        padding: "clamp(1.75rem, 3vw, 2.5rem) 0 clamp(2rem, 4vw, 3rem)",
+        backgroundImage: "url('/gallery-bg2.png')",
+        backgroundAttachment: "fixed",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
     >
+      {/* Same overlay as gallery section */}
+      <div aria-hidden style={{ position: "absolute", inset: 0, background: "rgba(253,250,246,0.50)", pointerEvents: "none", zIndex: 0 }} />
+
       {/* Thin gold divider */}
       <div
         style={{
+          position: "relative", zIndex: 1,
           margin:     "0 auto clamp(1.25rem, 2.5vw, 2rem)",
           maxWidth:   "80%",
           height:     1,
@@ -697,7 +705,7 @@ function ReviewsSection() {
       {/* Header */}
       <div
         className="flex flex-col items-center text-center px-6"
-        style={{ marginBottom: "clamp(1rem, 2vw, 1.5rem)" }}
+        style={{ marginBottom: "clamp(1rem, 2vw, 1.5rem)", position: "relative", zIndex: 1 }}
       >
         <p
           className="font-sans"
@@ -720,7 +728,7 @@ function ReviewsSection() {
       </div>
 
       {/* Carousel viewport */}
-      <div style={{ padding: "0 clamp(1.5rem, 5vw, 5rem)" }}>
+      <div style={{ padding: "0 clamp(1.5rem, 5vw, 5rem)", position: "relative", zIndex: 1 }}>
         <div
           ref={trackRef}
           className="hide-scrollbar"

@@ -185,7 +185,7 @@ export default function ExperienceSection() {
               className="mt-12"
             >
               <a
-                href="#booking"
+                href="/booking"
                 className="group relative inline-flex items-center gap-3 rounded-full font-sans text-[11px] tracking-[0.2em] uppercase font-medium text-white transition-all duration-400 hover:-translate-y-0.5 overflow-hidden"
                 style={{
                   padding: "13px 32px",

@@ -12,21 +12,21 @@ export default function CreditsPage() {
       <Navbar />
       <main style={{
         minHeight: "100svh",
-        backgroundImage: "url('/credits-bg.jpg')",
+        backgroundImage: "url('/credits-bg.png')",
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundAttachment: "fixed",
         position: "relative",
         padding: "clamp(110px, 15vh, 150px) clamp(24px, 8vw, 96px) clamp(72px, 10vh, 100px)",
       }}>
-        <div style={{ position: "absolute", inset: 0, background: "rgba(236,234,231,0.70)", pointerEvents: "none" }} />
+        <div style={{ position: "absolute", inset: 0, background: "rgba(236,234,231,0.75)", pointerEvents: "none" }} />
         <div style={{ maxWidth: 760, margin: "0 auto", position: "relative", zIndex: 1 }}>
 
           {/* ── HEADER ──────────────────────────────────────────────────── */}
           <header style={{ textAlign: "center", marginBottom: "clamp(48px, 7vh, 72px)" }}>
             <p style={{
               fontFamily: "'Inter', sans-serif",
-              fontSize: "0.62rem", fontWeight: 500,
+              fontSize: "0.78rem", fontWeight: 700,
               letterSpacing: "0.30em", textTransform: "uppercase",
               color: "#C6A76B", marginBottom: 10,
             }}>
@@ -52,9 +52,9 @@ export default function CreditsPage() {
 
             <p style={{
               fontFamily: "'Cormorant Garamond', Georgia, serif",
-              fontSize: "clamp(1.1rem, 1.8vw, 1.3rem)",
+              fontSize: "clamp(1.25rem, 2vw, 1.5rem)",
               fontWeight: 400, fontStyle: "italic",
-              lineHeight: 1.7, color: "#3A3832",
+              lineHeight: 1.7, color: "#000",
               maxWidth: 560, margin: "0 auto",
               textAlign: "justify",
             }}>
@@ -124,9 +124,9 @@ export default function CreditsPage() {
             <blockquote style={{ margin: 0 }}>
               <p style={{
                 fontFamily: "'Cormorant Garamond', Georgia, serif",
-                fontSize: "clamp(1.2rem, 2.2vw, 1.55rem)",
+                fontSize: "clamp(1.4rem, 2.5vw, 1.8rem)",
                 fontWeight: 500, fontStyle: "italic",
-                lineHeight: 1.7, color: "#2C2A25",
+                lineHeight: 1.7, color: "#000",
                 letterSpacing: "0.01em", textAlign: "justify",
               }}>
                 "Welcome. You may enter a stranger — but you will leave as part of the Shear Madness family."
@@ -134,7 +134,7 @@ export default function CreditsPage() {
             </blockquote>
             <div style={{ marginTop: 20, display: "flex", justifyContent: "center" }}>
               <a
-                href="/#booking"
+                href="/booking"
                 style={{
                   fontFamily: "'Inter', sans-serif",
                   fontSize: "0.65rem", fontWeight: 500,
@@ -173,7 +173,7 @@ function CreditSection({
     }}>
       <p style={{
         fontFamily: "'Inter', sans-serif",
-        fontSize: "0.58rem", fontWeight: 600,
+        fontSize: "0.74rem", fontWeight: 700,
         letterSpacing: "0.26em", textTransform: "uppercase",
         color: "#C6A76B", marginBottom: 8,
       }}>
@@ -190,9 +190,9 @@ function CreditSection({
       </h2>
       <p style={{
         fontFamily: "'Inter', sans-serif",
-        fontSize: "clamp(0.92rem, 1.05vw, 1.0rem)",
+        fontSize: "clamp(1.05rem, 1.4vw, 1.2rem)",
         fontWeight: 400, lineHeight: 1.82,
-        color: "#3A3832", letterSpacing: "0.012em",
+        color: "#000", letterSpacing: "0.012em",
         textAlign: "justify",
       }}>
         {body}

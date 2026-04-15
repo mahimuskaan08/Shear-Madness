@@ -202,7 +202,7 @@ export default function Navbar() {
           {/* ── RIGHT BUTTONS: Contact + Book Now — absolute right edge ─ */}
           <div className="hidden md:flex items-center gap-3 absolute right-6 md:right-10">
             <NavPillButton href="/contact" label="Contact" />
-            <NavPillButton href="#booking" label="Book Now" />
+            <NavPillButton href="/booking" label="Book Now" />
           </div>
 
           {/* ── MOBILE HAMBURGER ──────────────────────────────────────── */}
@@ -292,7 +292,7 @@ export default function Navbar() {
               Contact
             </a>
             <a
-              href="#booking"
+              href="/booking"
               onClick={() => setMenuOpen(false)}
               className="rounded-full text-[10px] tracking-[0.2em] uppercase text-white px-7 py-3 transition-all duration-300"
               style={{ fontFamily: "'Neue World', Georgia, serif", background: "linear-gradient(135deg, #C9A96E, #B8935A)", boxShadow: "0 4px 18px rgba(196,169,106,0.45)" }}

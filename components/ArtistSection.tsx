@@ -100,77 +100,65 @@ export default function ArtistSection() {
       ref={ref}
       id="experience"
       style={{
-        background: "#ECEAE7",
         position: "relative",
-        overflow: "clip",
-        padding: "clamp(64px, 9vh, 112px) clamp(24px, 7vw, 96px) clamp(72px, 10vh, 120px)",
+        overflow: "hidden",
+        padding: "clamp(64px, 9vh, 112px) clamp(24px, 7vw, 96px) clamp(36px, 5vh, 60px)",
       }}
     >
       <style dangerouslySetInnerHTML={{ __html: BAMBOO_CSS }} />
 
-      {/* ── STICKY BACKGROUND WRAPPER — locks bg while content scrolls ───────── */}
-      <div aria-hidden="true" style={{ position: "sticky", top: 0, height: 0, zIndex: 0 }}>
-        <div style={{ position: "absolute", top: 0, left: "50%", transform: "translateX(-50%)", width: "100vw", height: "100vh" }}>
+      {/* ── FIXED BACKGROUND LAYERS — viewport-pinned, clipped by section overflow:hidden ── */}
 
-          {/* Layer 1: greyscale image */}
-          <img
-            src="/artist-bg.png"
-            alt=""
+      {/* Layer 1: greyscale image — fixed to viewport */}
+      <div aria-hidden="true" style={{
+        position: "absolute", inset: 0, zIndex: 0, pointerEvents: "none",
+        backgroundImage: "url('/artist-bg.png')",
+        backgroundAttachment: "fixed",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        filter: "grayscale(100%) brightness(1.04) contrast(0.92)",
+        opacity: 0.55,
+      }} />
+
+      {/* Layer 2: colour restoration — fixed to viewport */}
+      <div aria-hidden="true" style={{
+        position: "absolute", inset: 0, zIndex: 1, pointerEvents: "none",
+        backgroundImage: "url('/artist-bg.png')",
+        backgroundAttachment: "fixed",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        opacity: 0.28,
+        mixBlendMode: "color",
+      }} />
+
+      {/* Layer 3: blend wash */}
+      <div aria-hidden="true" style={{
+        position: "absolute", inset: 0, zIndex: 2, pointerEvents: "none",
+        background: "linear-gradient(to bottom, rgba(236,234,231,0.60) 0%, rgba(236,234,231,0.28) 30%, rgba(236,234,231,0.22) 70%, rgba(236,234,231,0.60) 100%)",
+      }} />
+
+      {/* Layer 4: gold accent */}
+      <div aria-hidden="true" style={{
+        position: "absolute", inset: 0, zIndex: 2, pointerEvents: "none",
+        background: "radial-gradient(ellipse 55% 60% at 80% 55%, rgba(198,167,107,0.06) 0%, transparent 70%)",
+      }} />
+
+      {/* Bamboo leaves */}
+      <div aria-hidden="true" style={{ position: "absolute", inset: 0, overflow: "hidden", pointerEvents: "none", zIndex: 3 }}>
+        {BAMBOO_LEAVES.map(l => (
+          <div
+            key={l.id}
             style={{
-              position: "absolute", inset: 0,
-              width: "100%", height: "100%",
-              objectFit: "cover", objectPosition: "center",
-              display: "block",
-              filter: "grayscale(100%) brightness(1.04) contrast(0.92)",
-              opacity: 0.55,
+              position: "absolute",
+              left: `${l.left}%`,
+              top: 0,
+              animation: `bamboo-leaf-${l.id} ${l.dur}s ${l.delay}s linear infinite`,
+              willChange: "transform, opacity",
             }}
-          />
-
-          {/* Layer 2: colour restoration */}
-          <img
-            src="/artist-bg.png"
-            alt=""
-            style={{
-              position: "absolute", inset: 0,
-              width: "100%", height: "100%",
-              objectFit: "cover", objectPosition: "center",
-              display: "block",
-              opacity: 0.28,
-              mixBlendMode: "color",
-            }}
-          />
-
-          {/* Layer 3: blend wash */}
-          <div style={{
-            position: "absolute", inset: 0, pointerEvents: "none",
-            background: "linear-gradient(to bottom, rgba(236,234,231,0.60) 0%, rgba(236,234,231,0.28) 30%, rgba(236,234,231,0.22) 70%, rgba(236,234,231,0.60) 100%)",
-          }} />
-
-          {/* Layer 4: gold accent */}
-          <div style={{
-            position: "absolute", inset: 0, pointerEvents: "none",
-            background: "radial-gradient(ellipse 55% 60% at 80% 55%, rgba(198,167,107,0.06) 0%, transparent 70%)",
-          }} />
-
-          {/* Bamboo leaves */}
-          <div style={{ position: "absolute", inset: 0, overflow: "hidden", pointerEvents: "none" }}>
-            {BAMBOO_LEAVES.map(l => (
-              <div
-                key={l.id}
-                style={{
-                  position: "absolute",
-                  left: `${l.left}%`,
-                  top: 0,
-                  animation: `bamboo-leaf-${l.id} ${l.dur}s ${l.delay}s linear infinite`,
-                  willChange: "transform, opacity",
-                }}
-              >
-                <BambooLeafSVG size={l.size} opacity={l.opacity} />
-              </div>
-            ))}
+          >
+            <BambooLeafSVG size={l.size} opacity={l.opacity} />
           </div>
-
-        </div>
+        ))}
       </div>
 
       {/* ── CONTENT ──────────────────────────────────────────────────────────────── */}

@@ -308,7 +308,7 @@ export default function JoinUsPageContent() {
                 marginBottom: 22,
               }}
             >
-              <span style={{ color: "#556B2F" }}>Join</span> Our<br /><em>Team</em>
+              <span style={{ color: "#556B2F" }}>Join Our</span><br /><em style={{ color: "#556B2F" }}>Team</em>
             </motion.h1>
 
             <motion.div
