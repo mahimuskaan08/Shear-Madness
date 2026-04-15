@@ -348,7 +348,7 @@ function CardGrid({
         <div
           ref={trackWrapRef}
           className="flex-1 overflow-hidden select-none hide-scrollbar"
-          style={{ cursor: "grab" }}
+          style={{ cursor: "grab", touchAction: "pan-y" }}
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => { setPaused(false); dragStart.current = null; }}
           onPointerDown={onPointerDown}
@@ -494,7 +494,7 @@ function GalleryCard({ item, onClick }: { item: GalleryItem; onClick: () => void
         alt={item.alt}
         fill
         className="object-cover"
-        sizes="(max-width: 768px) 45vw, 220px"
+        sizes="(max-width: 640px) 88vw, (max-width: 1024px) 33vw, 220px"
         style={{
           transform:     hovered ? "scale(1.05)" : "scale(1)",
           transition:    "transform 0.6s cubic-bezier(0.22,1,0.36,1)",
@@ -732,7 +732,7 @@ function ReviewsSection() {
         <div
           ref={trackRef}
           className="hide-scrollbar"
-          style={{ overflow: "hidden", cursor: "grab", userSelect: "none" }}
+          style={{ overflow: "hidden", cursor: "grab", userSelect: "none", touchAction: "pan-y" }}
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => { setPaused(false); dragStart.current = null; }}
           onPointerDown={onPointerDown}
@@ -818,13 +818,14 @@ function Lightbox({ item, onClose }: { item: GalleryItem; onClose: () => void })
         animate={{ scale: 1,   opacity: 1, y: 0  }}
         exit={{ scale: 0.93,  opacity: 0, y: 8  }}
         transition={{ duration: 0.38, ease: [0.22, 1, 0.36, 1] }}
-        className="relative flex flex-col items-center"
-        style={{ maxWidth: "480px", width: "100%" }}
+        className="relative flex flex-col items-center w-full"
+        style={{ maxWidth: "480px" }}
         onClick={(e) => e.stopPropagation()}
       >
+        {/* Close button — above image on desktop, overlaid top-right on mobile */}
         <button
           onClick={onClose}
-          className="absolute -top-10 right-0 flex items-center gap-2 font-sans text-[10px] tracking-[0.2em] uppercase font-medium transition-colors duration-200"
+          className="hidden sm:flex absolute -top-10 right-0 items-center gap-2 font-sans text-[10px] tracking-[0.2em] uppercase font-medium transition-colors duration-200"
           style={{ color: "rgba(255,255,255,0.5)" }}
           onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "#fff"; }}
           onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "rgba(255,255,255,0.5)"; }}
@@ -832,6 +833,18 @@ function Lightbox({ item, onClose }: { item: GalleryItem; onClose: () => void })
         >
           <span>Close</span>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+            <path d="M18 6L6 18M6 6l12 12" />
+          </svg>
+        </button>
+
+        {/* Mobile close button — inside the image, top-right corner */}
+        <button
+          onClick={onClose}
+          className="sm:hidden absolute top-2 right-2 z-20 flex items-center justify-center w-9 h-9 rounded-full"
+          style={{ background: "rgba(0,0,0,0.55)", color: "rgba(255,255,255,0.85)" }}
+          aria-label="Close"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <path d="M18 6L6 18M6 6l12 12" />
           </svg>
         </button>
@@ -845,7 +858,7 @@ function Lightbox({ item, onClose }: { item: GalleryItem; onClose: () => void })
             alt={item.alt}
             fill
             className="object-cover"
-            sizes="480px"
+            sizes="(max-width: 640px) 100vw, 480px"
             priority
           />
         </div>

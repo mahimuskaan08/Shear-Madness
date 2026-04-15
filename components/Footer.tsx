@@ -204,7 +204,7 @@ export default function Footer() {
 
             <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
               {HOURS.map(({ days, time }) => (
-                <div key={days} style={{ display: "flex", justifyContent: "space-between", gap: 12 }}>
+                <div key={days} className="footer-hours-row" style={{ display: "flex", justifyContent: "space-between", gap: 12 }}>
                   <span style={{
                     fontFamily: "'Cormorant Garamond', Georgia, serif",
                     fontSize: "clamp(0.92rem, 1.1vw, 1.05rem)",
@@ -351,6 +351,10 @@ export default function Footer() {
         }
         @media (max-width: 540px) {
           #footer-grid { grid-template-columns: 1fr !important; }
+        }
+        @media (max-width: 380px) {
+          .footer-hours-row { flex-wrap: wrap !important; gap: 2px !important; }
+          .footer-hours-row span { white-space: normal !important; }
         }
       `}</style>
     </footer>

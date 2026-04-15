@@ -209,11 +209,13 @@ export default function Navbar() {
           <button
             onClick={() => setMenuOpen(!menuOpen)}
             aria-label="Toggle navigation"
-            className="md:hidden absolute right-6 z-[60] flex flex-col justify-center gap-[5px] w-6 h-6"
+            className="md:hidden absolute right-4 z-[60] flex items-center justify-center w-11 h-11"
           >
-            <motion.span animate={menuOpen ? { rotate: 45, y: 5 } : { rotate: 0, y: 0 }} transition={{ duration: 0.28 }} className="block h-px w-full bg-[#2C2A25]" />
-            <motion.span animate={menuOpen ? { opacity: 0, scaleX: 0 } : { opacity: 1, scaleX: 1 }} transition={{ duration: 0.2 }} className="block h-px w-full bg-[#2C2A25]" />
-            <motion.span animate={menuOpen ? { rotate: -45, y: -5 } : { rotate: 0, y: 0 }} transition={{ duration: 0.28 }} className="block h-px w-4/5 bg-[#2C2A25]" />
+            <div className="flex flex-col justify-center gap-[5px] w-6 h-6 pointer-events-none">
+              <motion.span animate={menuOpen ? { rotate: 45, y: 5 } : { rotate: 0, y: 0 }} transition={{ duration: 0.28 }} className="block h-px w-full bg-[#2C2A25]" />
+              <motion.span animate={menuOpen ? { opacity: 0, scaleX: 0 } : { opacity: 1, scaleX: 1 }} transition={{ duration: 0.2 }} className="block h-px w-full bg-[#2C2A25]" />
+              <motion.span animate={menuOpen ? { rotate: -45, y: -5 } : { rotate: 0, y: 0 }} transition={{ duration: 0.28 }} className="block h-px w-4/5 bg-[#2C2A25]" />
+            </div>
           </button>
         </div>
       </motion.header>

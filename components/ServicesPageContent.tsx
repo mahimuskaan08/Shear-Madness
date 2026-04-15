@@ -186,6 +186,11 @@ const PETAL_COLORS = [
 // STYLES
 // ─────────────────────────────────────────────────────────────────────────────
 const STYLES = `
+  /* iOS Safari does not support background-attachment: fixed — fallback to scroll */
+  @media (max-width: 1024px) {
+    .svc-page-bg { background-attachment: scroll !important; }
+  }
+
   /* ── CRANE ANIMATION ────────────────────────────────── */
   @keyframes crane-walk {
     0%   { transform: translateX(-120px); }
@@ -679,7 +684,7 @@ export default function ServicesPageContent() {
           <div aria-hidden style={{ position: "absolute", inset: 0, background: "#F5F2EB", zIndex: 0 }} />
 
           {/* Layer 1: fixed bg image — covers entire page from top */}
-          <div aria-hidden style={{
+          <div aria-hidden className="svc-page-bg" style={{
             position: "absolute", inset: 0,
             backgroundImage: "url('/services-page-bg.jpg')",
             backgroundAttachment: "fixed",

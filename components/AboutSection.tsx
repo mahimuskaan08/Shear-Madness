@@ -566,7 +566,7 @@ function PremiumCarousel() {
       {/* ── TRACK ─────────────────────────────────────────────────────────── */}
       <div
         ref={trackRef}
-        style={{ position: "relative", flex: 1, overflow: "hidden", cursor: "grab" }}
+        style={{ position: "relative", flex: 1, overflow: "hidden", cursor: "grab", touchAction: "pan-y" }}
         onPointerDown={onPointerDown}
         onPointerUp={onPointerUp}
         onPointerLeave={() => { dragStart.current = null; }}
