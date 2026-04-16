@@ -477,7 +477,7 @@ function CategorySection({ cat }: { cat: CategoryData }) {
 
           {/* Left: eyebrow + title + description */}
           <div style={{ display:"flex", flexDirection:"column", gap:14, flex:1, minWidth:0 }}>
-            <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"0.60rem", fontWeight:500, letterSpacing:"0.34em", textTransform:"uppercase", color:"#C6A76B" }}>
+            <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"0.60rem", fontWeight:500, letterSpacing:"0.34em", textTransform:"uppercase", color:"#7A5C10" }}>
               {cat.eyebrow}
             </p>
             <div>
@@ -497,7 +497,7 @@ function CategorySection({ cat }: { cat: CategoryData }) {
           {/* Right: note callout */}
           {cat.note && (
             <div style={{ display:"flex", alignItems:"flex-start", gap:8, flexShrink:0, alignSelf:"center", textAlign:"right" }}>
-              <span style={{ color:"#C6A76B", fontSize:"0.60rem", flexShrink:0, marginTop:1 }}>✦</span>
+              <span style={{ color:"#7A5C10", fontSize:"0.60rem", flexShrink:0, marginTop:1 }}>✦</span>
               <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"clamp(0.80rem,0.95vw,0.90rem)", fontWeight:700, fontStyle:"normal", color:"#0A0A0A", letterSpacing:"0.01em", lineHeight:1.55 }}>
                 {cat.note}
               </p>
@@ -526,7 +526,7 @@ function NotesSection() {
     <section style={{ background:"transparent", padding:"clamp(3px,0.35vh,4px) clamp(24px,7vw,96px)" }}>
       <div style={{ maxWidth:1280, margin:"0 auto" }}>
         <FadeIn style={{ textAlign:"center", marginBottom:"clamp(16px,2vh,24px)" }}>
-          <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"0.58rem", fontWeight:500, letterSpacing:"0.34em", textTransform:"uppercase", color:"#C6A76B", marginBottom:6 }}>
+          <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"0.58rem", fontWeight:500, letterSpacing:"0.34em", textTransform:"uppercase", color:"#7A5C10", marginBottom:6 }}>
             Good to Know
           </p>
           <h2 style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"clamp(1.4rem,2.2vw,2.0rem)", fontWeight:600, color:"#556B2F", letterSpacing:"0.01em" }}>
@@ -537,7 +537,7 @@ function NotesSection() {
           {NOTES.map((text, i) => (
             <FadeIn key={i} delay={0.08 * i}>
               <div style={{ background:"linear-gradient(160deg, #FBF7F2 0%, #F8F2EA 100%)", border:"1px solid rgba(210,190,170,0.22)", borderRadius:6, boxShadow:"0 2px 14px rgba(210,190,170,0.12)", padding:"clamp(10px,1.4vh,16px) clamp(12px,1.2vw,18px)", height:"100%", display:"flex", flexDirection:"column", gap:6 }}>
-                <span style={{ fontSize:"0.52rem", color:"#C6A76B" }}>✦</span>
+                <span style={{ fontSize:"0.52rem", color:"#7A5C10" }}>✦</span>
                 <p style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"clamp(0.92rem,0.95vw,1.0rem)", fontWeight:400, lineHeight:1.72, color:"#111111", letterSpacing:"0.01em" }}>
                   {text}
                 </p>
@@ -622,7 +622,7 @@ function HeroSection() {
         <div style={{ textAlign:"center", maxWidth:700, margin:"0 auto" }}>
 
           <motion.p initial={{ opacity:0, y:20 }} animate={{ opacity:1, y:0 }} transition={{ duration:0.9, ease:EASE, delay:0.2 }}
-            style={{ fontFamily:"'Inter',sans-serif", fontSize:"0.60rem", fontWeight:500, letterSpacing:"0.40em", textTransform:"uppercase", color:"#C6A76B", marginBottom:14 }}>
+            style={{ fontFamily:"'Inter',sans-serif", fontSize:"0.60rem", fontWeight:500, letterSpacing:"0.40em", textTransform:"uppercase", color:"#7A5C10", marginBottom:14 }}>
             Our Services
           </motion.p>
 

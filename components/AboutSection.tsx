@@ -161,7 +161,7 @@ export default function AboutSection() {
                 fontWeight: 500,
                 letterSpacing: "0.28em",
                 textTransform: "uppercase",
-                color: "#C6A76B",
+                color: "#7A5C10",
                 marginBottom: 8,
               }}
             >
@@ -240,9 +240,10 @@ export default function AboutSection() {
               phonetic="\ˈshir\"
               pos="noun"
               defs={[
-                "A tool of precision — to shape, refine, and transform.",
-                "The art of cutting with intention and control.",
-                "To sculpt beauty through technique and detail.",
+                "A pair of scissors. Often used in the plural.",
+                "Any of various implements or machines that cut with a scissor like action. verb tr.",
+                "To remove (hair) by cutting or clipping verb intr.",
+                "To use cutting tool such as shears.",
               ]}
             />
             <div style={{ height: 1, background: "rgba(180,155,110,0.22)", margin: "8px 0" }} />
@@ -251,8 +252,8 @@ export default function AboutSection() {
               phonetic="\ˈmad-nəs\"
               pos="noun"
               defs={[
-                "A state of bold creativity and fearless expression.",
-                "Passion, energy, and the pursuit of something extraordinary.",
+                "The state of being mad.",
+                "Intense excitement, enthusiasm or passion.",
               ]}
             />
             <div style={{ height: 1, background: "rgba(180,155,110,0.22)", margin: "8px 0" }} />
@@ -261,11 +262,11 @@ export default function AboutSection() {
               phonetic="\ˈshir ˈmad-nəs\"
               pos="noun"
               defs={[
-                "Where precision meets passion to create exceptional beauty.",
-                "A space where artistry, individuality, and expression come together.",
-                "Where skilled hands transform vision into confidence.",
-                "An experience beyond a salon — refined, personal, and unforgettable.",
-                "A place for both men and women to feel their absolute best.",
+                "Where passion and excitement combine with shears and various implements to achieve beautiful hair.",
+                "Where beauty and passion intersect.",
+                "Where skilled artists achieve great beauty through creativity using great products.",
+                "A place for really great head.",
+                "A Salon for Men & Women.",
               ]}
             />
           </motion.div>
@@ -467,7 +468,7 @@ function DictEntry({
         {defs.map((d, i) => (
           <li key={i} style={{
             fontFamily: "'Cormorant Garamond', Georgia, serif",
-            fontSize: "clamp(0.70rem, 0.86vw, 0.82rem)",
+            fontSize: "clamp(0.92rem, 1.08vw, 1.05rem)",
             fontWeight: 400,
             lineHeight: 1.68,
             color: "#0A0A0A",

@@ -28,7 +28,7 @@ export default function CreditsPage() {
               fontFamily: "'Inter', sans-serif",
               fontSize: "0.78rem", fontWeight: 700,
               letterSpacing: "0.30em", textTransform: "uppercase",
-              color: "#C6A76B", marginBottom: 10,
+              color: "#7A5C10", marginBottom: 10,
             }}>
               With Gratitude
             </p>
@@ -115,9 +115,9 @@ export default function CreditsPage() {
           }}>
             <p style={{
               fontFamily: "'Inter', sans-serif",
-              fontSize: "0.60rem", fontWeight: 600,
+              fontSize: "0.60rem", fontWeight: 700,
               letterSpacing: "0.26em", textTransform: "uppercase",
-              color: "#C6A76B", marginBottom: 14,
+              color: "#7A5C10", marginBottom: 14,
             }}>
               To Those Yet to Visit
             </p>
@@ -137,9 +137,9 @@ export default function CreditsPage() {
                 href="/booking"
                 style={{
                   fontFamily: "'Inter', sans-serif",
-                  fontSize: "0.65rem", fontWeight: 500,
+                  fontSize: "0.65rem", fontWeight: 700,
                   letterSpacing: "0.20em", textTransform: "uppercase",
-                  color: "#C6A76B", textDecoration: "none",
+                  color: "#7A5C10", textDecoration: "none",
                   display: "inline-flex", alignItems: "center", gap: 8,
                 }}
               >
@@ -175,7 +175,7 @@ function CreditSection({
         fontFamily: "'Inter', sans-serif",
         fontSize: "0.74rem", fontWeight: 700,
         letterSpacing: "0.26em", textTransform: "uppercase",
-        color: "#C6A76B", marginBottom: 8,
+        color: "#7A5C10", marginBottom: 8,
       }}>
         {label}
       </p>

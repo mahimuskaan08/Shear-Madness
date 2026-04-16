@@ -88,10 +88,10 @@ const contactDetails = [
 ];
 
 const hours = [
-  { day: "Monday", time: "Closed" },
-  { day: "Tue – Fri", time: "10:00 am – 7:00 pm" },
-  { day: "Saturday", time: "9:00 am – 6:00 pm" },
-  { day: "Sunday", time: "11:00 am – 5:00 pm" },
+  { day: "Tue – Thu", time: "10:00 am – 9:00 pm" },
+  { day: "Fri",       time: "10:00 am – 8:00 pm" },
+  { day: "Sat",       time: "10:00 am – 6:00 pm" },
+  { day: "Sun – Mon", time: "Closed"              },
 ];
 
 // ── HERO ────────────────────────────────────────────────────────────────────
@@ -105,7 +105,7 @@ function ContactHero() {
       {/* Lotus cluster — top right */}
       <div
         className="absolute -top-8 -right-8 w-64 h-64 pointer-events-none opacity-[0.07]"
-        style={{ color: "#C4A96A" }}
+        style={{ color: "#7A5C10" }}
       >
         {[0, 40, 80, 120, 160, 200, 240, 280, 320].map((angle) => (
           <LotusPetal
@@ -440,20 +440,21 @@ function ContactInfoMap() {
                         key={h.day}
                         className="flex justify-between items-baseline gap-3"
                       >
-                        <span className="font-sans text-[#3A3832]/48 text-[11px] tracking-[0.12em] uppercase flex-shrink-0">
+                        <span style={{ fontFamily: "sans-serif", color: "#000000", fontWeight: 800, fontSize: "11px", letterSpacing: "0.12em", textTransform: "uppercase", flexShrink: 0 }}>
                           {h.day}
                         </span>
                         <div
                           className="flex-1 h-px"
                           style={{ background: "rgba(196,169,106,0.14)" }}
                         />
-                        <span
-                          className={`font-sans text-[13px] flex-shrink-0 ${
-                            h.time === "Closed"
-                              ? "text-[#3A3832]/28 italic"
-                              : "text-[#2C2A25]"
-                          }`}
-                        >
+                        <span style={{
+                          fontFamily: "sans-serif",
+                          fontSize: "13px",
+                          fontWeight: 800,
+                          flexShrink: 0,
+                          color: h.time === "Closed" ? "rgba(0,0,0,0.40)" : "#000000",
+                          fontStyle: h.time === "Closed" ? "italic" : "normal",
+                        }}>
                           {h.time}
                         </span>
                       </div>

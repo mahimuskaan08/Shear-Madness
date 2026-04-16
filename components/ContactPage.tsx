@@ -122,9 +122,9 @@ export default function ContactPage() {
         >
           <p style={{
             fontFamily: "'Inter', sans-serif",
-            fontSize: "0.62rem", fontWeight: 500,
+            fontSize: "0.62rem", fontWeight: 700,
             letterSpacing: "0.30em", textTransform: "uppercase",
-            color: "#C6A76B", marginBottom: 8,
+            color: "#7A5C10", marginBottom: 8,
           }}>
             Find Us
           </p>
@@ -250,7 +250,7 @@ export default function ContactPage() {
                       <span style={{
                         fontFamily: "'Cormorant Garamond', Georgia, serif",
                         fontSize: "clamp(1.2rem, 1.6vw, 1.45rem)",
-                        fontWeight: 500, color: "#0A0A0A",
+                        fontWeight: 800, color: "#000000",
                         letterSpacing: "0.01em", whiteSpace: "nowrap",
                       }}>
                         {days}
@@ -258,8 +258,8 @@ export default function ContactPage() {
                       <span style={{
                         fontFamily: "'Cormorant Garamond', Georgia, serif",
                         fontSize: "clamp(1.1rem, 1.5vw, 1.3rem)",
-                        fontWeight: 400,
-                        color: time === "Closed" ? "rgba(10,10,10,0.38)" : "rgba(10,10,10,0.78)",
+                        fontWeight: 800,
+                        color: time === "Closed" ? "rgba(0,0,0,0.45)" : "#000000",
                         letterSpacing: "0.01em", textAlign: "right", whiteSpace: "nowrap",
                       }}>
                         {time}
@@ -333,9 +333,9 @@ function InfoBlock({
     >
       <p style={{
         fontFamily: "'Inter', sans-serif",
-        fontSize: "0.65rem", fontWeight: 600,
+        fontSize: "0.65rem", fontWeight: 700,
         letterSpacing: "0.32em", textTransform: "uppercase",
-        color: "#C6A76B", marginBottom: 10,
+        color: "#7A5C10", marginBottom: 10,
       }}>
         {label}
       </p>
