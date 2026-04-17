@@ -749,7 +749,7 @@ export default function BookingPageContent() {
           <p style={{
             fontFamily: "'Cormorant Garamond', Georgia, serif",
             fontSize: "clamp(1.0rem, 1.6vw, 1.2rem)",
-            fontWeight: 400, fontStyle: "italic",
+            fontStyle: "italic",
             lineHeight: 1.7, color: "#3A3832", fontWeight: 700,
             maxWidth: 520, margin: "0 auto",
           }}>
