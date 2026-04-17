@@ -201,47 +201,24 @@ export default function HeroSection() {
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 0 }}>
             <h1
               style={{
-                fontFamily: "'Cinzel', 'Trajan Pro', Georgia, serif",
+                fontFamily: "'Times New Roman', Times, serif",
                 /* base size — small letters at 0.8em sit comfortably */
                 fontSize: "clamp(2.4rem, 7.8vw, 7.2rem)",
-                fontWeight: 400,
-                letterSpacing: 0,
+                fontWeight: 900,
+                letterSpacing: "0.04em",
+                textTransform: "uppercase" as const,
                 fontKerning: "none" as const,
-                color: "#556B2F",
+                color: "#000000",
                 lineHeight: 1.0,
                 textAlign: "center",
-                /*
-                  Bevel / emboss stack:
-                  1. bright top-left highlight
-                  2. faint warm inner highlight
-                  3-5. dark edge shadow on bottom + sides
-                  6. ambient spread for depth
-                */
-                textShadow: "0 1px 0 rgba(255,255,255,0.35), 0 2px 8px rgba(0,0,0,0.12)",
+                textShadow: "none",
                 margin: 0,
                 display: "inline-flex",
                 alignItems: "baseline",
                 whiteSpace: "nowrap",
               }}
             >
-              {/* ── S H E A R ───────────────────────── */}
-              <span style={{ fontSize: "1.10em" }}>S</span>
-              <span style={{ fontSize: "0.80em", marginLeft: "-0.010em" }}>H</span>
-              <span style={{ fontSize: "0.80em", marginLeft: "-0.005em" }}>E</span>
-              <span style={{ fontSize: "0.80em", marginLeft: "-0.010em" }}>A</span>
-              <span style={{ fontSize: "0.80em", marginLeft: "-0.010em" }}>R</span>
-
-              {/* word gap — tighter than natural */}
-              <span style={{ display: "inline-block", width: "0.14em" }} />
-
-              {/* ── M A D N E S S ───────────────────── */}
-              <span style={{ fontSize: "1.08em" }}>M</span>
-              <span style={{ fontSize: "0.80em", marginLeft: "-0.015em" }}>A</span>
-              <span style={{ fontSize: "0.80em", marginLeft: "-0.008em" }}>D</span>
-              <span style={{ fontSize: "0.80em", marginLeft: "-0.010em" }}>N</span>
-              <span style={{ fontSize: "0.80em", marginLeft: "-0.006em" }}>E</span>
-              <span style={{ fontSize: "0.80em", marginLeft: "-0.008em" }}>S</span>
-              <span style={{ fontSize: "0.80em", marginLeft: "-0.012em" }}>S</span>
+              SHEAR MADNESS
             </h1>
 
             {/* Bright ivory underline — thick, close, nearly full width */}
