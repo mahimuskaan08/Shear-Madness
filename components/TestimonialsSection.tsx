@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
+import { motion } from "framer-motion";
 import { useRef, useState } from "react";
 
 const testimonials = [
@@ -124,7 +124,6 @@ function StarIcon() {
 
 export default function TestimonialsSection() {
   const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-60px" });
   const [active, setActive] = useState(0);
 
   return (
@@ -142,39 +141,21 @@ export default function TestimonialsSection() {
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         {/* Header */}
         <div className="text-center mb-20" ref={ref}>
-          <motion.div
-            initial={{ scaleX: 0, opacity: 0 }}
-            animate={isInView ? { scaleX: 1, opacity: 1 } : {}}
-            transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-            className="w-16 h-px bg-[#C4A96A] mx-auto mb-8"
-          />
-          <motion.p
-            initial={{ opacity: 0, y: 12 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.8, delay: 0.1 }}
-            className="text-[#8FA68C] text-xs tracking-[0.3em] uppercase font-sans font-medium mb-4"
-          >
+          <div className="w-16 h-px bg-[#C4A96A] mx-auto mb-8" />
+          <p className="text-[#8FA68C] text-xs tracking-[0.3em] uppercase font-sans font-medium mb-4">
             Client Stories
-          </motion.p>
-          <motion.h2
-            initial={{ opacity: 0, y: 24 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
+          </p>
+          <h2
             className="font-serif text-[#556B2F] leading-[1.1]"
             style={{ fontSize: "clamp(2rem, 4vw, 3.5rem)", fontWeight: 300 }}
           >
             Words from
             <em> Our Guests</em>
-          </motion.h2>
+          </h2>
         </div>
 
         {/* Featured Testimonial */}
-        <motion.div
-          initial={{ opacity: 0, y: 32 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.3 }}
-          className="max-w-3xl mx-auto text-center mb-16"
-        >
+        <div className="max-w-3xl mx-auto text-center mb-16">
           <motion.div
             key={active}
             initial={{ opacity: 0, y: 12 }}
@@ -202,16 +183,13 @@ export default function TestimonialsSection() {
               </p>
             </div>
           </motion.div>
-        </motion.div>
+        </div>
 
         {/* Testimonial selector dots + mini cards */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 max-w-6xl mx-auto">
           {testimonials.map((t, i) => (
-            <motion.button
+            <button
               key={t.name}
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.7, delay: 0.4 + i * 0.08 }}
               onClick={() => setActive(i)}
               className={`text-left p-5 border transition-all duration-400 rounded-sm cursor-pointer ${
                 active === i
@@ -230,7 +208,7 @@ export default function TestimonialsSection() {
               <p className="font-sans text-[#8FA68C] text-[10px] tracking-wider uppercase">
                 {t.service}
               </p>
-            </motion.button>
+            </button>
           ))}
         </div>
       </div>

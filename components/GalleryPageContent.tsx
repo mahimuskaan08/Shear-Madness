@@ -117,16 +117,21 @@ const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
    Testimonials Data
 ───────────────────────────────────────────── */
 const TESTIMONIALS = [
-  { name: "Sarah H.",    role: "Client", text: "Everyone at the salon takes real care to understand the look you want. The team is thoughtful, skilled, and always makes the experience feel comfortable." },
-  { name: "Megan C.",    role: "Client", text: "Very personable service and a haircut I genuinely loved. The visit felt easy, warm, and polished from start to finish." },
-  { name: "Andrea B.",   role: "Client", text: "Excellent service and close attention to what I asked for. The stylist was careful, attentive, and delivered exactly the result I wanted." },
-  { name: "Brenda S.",   role: "Client", text: "Meticulous work, a lovely experience, and great attention to detail. The haircut was done with care and precision." },
-  { name: "Charlotte S.", role: "Client", text: "A beautifully done haircut with real care taken throughout. You can feel the experience and professionalism." },
-  { name: "Joan M.",     role: "Client", text: "As a first-time visitor, I felt understood right away. The stylist knew exactly what I wanted, and I left very pleased." },
-  { name: "Emma L.",     role: "Client", text: "I felt at home here. The service was fun, welcoming, and the final result was even better than salons I had visited before." },
-  { name: "Alice E.",    role: "Client", text: "Wonderful first appointment. Professional service, a great result, and an experience good enough that I would happily book again." },
-  { name: "Gavin W.",    role: "Client", text: "Professional, creative, courteous, and consistently clean. The salon has a polished atmosphere and talented stylists." },
-  { name: "Susan P.",    role: "Client", text: "Friendly, personable, and easy to return to regularly. Booking feels convenient, and the overall experience is reliable and welcoming." },
+  { name: "Verified Reviewer",   role: "Google Review", text: "I love this place. Right when you walk in, you are always greeted by David, who is super friendly and welcoming. Victor is the absolute best. He takes his time and is meticulous with his cuts/styling. I highly recommend you give this place a try :)" },
+  { name: "Michelle Ferran",     role: "Google Review", text: "OMG I had my first haircut from Victor — what an amazing experience!!! Not only did I get a fabulous haircut, Victor took the time to talk me through my new style. He showed me how to style it with his hair products." },
+  { name: "Bradley Paszkiewicz", role: "Google Review", text: "Honestly the best haircut I have ever gotten. Victor has an absolutely amazing personality that makes the whole experience fun, plus super experienced. He explains everything he is doing/about to do and why." },
+  { name: "Ángeles González",    role: "Google Review", text: "Today my boyfriend went to this place to get his hair cut. He received what we believe is the best haircut he's ever had, so I had to come here to say THANK YOU." },
+  { name: "Henna Vora",          role: "Google Review", text: "I love my husband's haircut and styling. Victor is professional and excellent at his job. Brilliant skill set to handle my husband's hair volumes. Big thank you." },
+  { name: "Gregory G.",          role: "Google Review", text: "The 2 owner operators are always on-site, so the well run, full service shop is always fully stocked, staffed, and maintained. David and Viktor space appointments that they can actually honor." },
+  { name: "Saarth Shah",         role: "Google Review", text: "Best haircut place in town. Victor is amazing at knowing the hair style you want and has some great suggestions. David is very nice and friendly." },
+  { name: "G Bha",               role: "Google Review", text: "Love the edgy cuts Victor does! He always takes the time to make sure it's cut and styled well. I've tried different hair salons both in Hoboken and New York City but Shear Madness is a cut above all of them!" },
+  { name: "Jaime Zimmel",        role: "Google Review", text: "David and Victor are always on-site, and always very accommodating and professional. The site is always well maintained and clean. They always make the experience very warm and welcoming." },
+  { name: "Jesse Luo",           role: "Google Review", text: "Met with Victor, he was very patient with me in building up a better haircut than my usual, and explained all his recommendations in detail. Highly recommended and worth a trip." },
+  { name: "Andrew Lazirko",      role: "Google Review", text: "My first haircut at a new salon in 28 years. Absolute legends in here. 10/10 would recommend to everyone. Class act establishment. My new spot for sure." },
+  { name: "Erdal Turnacioglu",   role: "Google Review", text: "I've been going to Victor for over 15 years now, no matter where I've lived and worked in New York or New Jersey. He's the best! Highly recommend!" },
+  { name: "Brad Mundt",          role: "Google Review", text: "Excellent cut by Victor. I appreciate his explanations as to why he is doing certain things and his overall skill level." },
+  { name: "Georgiy Yudintsev",   role: "Google Review", text: "Excellent haircut, a little pricey but it was very well done. Very chill and easy going staff too!" },
+  { name: "Daniel Mikus",        role: "Google Review", text: "I love this place! Even after moving to Brooklyn I still make the journey across both rivers monthly to get my hair cut." },
 ];
 
 
