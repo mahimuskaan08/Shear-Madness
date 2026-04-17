@@ -206,16 +206,18 @@ export default function AboutSection() {
               flexShrink: 0,
             }}
           >
-            Shear Madness is Hoboken's top-rated beauty salon, offering professional haircuts, coloring,
-            waxing, straightening, extensions, and more — all delivered with precision and artistry.
-            Founded in 2003 and tucked just steps from Hoboken City Hall, our vision has always been
-            simple: to redefine the salon experience by combining exceptional service with a warm,
-            welcoming atmosphere free from the pretense of traditional spaces. Our team of highly skilled
-            artists, coming from diverse backgrounds, work with premium products in a calm, Asian-inspired
-            setting designed for both comfort and expression. Here, every client is treated as part of the
-            Shear Madness family — whether you're seeking a bold transformation or maintaining your
-            signature look, we interpret your vision with care, creativity, and intention. At Shear
-            Madness, beauty isn't just a service — it's an experience.
+            We are Hoboken's top-rated beauty salon for professional haircuts, waxes, hair coloring,
+            straightening, extensions and much more. Tucked away just three blocks behind Hoboken City
+            Hall, Shear Madness was born in 2003 with one simple mission – recreate the professional
+            salon experience by providing top notch beauty services for men and women; without the
+            pretense of other fine salons, in a warm and inviting atmosphere, atypical from the rest.
+            Staffed with top notch artists/stylists from many backgrounds, using the finest quality
+            products available, in a comfortable Asian inspired setting, the Shear Madness team can help
+            find and interpret the vision of even the most discerning client. Once you are here, you're
+            not just a client but a member of the Shear Madness family. Trust me, relaxing in one of our
+            chairs, it will feel like a second home! Whether you're looking for a dramatic change – a new
+            hair color perhaps – or just maintaining your current style, from avant guarde to traditional,
+            you owe it to yourself to call us today and FEEL THE MADNESS!
           </motion.p>
 
           {/* ── DICTIONARY BLOCK ────────────────────────────────────────────── */}
@@ -240,9 +242,10 @@ export default function AboutSection() {
               phonetic="\ˈshir\"
               pos="noun"
               defs={[
-                "A tool of precision — to shape, refine, and transform.",
-                "The art of cutting with intention and control.",
-                "To sculpt beauty through technique and detail.",
+                "A pair of scissors. Often used in the plural.",
+                "Any of various implements or machines that cut with a scissor like action.",
+                "verb tr. — To remove (hair) by cutting or clipping",
+                "verb intr. — To use cutting tool such as shears.",
               ]}
             />
             <div style={{ height: 1, background: "rgba(180,155,110,0.22)", margin: "8px 0" }} />
@@ -251,8 +254,8 @@ export default function AboutSection() {
               phonetic="\ˈmad-nəs\"
               pos="noun"
               defs={[
-                "A state of bold creativity and fearless expression.",
-                "Passion, energy, and the pursuit of something extraordinary.",
+                "The state of being mad",
+                "Intense excitement, enthusiasm or passion.",
               ]}
             />
             <div style={{ height: 1, background: "rgba(180,155,110,0.22)", margin: "8px 0" }} />
@@ -261,11 +264,11 @@ export default function AboutSection() {
               phonetic="\ˈshir ˈmad-nəs\"
               pos="noun"
               defs={[
-                "Where precision meets passion to create exceptional beauty.",
-                "A space where artistry, individuality, and expression come together.",
-                "Where skilled hands transform vision into confidence.",
-                "An experience beyond a salon — refined, personal, and unforgettable.",
-                "A place for both men and women to feel their absolute best.",
+                "Where passion and excitement combine with shears and various implements to achieve beautiful hair.",
+                "Where beauty and passion intersect.",
+                "Where skilled artists achieve great beauty through creativity using great products.",
+                "A place for really great head.",
+                "A Salon for Men & Women",
               ]}
             />
           </motion.div>
