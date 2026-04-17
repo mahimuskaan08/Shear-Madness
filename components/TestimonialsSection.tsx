@@ -5,32 +5,109 @@ import { useRef, useState } from "react";
 
 const testimonials = [
   {
-    name: "Sophia L.",
+    name: "Verified Reviewer",
     location: "Hoboken, NJ",
     rating: 5,
-    text: "Walking into Shear Madness feels like stepping into a different world — calm, beautiful, and so intentional. My hair has never looked better, and I leave every visit feeling genuinely restored.",
-    service: "Balayage & Cut",
+    text: "I love this place. Right when you walk in, you are always greeted by David, who is super friendly and welcoming. Victor is the absolute best. He takes his time and is meticulous with his cuts/styling. I trust his judgement so much, that during every cut, I am often saying \"oh just do what you think will look best!\" and he's always right. I highly recommend you give this place a try :)",
+    service: "Haircut",
   },
   {
-    name: "Michelle K.",
-    location: "Jersey City, NJ",
-    rating: 5,
-    text: "The most peaceful salon experience I've ever had. The atmosphere is stunning, the stylists are true artists, and the results speak for themselves. I won't go anywhere else.",
-    service: "Updo & Styling",
-  },
-  {
-    name: "Natalie R.",
-    location: "Manhattan, NY",
-    rating: 5,
-    text: "I've tried salons all over New York and Hoboken, and nothing comes close. It's the combination of skill, care, and environment — everything feels elevated and considered.",
-    service: "Keratin Treatment",
-  },
-  {
-    name: "James T.",
+    name: "Michelle Ferran",
     location: "Hoboken, NJ",
     rating: 5,
-    text: "As someone who was always nervous about haircuts, Shear Madness completely changed my perspective. The team takes their time, listens, and delivers every single time.",
-    service: "Men's Cut",
+    text: "OMG I had my first haircut from Victor — what an amazing experience!!! Not only did I get a fabulous haircut, Victor took the time to talk me through my new style. He showed me how to style it with his hair products.",
+    service: "Haircut",
+  },
+  {
+    name: "Bradley Paszkiewicz",
+    location: "Hoboken, NJ",
+    rating: 5,
+    text: "Honestly the best haircut I have ever gotten. Victor has an absolutely amazing personality that makes the whole experience fun, plus super experienced. He explains everything he is doing/about to do and why.",
+    service: "Haircut",
+  },
+  {
+    name: "Ángeles González",
+    location: "Hoboken, NJ",
+    rating: 5,
+    text: "Today my boyfriend went to this place to get his hair cut. He received what we believe is the best haircut he's ever had, so I had to come here to say THANK YOU.",
+    service: "Men's Haircut",
+  },
+  {
+    name: "Henna Vora",
+    location: "Hoboken, NJ",
+    rating: 5,
+    text: "I love my husband's haircut and styling. Victor is professional and excellent at his job. Brilliant skill set to handle my husband's hair volumes. Big thank you.",
+    service: "Haircut & Styling",
+  },
+  {
+    name: "Gregory G.",
+    location: "Hoboken, NJ",
+    rating: 5,
+    text: "The 2 owner operators are always on-site, so the well run, full service shop is always fully stocked, staffed, and maintained. David and Viktor space appointments that they can actually honor — so on-time clients are generally treated to an on-time appointment.",
+    service: "Full Service",
+  },
+  {
+    name: "Saarth Shah",
+    location: "Hoboken, NJ",
+    rating: 5,
+    text: "Best haircut place in town. Victor is amazing at knowing the hair style you want and has some great suggestions. David is very nice and friendly.",
+    service: "Haircut",
+  },
+  {
+    name: "G Bha",
+    location: "Hoboken, NJ",
+    rating: 5,
+    text: "Love the edgy cuts Victor does! He always takes the time to make sure it's cut and styled well. I've tried different hair salons both in Hoboken and New York City but Shear Madness is a cut above all of them!",
+    service: "Haircut & Styling",
+  },
+  {
+    name: "Jaime Zimmel",
+    location: "Hoboken, NJ",
+    rating: 5,
+    text: "David and Victor are always on-site, and always very accommodating and professional. The site is always well maintained and clean. They always make the experience very warm and welcoming.",
+    service: "Full Service",
+  },
+  {
+    name: "Jesse Luo",
+    location: "Hoboken, NJ",
+    rating: 5,
+    text: "Met with Victor, he was very patient with me in building up a better haircut than my usual, and explained all his recommendations in detail. Highly recommended and worth a trip.",
+    service: "Haircut",
+  },
+  {
+    name: "Metalcrazier W",
+    location: "Hoboken, NJ",
+    rating: 5,
+    text: "Victor saved my hair from a bad haircut. Both David and Victor are super friendly. Definitely will return.",
+    service: "Haircut",
+  },
+  {
+    name: "Andrew Lazirko",
+    location: "Hoboken, NJ",
+    rating: 5,
+    text: "My first haircut at a new salon in 28 years. Absolute legends in here. 10/10 would recommend to everyone. Class act establishment. My new spot for sure.",
+    service: "Men's Haircut",
+  },
+  {
+    name: "Erdal Turnacioglu",
+    location: "New York / New Jersey",
+    rating: 5,
+    text: "I've been going to Victor for over 15 years now, no matter where I've lived and worked in New York or New Jersey. He's the best! Highly recommend!",
+    service: "Haircut",
+  },
+  {
+    name: "Brad Mundt",
+    location: "Hoboken, NJ",
+    rating: 5,
+    text: "Excellent cut by Victor. I appreciate his explanations as to why he is doing certain things and his overall skill level.",
+    service: "Haircut",
+  },
+  {
+    name: "Georgiy Yudintsev",
+    location: "Hoboken, NJ",
+    rating: 5,
+    text: "Excellent haircut, a little pricey but it was very well done. Very chill and easy going staff too!",
+    service: "Haircut",
   },
 ];
 
@@ -128,7 +205,7 @@ export default function TestimonialsSection() {
         </motion.div>
 
         {/* Testimonial selector dots + mini cards */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 max-w-6xl mx-auto">
           {testimonials.map((t, i) => (
             <motion.button
               key={t.name}
