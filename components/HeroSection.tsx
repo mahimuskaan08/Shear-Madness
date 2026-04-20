@@ -62,6 +62,31 @@ const HERO_FADE = `
 @keyframes hero-fade-in {
   from { opacity: 0; }
   to   { opacity: 1; }
+}
+
+.sm-letter {
+  font-family: 'Times New Roman', Times, serif;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: #111111;
+  /* white halo behind ensures black text pops on any bg; subtle dark shadow adds depth */
+  text-shadow:
+    0 0 18px rgba(255,255,255,0.92),
+    0 0 40px rgba(255,255,255,0.60),
+    2px 2px 0 rgba(0,0,0,.22),
+    4px 4px 10px rgba(0,0,0,.12);
+  line-height: 1;
+  display: inline;
+  vertical-align: baseline;
+  letter-spacing: -0.01em;
+}
+/* fluid scale: xs=22px → lg=105px; never overflows on any viewport */
+.sm-letter-normal { font-size: clamp(22px, 6.5vw, 105px); }
+.sm-letter-large  { font-size: clamp(28px, 8.5vw, 135px); margin-right: -3px; }
+/* word gap between SHEAR and MADNESS — scales with viewport */
+.sm-word-gap { display: inline-block; width: clamp(6px, 1.8vw, 28px); }
+@media (max-width: 480px) {
+  .sm-letter-large { margin-right: -2px; }
 }`;
 
 // ── PETAL SVG ─────────────────────────────────────────────────────────────────
@@ -107,11 +132,16 @@ export default function HeroSection() {
 
       {/* ── LAYER 1: BACKGROUND IMAGE ────────────────────────────────────── */}
       <motion.div style={{ scale: bgScale }} className="absolute inset-0 w-full h-full">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="/hero-bg.png"
           alt=""
           aria-hidden="true"
+          fetchPriority="high"
+          decoding="async"
           style={{
+            position: "absolute",
+            inset: 0,
             width: "100%",
             height: "100%",
             objectFit: "cover",
@@ -197,66 +227,69 @@ export default function HeroSection() {
           transition={{ duration: 1.5, ease: EASE, delay: 0.4 }}
           style={{ display: "flex", flexDirection: "column", alignItems: "center", marginTop: "8%", gap: 0 }}
         >
-          {/* Name — per-glyph tuned to match logo silhouette */}
+          {/* ── MAIN TITLE ───────────────────────────────────────────────── */}
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 0 }}>
+            {/*
+              Inline spans keep every letter on the same baseline automatically.
+              S and M use .sm-letter-large; the rest use .sm-letter-normal.
+              A zero-width word gap span sits between SHEAR and MADNESS.
+            */}
             <h1
               style={{
-                fontFamily: "'Times New Roman', Times, serif",
-                /* base size — small letters at 0.8em sit comfortably */
-                fontSize: "clamp(2.4rem, 7.8vw, 7.2rem)",
-                fontWeight: 900,
-                letterSpacing: "0.04em",
-                textTransform: "uppercase" as const,
-                fontKerning: "none" as const,
-                color: "#000000",
-                lineHeight: 1.0,
-                textAlign: "center",
-                textShadow: "none",
                 margin: 0,
-                display: "inline-flex",
-                alignItems: "baseline",
+                padding: 0,
+                display: "block",
+                textAlign: "center",
+                lineHeight: 1,
                 whiteSpace: "nowrap",
               }}
             >
-              SHEAR MADNESS
+              <span className="sm-letter sm-letter-large">S</span>
+              <span className="sm-letter sm-letter-normal">HEAR</span>
+              {/* word gap — scales with viewport via CSS class */}
+              <span className="sm-word-gap" />
+              <span className="sm-letter sm-letter-large">M</span>
+              <span className="sm-letter sm-letter-normal">ADNESS</span>
             </h1>
 
-            {/* Bright ivory underline — thick, close, nearly full width */}
+            {/* Ornamental rule */}
             <div
               style={{
-                marginTop: "0.30em",
-                width: "95%",
-                height: "1.5px",
+                marginTop: "0.38em",
+                width: "88%",
+                height: "1px",
                 background:
-                  "linear-gradient(to right, transparent, rgba(85,107,47,0.65) 4%, rgba(85,107,47,0.65) 96%, transparent)",
+                  "linear-gradient(to right, transparent, rgba(0,0,0,0.55) 12%, rgba(0,0,0,0.55) 88%, transparent)",
               }}
             />
           </div>
 
           {/* Spacing */}
-          <div style={{ height: 12 }} />
+          <div style={{ height: 14 }} />
 
-          {/* Taglines */}
+          {/* Subtitle */}
           <p style={{
-            fontFamily: "'Cormorant Garamond', Georgia, serif",
-            fontSize: "clamp(1.0rem, 2.0vw, 1.34rem)",
-            fontWeight: 600,
-            letterSpacing: "0.18em",
-            textTransform: "uppercase",
-            color: "#000",
-            textShadow: "none",
-            marginBottom: 6,
+            fontFamily: "'Times New Roman', Times, serif",
+            fontSize: "clamp(0.95rem, 2.4vw, 1.38rem)",
+            fontWeight: 700,
+            fontStyle: "italic",
+            letterSpacing: "0.06em",
+            color: "#111111",
+            textShadow: "0 0 14px rgba(255,255,255,0.85), 1px 1px 3px rgba(0,0,0,0.20)",
+            marginBottom: 5,
           }}>
             A Salon For Men &amp; Women
           </p>
 
-          <p className="font-serif italic" style={{
-            fontSize: "clamp(1.05rem, 2.5vw, 1.55rem)",
-            fontWeight: 700,
-            letterSpacing: "0.02em",
-            color: "#000",
-            textShadow: "none",
-            marginBottom: 28,
+          <p style={{
+            fontFamily: "'Cormorant Garamond', Georgia, serif",
+            fontSize: "clamp(0.78rem, 1.8vw, 1.0rem)",
+            fontWeight: 500,
+            letterSpacing: "0.14em",
+            textTransform: "uppercase" as const,
+            color: "rgba(17,17,17,0.78)",
+            textShadow: "0 0 12px rgba(255,255,255,0.80)",
+            marginBottom: 32,
           }}>
             Where Style Meets Balance
           </p>
