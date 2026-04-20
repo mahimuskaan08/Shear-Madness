@@ -1,0 +1,35 @@
+name: Sync from Mahi's Repo
+
+on:
+  schedule:
+    - cron: '*/30 * * * *'   # runs every 30 minutes
+  workflow_dispatch:          # allows manual trigger from GitHub UI
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Add Mahi's repo as remote
+        run: git remote add mahi https://github.com/mahimuskaan08/Shear-Madness.git
+
+      - name: Fetch from Mahi
+        run: git fetch mahi
+
+      - name: Merge Mahi's master
+        run: |
+          git merge mahi/master --no-edit --strategy-option=theirs \
+            -m "chore: auto-sync from mahimuskaan08/Shear-Madness"
+
+      - name: Push to origin
+        run: git push origin master
