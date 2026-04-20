@@ -24,7 +24,7 @@ const HOURS = [
 const SOCIALS = [
   {
     label: "Instagram",
-    href: "#",
+    href: "https://www.instagram.com/shearmadnesshoboken/",
     icon: (
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
         <rect x="2" y="2" width="20" height="20" rx="5" />
@@ -35,7 +35,7 @@ const SOCIALS = [
   },
   {
     label: "Facebook",
-    href: "#",
+    href: "https://www.facebook.com/ShearMadnessHobokenNJ/",
     icon: (
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
         <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
@@ -44,7 +44,7 @@ const SOCIALS = [
   },
   {
     label: "X (Twitter)",
-    href: "#",
+    href: "https://x.com/ShearMadnessNJ",
     icon: (
       <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
         <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
@@ -53,7 +53,7 @@ const SOCIALS = [
   },
   {
     label: "Google",
-    href: "#",
+    href: "mailto:info@shearmadnesshoboken.com",
     icon: (
       <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
         <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
@@ -193,10 +193,10 @@ export default function Footer() {
             <p style={{
               fontFamily: "'Inter', sans-serif",
               fontSize: "0.58rem",
-              fontWeight: 500,
+              fontWeight: 700,
               letterSpacing: "0.30em",
               textTransform: "uppercase",
-              color: "#C6A76B",
+              color: "#7A5C10",
               marginBottom: 16,
             }}>
               Salon Hours
@@ -252,10 +252,10 @@ export default function Footer() {
             <p style={{
               fontFamily: "'Inter', sans-serif",
               fontSize: "0.58rem",
-              fontWeight: 500,
+              fontWeight: 700,
               letterSpacing: "0.30em",
               textTransform: "uppercase",
-              color: "#C6A76B",
+              color: "#7A5C10",
               marginBottom: 16,
             }}>
               Navigation

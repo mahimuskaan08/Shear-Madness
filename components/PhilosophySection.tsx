@@ -70,7 +70,7 @@ export default function PhilosophySection() {
       {/* ── DECORATIVE LOTUS BG ───────────────────────────────────────────── */}
       {/* Top-right cluster */}
       <div className="absolute -top-10 -right-10 w-72 h-72 pointer-events-none opacity-[0.07]"
-        style={{ color: "#C4A96A" }}
+        style={{ color: "#7A5C10" }}
       >
         {[0, 40, 80, 120, 160, 200, 240, 280, 320].map((angle) => (
           <LotusPetal

@@ -173,9 +173,9 @@ export default function ArtistSection() {
         >
           <p style={{
             fontFamily: "'Inter', sans-serif",
-            fontSize: "0.62rem", fontWeight: 500,
+            fontSize: "0.62rem", fontWeight: 700,
             letterSpacing: "0.30em", textTransform: "uppercase",
-            color: "#C6A76B", marginBottom: 8,
+            color: "#7A5C10", marginBottom: 8,
           }}>
             Meet the Artist
           </p>
@@ -212,7 +212,7 @@ export default function ArtistSection() {
             style={{ display: "flex", flexDirection: "column", height: "100%" }}
           >
             <div
-              className="artist-img-wrap has-hover"
+              className="artist-img-wrap"
               style={{
                 flex: 1,
                 minHeight: 0,
@@ -222,14 +222,8 @@ export default function ArtistSection() {
             >
               <img
                 className="portrait-main"
-                src="/oscar.jpg"
+                src="/oscar-about.png"
                 alt="Oscar 'Victor' Landicho — Co-Founder & Master Stylist, Shear Madness Hoboken"
-              />
-              <img
-                className="portrait-hover"
-                src="/oscar-color.jpg"
-                alt=""
-                aria-hidden="true"
               />
             </div>
 
@@ -263,9 +257,9 @@ export default function ArtistSection() {
               </h3>
               <p style={{
                 fontFamily: "'Inter', sans-serif",
-                fontSize: "0.62rem", fontWeight: 500,
+                fontSize: "0.62rem", fontWeight: 700,
                 letterSpacing: "0.26em", textTransform: "uppercase",
-                color: "#C6A76B",
+                color: "#7A5C10",
               }}>
                 Master Stylist · Co-Founder · Manager
               </p>
@@ -369,9 +363,9 @@ export default function ArtistSection() {
               </h3>
               <p style={{
                 fontFamily: "'Inter', sans-serif",
-                fontSize: "0.62rem", fontWeight: 500,
+                fontSize: "0.62rem", fontWeight: 700,
                 letterSpacing: "0.26em", textTransform: "uppercase",
-                color: "#C6A76B",
+                color: "#7A5C10",
               }}>
                 Stylist
               </p>
@@ -446,7 +440,7 @@ export default function ArtistSection() {
             <div style={{ marginTop: 14, paddingLeft: 2 }}>
               <p style={{
                 fontFamily: "'Inter', sans-serif",
-                fontSize: "0.60rem", fontWeight: 500,
+                fontSize: "0.60rem", fontWeight: 700,
                 letterSpacing: "0.22em", textTransform: "uppercase",
                 color: "rgba(26,18,8,0.36)",
               }}>

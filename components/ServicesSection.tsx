@@ -113,10 +113,10 @@ export default function ServicesSection() {
           <p style={{
             fontFamily: "'Inter', sans-serif",
             fontSize: "0.62rem",
-            fontWeight: 500,
+            fontWeight: 700,
             letterSpacing: "0.30em",
             textTransform: "uppercase",
-            color: "#C6A76B",
+            color: "#7A5C10",
             marginBottom: 8,
           }}>
             What We Offer
@@ -327,7 +327,7 @@ function ServiceCard({
             fontWeight: 500,
             letterSpacing: "0.20em",
             textTransform: "uppercase",
-            color: "#C6A76B",
+            color: "#7A5C10",
           }}
         >
           Explore Services

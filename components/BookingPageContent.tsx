@@ -66,9 +66,9 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
     <p style={{
       fontFamily: "'Inter', sans-serif",
-      fontSize: "0.62rem", fontWeight: 600,
+      fontSize: "0.62rem", fontWeight: 700,
       letterSpacing: "0.28em", textTransform: "uppercase",
-      color: "#C4A96A", marginBottom: 6,
+      color: "#7A5C10", marginBottom: 6,
     }}>
       {children}
     </p>
@@ -103,7 +103,7 @@ function FieldLabel({ htmlFor, required, children }: { htmlFor: string; required
       }}
     >
       {children}
-      {required && <span style={{ color: "#C4A96A", marginLeft: 3 }}>*</span>}
+      {required && <span style={{ color: "#7A5C10", marginLeft: 3 }}>*</span>}
     </label>
   );
 }
@@ -257,7 +257,7 @@ function ServicesSelect({ selected, onChange }: {
                   fontFamily: "'Inter', sans-serif",
                   fontSize: "0.60rem", fontWeight: 700,
                   letterSpacing: "0.22em", textTransform: "uppercase",
-                  color: "#C4A96A",
+                  color: "#7A5C10",
                   borderTop: "1px solid rgba(196,169,106,0.16)",
                 }}>
                   {grp.group}
@@ -302,7 +302,7 @@ function ServicesSelect({ selected, onChange }: {
                 type="button"
                 onClick={() => toggle(s)}
                 style={{ display: "flex", alignItems: "center", background: "none", border: "none",
-                  cursor: "pointer", padding: 0, color: "#C4A96A", lineHeight: 1 }}
+                  cursor: "pointer", padding: 0, color: "#7A5C10", lineHeight: 1 }}
                 aria-label={`Remove ${s}`}
               >
                 <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
@@ -722,9 +722,9 @@ export default function BookingPageContent() {
         >
           <p style={{
             fontFamily: "'Inter', sans-serif",
-            fontSize: "0.62rem", fontWeight: 600,
+            fontSize: "0.62rem", fontWeight: 700,
             letterSpacing: "0.30em", textTransform: "uppercase",
-            color: "#C4A96A", marginBottom: 10,
+            color: "#7A5C10", marginBottom: 10,
           }}>
             Shear Madness Hoboken
           </p>
@@ -819,7 +819,7 @@ export default function BookingPageContent() {
                     fontFamily: "'Inter', sans-serif",
                     fontSize: "0.72rem", fontWeight: 600,
                     letterSpacing: "0.18em", textTransform: "uppercase",
-                    color: "#C4A96A", background: "none", border: "none",
+                    color: "#7A5C10", background: "none", border: "none",
                     cursor: "pointer", textDecoration: "underline",
                     textDecorationColor: "rgba(196,169,106,0.4)",
                   }}
@@ -919,7 +919,7 @@ export default function BookingPageContent() {
                   fontSize: "0.70rem", color: "rgba(58,56,50,0.50)",
                   marginTop: 20, marginBottom: 28,
                 }}>
-                  <span style={{ color: "#C4A96A" }}>*</span> Required fields
+                  <span style={{ color: "#7A5C10" }}>*</span> Required fields
                 </p>
 
                 {/* ── SUBMIT ───────────────────────────────────────── */}
@@ -985,7 +985,7 @@ export default function BookingPageContent() {
           }}
         >
           Prefer to call? Reach us at{" "}
-          <a href="tel:+12015551234" style={{ color: "#C4A96A", textDecoration: "none" }}>
+          <a href="tel:+12015551234" style={{ color: "#7A5C10", textDecoration: "none" }}>
             (201) 555-1234
           </a>
           {" "}— we're happy to book your appointment over the phone.

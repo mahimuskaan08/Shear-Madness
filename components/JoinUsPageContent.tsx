@@ -155,7 +155,7 @@ function ApplicationForm() {
       >
         <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10, marginBottom: 24 }}>
           <div style={{ height: 1, width: 36, background: "linear-gradient(to right, transparent, rgba(198,167,107,0.55))" }} />
-          <span style={{ color: "#C6A76B", fontSize: "0.68rem" }}>✦</span>
+          <span style={{ color: "#7A5C10", fontSize: "0.68rem" }}>✦</span>
           <div style={{ height: 1, width: 36, background: "linear-gradient(to left, transparent, rgba(198,167,107,0.55))" }} />
         </div>
         <h3 style={{
@@ -287,7 +287,7 @@ export default function JoinUsPageContent() {
                 fontWeight: 700,
                 letterSpacing: "0.38em",
                 textTransform: "uppercase",
-                color: "#C6A76B",
+                color: "#7A5C10",
                 marginBottom: 18,
               }}
             >
@@ -379,7 +379,7 @@ export default function JoinUsPageContent() {
                 fontWeight: 700,
                 letterSpacing: "0.36em",
                 textTransform: "uppercase",
-                color: "#C6A76B",
+                color: "#7A5C10",
                 marginBottom: 8,
               }}>
                 Apply Now

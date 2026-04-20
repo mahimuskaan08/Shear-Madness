@@ -193,7 +193,7 @@ export default function GalleryPageContent() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: EASE }}
           className="font-sans text-[10px] tracking-[0.35em] uppercase font-medium"
-          style={{ color: "#C4A96A" }}
+          style={{ color: "#7A5C10" }}
         >
           Gallery
         </motion.p>
@@ -714,7 +714,7 @@ function ReviewsSection() {
       >
         <p
           className="font-sans"
-          style={{ fontSize: "0.68rem", letterSpacing: "0.34em", textTransform: "uppercase", color: "#C4A96A", fontWeight: 600 }}
+          style={{ fontSize: "0.68rem", letterSpacing: "0.34em", textTransform: "uppercase", color: "#7A5C10", fontWeight: 700 }}
         >
           Reviews
         </p>

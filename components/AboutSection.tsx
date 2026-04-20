@@ -161,7 +161,7 @@ export default function AboutSection() {
                 fontWeight: 500,
                 letterSpacing: "0.28em",
                 textTransform: "uppercase",
-                color: "#C6A76B",
+                color: "#7A5C10",
                 marginBottom: 8,
               }}
             >
@@ -243,9 +243,9 @@ export default function AboutSection() {
               pos="noun"
               defs={[
                 "A pair of scissors. Often used in the plural.",
-                "Any of various implements or machines that cut with a scissor like action.",
-                "verb tr. — To remove (hair) by cutting or clipping",
-                "verb intr. — To use cutting tool such as shears.",
+                "Any of various implements or machines that cut with a scissor like action. verb tr.",
+                "To remove (hair) by cutting or clipping verb intr.",
+                "To use cutting tool such as shears.",
               ]}
             />
             <div style={{ height: 1, background: "rgba(180,155,110,0.22)", margin: "8px 0" }} />
@@ -254,7 +254,7 @@ export default function AboutSection() {
               phonetic="\ˈmad-nəs\"
               pos="noun"
               defs={[
-                "The state of being mad",
+                "The state of being mad.",
                 "Intense excitement, enthusiasm or passion.",
               ]}
             />
@@ -268,7 +268,7 @@ export default function AboutSection() {
                 "Where beauty and passion intersect.",
                 "Where skilled artists achieve great beauty through creativity using great products.",
                 "A place for really great head.",
-                "A Salon for Men & Women",
+                "A Salon for Men & Women.",
               ]}
             />
           </motion.div>
@@ -470,7 +470,7 @@ function DictEntry({
         {defs.map((d, i) => (
           <li key={i} style={{
             fontFamily: "'Cormorant Garamond', Georgia, serif",
-            fontSize: "clamp(0.70rem, 0.86vw, 0.82rem)",
+            fontSize: "clamp(0.92rem, 1.08vw, 1.05rem)",
             fontWeight: 400,
             lineHeight: 1.68,
             color: "#0A0A0A",
