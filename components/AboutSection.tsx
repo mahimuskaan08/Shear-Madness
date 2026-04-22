@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState, useEffect, useCallback } from "react";
+import Image from "next/image";
 import { motion, useInView } from "framer-motion";
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
@@ -85,13 +86,12 @@ export default function AboutSection() {
 
       {/* ── LAYER 1: BAMBOO PARCHMENT BACKGROUND ───────────────────────────── */}
       <div aria-hidden="true" style={{ position: "absolute", inset: 0, zIndex: 0 }}>
-        <img
+        <Image
           src="/about-bg.png"
           alt=""
-          style={{
-            width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", display: "block",
-            filter: "none",
-          }}
+          fill
+          sizes="100vw"
+          style={{ objectFit: "cover", objectPosition: "center" }}
         />
       </div>
 
@@ -206,16 +206,16 @@ export default function AboutSection() {
               flexShrink: 0,
             }}
           >
-            We are Hoboken's top-rated beauty salon for professional haircuts, waxes, hair coloring,
+            We are Hoboken&apos;s top-rated beauty salon for professional haircuts, waxes, hair coloring,
             straightening, extensions and much more. Tucked away just three blocks behind Hoboken City
             Hall, Shear Madness was born in 2003 with one simple mission – recreate the professional
             salon experience by providing top notch beauty services for men and women; without the
             pretense of other fine salons, in a warm and inviting atmosphere, atypical from the rest.
             Staffed with top notch artists/stylists from many backgrounds, using the finest quality
             products available, in a comfortable Asian inspired setting, the Shear Madness team can help
-            find and interpret the vision of even the most discerning client. Once you are here, you're
+            find and interpret the vision of even the most discerning client. Once you are here, you&apos;re
             not just a client but a member of the Shear Madness family. Trust me, relaxing in one of our
-            chairs, it will feel like a second home! Whether you're looking for a dramatic change – a new
+            chairs, it will feel like a second home! Whether you&apos;re looking for a dramatic change – a new
             hair color perhaps – or just maintaining your current style, from avant guarde to traditional,
             you owe it to yourself to call us today and FEEL THE MADNESS!
           </motion.p>
@@ -649,10 +649,12 @@ function PremiumCarousel() {
                 boxShadow: "inset 0 0 22px rgba(96,68,36,0.18)",
               }}>
                 {img.src ? (
-                  <img
+                  <Image
                     src={img.src}
                     alt={img.alt}
-                    style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                    style={{ objectFit: "cover" }}
                   />
                 ) : (
                   /* Placeholder — replace with real src in GALLERY array */

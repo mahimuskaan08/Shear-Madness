@@ -141,10 +141,10 @@ const TESTIMONIALS = [
 export default function GalleryPageContent() {
   const [activeTab, setActiveTab]       = useState<ActiveTab>("All");
   const [lightboxItem, setLightboxItem] = useState<GalleryItem | null>(null);
-  const [allItems, setAllItems]         = useState<GalleryItem[]>(GALLERY_ITEMS);
-
-  // Shuffle only on the client after mount to avoid SSR/client hydration mismatch
-  useEffect(() => { setAllItems(shuffle(GALLERY_ITEMS)); }, []);
+  // Lazy initializer runs once on client; SSR returns original order to avoid hydration mismatch
+  const [allItems] = useState<GalleryItem[]>(() =>
+    typeof window === "undefined" ? GALLERY_ITEMS : shuffle([...GALLERY_ITEMS])
+  );
 
   const visibleItems: GalleryItem[] =
     activeTab === "All"    ? allItems :
@@ -597,8 +597,7 @@ function ReviewsSection() {
   const trackRef   = useRef<HTMLDivElement>(null);
   const autoRef    = useRef<ReturnType<typeof setInterval> | undefined>(undefined);
   const dragStart  = useRef<number | null>(null);
-  const transOn    = useRef(true);
-  const [, forceRender] = useState(0);
+  const [transOn, setTransOn] = useState(true);
 
   const N        = TESTIMONIALS.length;
   const GAP      = 20;
@@ -626,12 +625,11 @@ function ReviewsSection() {
 
   /* ── Instant wrap to 0 without animation ── */
   const wrapToStart = useCallback(() => {
-    transOn.current = false;
+    setTransOn(false);
     setIdx(0);
     requestAnimationFrame(() =>
       requestAnimationFrame(() => {
-        transOn.current = true;
-        forceRender((n) => n + 1);
+        setTransOn(true);
       })
     );
   }, []);
@@ -732,7 +730,7 @@ function ReviewsSection() {
               display:    "flex",
               gap:        GAP,
               transform:  `translateX(${translateX}px)`,
-              transition: transOn.current ? "transform 0.65s cubic-bezier(0.32,0.72,0,1)" : "none",
+              transition: transOn ? "transform 0.65s cubic-bezier(0.32,0.72,0,1)" : "none",
               willChange: "transform",
             }}
           >

@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import Image from "next/image";
 import { motion, useInView } from "framer-motion";
 
 
@@ -225,10 +226,13 @@ export default function ArtistSection() {
                 border: "1px solid rgba(198,167,107,0.22)",
               }}
             >
-              <img
+              <Image
                 className="portrait-main"
                 src="/oscar-about.png"
                 alt="Oscar 'Victor' Landicho — Co-Founder & Master Stylist, Shear Madness Hoboken"
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
+                style={{ objectFit: "cover", objectPosition: "center top" }}
               />
             </div>
 
@@ -284,7 +288,7 @@ export default function ArtistSection() {
                 lineHeight: 1.6, color: "#1A1208",
                 letterSpacing: "0.01em",
               }}>
-                "Great style should feel effortless, personal, and quietly confident."
+                &ldquo;Great style should feel effortless, personal, and quietly confident.&rdquo;
               </p>
             </blockquote>
 
@@ -297,8 +301,8 @@ export default function ArtistSection() {
                 textShadow: "0 1px 2px rgba(255,255,255,0.4)",
                 textAlign: "justify",
               }}>
-                Co-founding Shear Madness in 2003, Oscar "Victor" Landicho has helped shape the salon into
-                one of Hoboken's most trusted beauty destinations. As Manager, he continues to
+                Co-founding Shear Madness in 2003, Oscar &ldquo;Victor&rdquo; Landicho has helped shape the salon into
+                one of Hoboken&apos;s most trusted beauty destinations. As Manager, he continues to
                 serve his longstanding clientele while also welcoming new guests through personal referrals
                 and word of mouth.
               </p>
@@ -435,10 +439,13 @@ export default function ArtistSection() {
                 border: "1px solid rgba(198,167,107,0.22)",
               }}
             >
-              <img
+              <Image
                 className="portrait-main"
                 src="/george-fraggos.jpg"
                 alt="George Fraggos - Stylist"
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
+                style={{ objectFit: "cover", objectPosition: "center top" }}
               />
             </div>
 

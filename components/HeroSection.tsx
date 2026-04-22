@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
@@ -133,23 +134,14 @@ export default function HeroSection() {
 
       {/* ── LAYER 1: BACKGROUND IMAGE ────────────────────────────────────── */}
       <motion.div style={{ scale: bgScale }} className="absolute inset-0 w-full h-full">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+        <Image
           src="/hero-bg.png"
           alt=""
           aria-hidden="true"
-          fetchPriority="high"
-          decoding="async"
-          className="hero-bg-img"
-          style={{
-            position: "absolute",
-            inset: 0,
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
-            objectPosition: "center 22%",
-            display: "block",
-          }}
+          fill
+          priority
+          sizes="100vw"
+          style={{ objectFit: "cover", objectPosition: "center 22%" }}
         />
       </motion.div>
 

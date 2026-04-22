@@ -1,3 +1,4 @@
+import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
@@ -58,7 +59,7 @@ export default function CreditsPage() {
               maxWidth: 560, margin: "0 auto",
               textAlign: "justify",
             }}>
-              Let's give credit where credit is due. Without the following people,
+              Let&apos;s give credit where credit is due. Without the following people,
               there would be no Shear Madness — website or otherwise.
             </p>
           </header>
@@ -129,11 +130,11 @@ export default function CreditsPage() {
                 lineHeight: 1.7, color: "#000",
                 letterSpacing: "0.01em", textAlign: "justify",
               }}>
-                "Welcome. You may enter a stranger — but you will leave as part of the Shear Madness family."
+                &ldquo;Welcome. You may enter a stranger — but you will leave as part of the Shear Madness family.&rdquo;
               </p>
             </blockquote>
             <div style={{ marginTop: 20, display: "flex", justifyContent: "center" }}>
-              <a
+              <Link
                 href="/booking"
                 style={{
                   fontFamily: "'Inter', sans-serif",
@@ -145,7 +146,7 @@ export default function CreditsPage() {
               >
                 Feel the Madness
                 <span style={{ fontSize: "0.8rem" }}>→</span>
-              </a>
+              </Link>
             </div>
           </div>
 
