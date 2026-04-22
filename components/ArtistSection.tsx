@@ -77,7 +77,7 @@ const BAMBOO_CSS = `
     0%   { transform: translateY(-70px) translateX(0px) rotate(${rot}deg); opacity: 0; }
     10%  { opacity: 1; }
     85%  { opacity: 0.85; }
-    100% { transform: translateY(calc(100svh + 120px)) translateX(${drift}px) rotate(${rot + 200}deg); opacity: 0; }
+    100% { transform: translateY(3200px) translateX(${drift}px) rotate(${rot + 200}deg); opacity: 0; }
   }`).join("")}
 
   /* ── RESPONSIVE ───────────────────────────────────────────────────────── */
@@ -86,6 +86,11 @@ const BAMBOO_CSS = `
     #artist-grid  > *:first-child { max-width: 420px; margin: 0 auto; width: 100%; }
     #artist-grid2 { grid-template-columns: 1fr !important; }
     #artist-grid2 > *:last-child  { max-width: 420px; margin: 0 auto; width: 100%; order: -1; }
+  }
+  @media (max-width: 640px) {
+    .artist-bg-fixed {
+      background-attachment: scroll !important;
+    }
   }
 `;
 
@@ -110,7 +115,7 @@ export default function ArtistSection() {
       {/* ── FIXED BACKGROUND LAYERS — viewport-pinned, clipped by section overflow:hidden ── */}
 
       {/* Layer 1: greyscale image — fixed to viewport */}
-      <div aria-hidden="true" style={{
+      <div aria-hidden="true" className="artist-bg-fixed" style={{
         position: "absolute", inset: 0, zIndex: 0, pointerEvents: "none",
         backgroundImage: "url('/artist-bg.png')",
         backgroundAttachment: "fixed",
@@ -121,7 +126,7 @@ export default function ArtistSection() {
       }} />
 
       {/* Layer 2: colour restoration — fixed to viewport */}
-      <div aria-hidden="true" style={{
+      <div aria-hidden="true" className="artist-bg-fixed" style={{
         position: "absolute", inset: 0, zIndex: 1, pointerEvents: "none",
         backgroundImage: "url('/artist-bg.png')",
         backgroundAttachment: "fixed",
@@ -293,7 +298,7 @@ export default function ArtistSection() {
                 textAlign: "justify",
               }}>
                 Co-founding Shear Madness in 2003, Oscar "Victor" Landicho has helped shape the salon into
-                one of Hoboken's most trusted beauty destinations. As Manager and Partner, he continues to
+                one of Hoboken's most trusted beauty destinations. As Manager, he continues to
                 serve his longstanding clientele while also welcoming new guests through personal referrals
                 and word of mouth.
               </p>

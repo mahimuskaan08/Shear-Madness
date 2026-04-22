@@ -87,7 +87,8 @@ const HERO_FADE = `
 .sm-word-gap { display: inline-block; width: clamp(6px, 1.8vw, 28px); }
 @media (max-width: 480px) {
   .sm-letter-large { margin-right: -2px; }
-}`;
+}
+`;
 
 // ── PETAL SVG ─────────────────────────────────────────────────────────────────
 function PetalSVG({ size, color }: { size: number; color: string }) {
@@ -139,6 +140,7 @@ export default function HeroSection() {
           aria-hidden="true"
           fetchPriority="high"
           decoding="async"
+          className="hero-bg-img"
           style={{
             position: "absolute",
             inset: 0,

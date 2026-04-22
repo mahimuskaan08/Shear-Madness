@@ -98,31 +98,20 @@ export default function Navbar() {
               alt="Shear Madness"
               style={{ height: 38, width: "auto", objectFit: "contain" }}
             />
-            <span style={{
-              fontFamily: "'Cormorant Garamond', Georgia, serif",
-              fontSize: "clamp(1.1rem, 1.4vw, 1.35rem)",
-              fontWeight: 600,
-              letterSpacing: "0.04em",
-              color: scrolled ? "#1A1208" : "#FDFAF6",
-              transition: "color 0.5s ease",
-              whiteSpace: "nowrap",
-            }}>
-              Shear <em>Madness</em>
-            </span>
           </motion.a>
 
           {/* ── DESKTOP NAV — glass pill, truly centered ─────────────── */}
           <nav
-            className="hidden md:flex items-center gap-6 absolute -translate-x-1/2"
+            className="hidden md:flex items-center gap-4 lg:gap-6 absolute -translate-x-1/2"
             style={{
-              left: "calc(50% - 5.5%)",
+              left: "50%",
               background: scrolled ? "transparent" : "rgba(255,255,255,0.14)",
               backdropFilter: scrolled ? "none" : "blur(20px) saturate(1.8)",
               WebkitBackdropFilter: scrolled ? "none" : "blur(20px) saturate(1.8)",
               border: scrolled ? "1px solid transparent" : "1px solid rgba(255,255,255,0.38)",
               borderRadius: 100,
               boxShadow: scrolled ? "none" : "0 2px 18px rgba(0,0,0,0.07), inset 0 1px 0 rgba(255,255,255,0.55)",
-              padding: "9px 28px",
+              padding: "7px 16px",
               transition: "background 0.5s ease, box-shadow 0.5s ease, border-color 0.5s ease",
             }}
           >
@@ -136,7 +125,7 @@ export default function Navbar() {
                 >
                   <a
                     href={link.href}
-                    className="relative text-[#2C2A25] text-[11.5px] tracking-[0.14em] uppercase font-black transition-colors duration-300 hover:text-[#C4A96A] flex items-center gap-1"
+                    className="relative text-[#2C2A25] text-[10px] lg:text-[11.5px] tracking-[0.12em] lg:tracking-[0.14em] uppercase font-black transition-colors duration-300 hover:text-[#C4A96A] flex items-center gap-1 whitespace-nowrap"
                     style={{ fontFamily: "'Neue World', Georgia, serif", fontWeight: 900 }}
                   >
                     {link.label}
@@ -189,7 +178,7 @@ export default function Navbar() {
                 <a
                   key={link.label}
                   href={link.href}
-                  className="relative text-[#2C2A25] text-[11.5px] tracking-[0.14em] uppercase font-black transition-colors duration-300 hover:text-[#C4A96A] group"
+                  className="relative text-[#2C2A25] text-[10px] lg:text-[11.5px] tracking-[0.12em] lg:tracking-[0.14em] uppercase font-black transition-colors duration-300 hover:text-[#C4A96A] group whitespace-nowrap"
                   style={{ fontFamily: "'Neue World', Georgia, serif", fontWeight: 900 }}
                 >
                   {link.label}
@@ -200,7 +189,7 @@ export default function Navbar() {
           </nav>
 
           {/* ── RIGHT BUTTONS: Contact + Book Now — absolute right edge ─ */}
-          <div className="hidden md:flex items-center gap-3 absolute right-6 md:right-10">
+          <div className="hidden lg:flex items-center gap-3 absolute right-6 lg:right-10">
             <NavPillButton href="/contact" label="Contact" />
             <NavPillButton href="/booking" label="Book Now" />
           </div>

@@ -16,7 +16,7 @@
   /* Navbar height — used to offset first sections so content clears the fixed bar */
   --navbar-h: 72px;
 }
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   :root { --navbar-h: 66px; }
 }
 

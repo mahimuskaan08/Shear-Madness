@@ -269,8 +269,8 @@ export default function GalleryPageContent() {
 }
 
 /* ─────────────────────────────────────────────
-   Card Slider — 5 / 3 / 1.2 visible, autoplay,
-   arrow nav, touch swipe, pause on hover
+   Card Slider — 3 visible, autoplay, arrow nav,
+   touch swipe, pause on hover
 ───────────────────────────────────────────── */
 function CardGrid({
   items,
@@ -281,7 +281,7 @@ function CardGrid({
 }) {
   const [current,      setCurrent]      = useState(0);
   const [paused,       setPaused]       = useState(false);
-  const [visibleCount, setVisibleCount] = useState(5);
+  const [visibleCount, setVisibleCount] = useState(3);
   const [containerW,   setContainerW]   = useState(0);
 
   const trackWrapRef = useRef<HTMLDivElement>(null);
@@ -289,20 +289,18 @@ function CardGrid({
   const dragStart    = useRef<number | null>(null);
 
   const N        = items.length;
-  const GAP      = 12; // px between cards
+  const GAP      = 0;
   const cardW    = containerW > 0 ? (containerW - GAP * (visibleCount - 1)) / visibleCount : 0;
   const maxIndex = Math.max(0, N - visibleCount);
 
-  /* ── Responsive count via ResizeObserver ── */
   useEffect(() => {
     const el = trackWrapRef.current;
     if (!el) return;
     const update = () => {
       const w = el.offsetWidth;
       setContainerW(w);
-      if (w < 640)       setVisibleCount(1);
-      else if (w < 1024) setVisibleCount(3);
-      else               setVisibleCount(5);
+      if (w < 640)  setVisibleCount(1);
+      else          setVisibleCount(3);
     };
     const ro = new ResizeObserver(update);
     ro.observe(el);
@@ -310,7 +308,6 @@ function CardGrid({
     return () => ro.disconnect();
   }, []);
 
-  /* ── Autoplay ── */
   useEffect(() => {
     if (paused || N <= visibleCount) return;
     autoRef.current = setInterval(() => {
@@ -319,10 +316,9 @@ function CardGrid({
     return () => clearInterval(autoRef.current);
   }, [paused, N, visibleCount, maxIndex]);
 
-  const prev = useCallback(() => setCurrent(c => Math.max(0, c - 1)),        []);
+  const prev = useCallback(() => setCurrent(c => Math.max(0, c - 1)), []);
   const next = useCallback(() => setCurrent(c => Math.min(maxIndex, c + 1)), [maxIndex]);
 
-  /* ── Touch / pointer drag ── */
   const onPointerDown = (e: React.PointerEvent) => { dragStart.current = e.clientX; };
   const onPointerUp   = (e: React.PointerEvent) => {
     if (dragStart.current === null) return;
@@ -341,18 +337,12 @@ function CardGrid({
       exit={{ opacity: 0, y: -10 }}
       transition={{ duration: 0.45, ease: EASE }}
       className="w-full overflow-x-hidden"
-      style={{ paddingTop: "clamp(1.5rem, 3vw, 2.5rem)" }}
+      style={{ paddingTop: "clamp(1.5rem, 3vw, 2.5rem)", paddingLeft: "clamp(2rem, 8vw, 10rem)", paddingRight: "clamp(2rem, 8vw, 10rem)" }}
     >
-      {/* ── Slider wrapper with arrow gutters ── */}
-      <div className="relative flex items-center px-4 md:px-10 gap-3">
-
-        {/* Left arrow */}
-        <SliderBtn dir="prev" disabled={current === 0} onClick={prev} />
-
-        {/* Viewport — clips the track */}
+      <div className="relative">
         <div
           ref={trackWrapRef}
-          className="flex-1 overflow-hidden select-none hide-scrollbar"
+          className="w-full overflow-hidden select-none hide-scrollbar"
           style={{ cursor: "grab", touchAction: "pan-y" }}
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => { setPaused(false); dragStart.current = null; }}
@@ -360,12 +350,11 @@ function CardGrid({
           onPointerUp={onPointerUp}
           onPointerLeave={() => { dragStart.current = null; }}
         >
-          {/* Track — slides horizontally */}
           <div
             style={{
-              display:   "flex",
-              gap:       GAP,
-              transform: `translateX(${translateX}px)`,
+              display:    "flex",
+              gap:        GAP,
+              transform:  `translateX(${translateX}px)`,
               transition: "transform 0.6s cubic-bezier(0.32,0.72,0,1)",
               willChange: "transform",
             }}
@@ -378,11 +367,19 @@ function CardGrid({
           </div>
         </div>
 
-        {/* Right arrow */}
-        <SliderBtn dir="next" disabled={current >= maxIndex} onClick={next} />
+        {/* Arrows overlaid on the images */}
+        <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+          <div className="pointer-events-auto">
+            <SliderBtn dir="prev" disabled={current === 0} onClick={prev} />
+          </div>
+        </div>
+        <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
+          <div className="pointer-events-auto">
+            <SliderBtn dir="next" disabled={current >= maxIndex} onClick={next} />
+          </div>
+        </div>
       </div>
 
-      {/* ── Dot indicators ── */}
       {maxIndex > 0 && (
         <div className="flex justify-center gap-2 mt-4">
           {Array.from({ length: maxIndex + 1 }).map((_, i) => (
@@ -391,23 +388,19 @@ function CardGrid({
               aria-label={`Go to slide ${i + 1}`}
               onClick={() => setCurrent(i)}
               style={{
-                height:     5,
-                width:      i === current ? 20 : 5,
+                height: 5, width: i === current ? 20 : 5,
                 borderRadius: 9999,
                 background: i === current
                   ? "linear-gradient(90deg,#C9A96E,#B8935A)"
                   : "rgba(58,56,50,0.18)",
                 transition: "width 0.3s ease, background 0.3s ease",
-                border: "none",
-                cursor: "pointer",
-                padding: 0,
+                border: "none", cursor: "pointer", padding: 0,
               }}
             />
           ))}
         </div>
       )}
 
-      {/* ── Instruction ── */}
       <p
         className="mt-4 text-center font-sans text-[15px] tracking-[0.08em]"
         style={{ color: "#1a1a1a", fontWeight: 700 }}
@@ -415,6 +408,40 @@ function CardGrid({
         Click on picture for Multiple Angles
       </p>
     </motion.div>
+  );
+}
+
+/* ─────────────────────────────────────────────
+   Gallery Card
+───────────────────────────────────────────── */
+function GalleryCard({ item, onClick }: { item: GalleryItem; onClick: () => void }) {
+  const [hovered, setHovered] = useState(false);
+  return (
+    <div
+      className="relative overflow-hidden cursor-zoom-in"
+      style={{
+        width: "100%",
+        height: "clamp(260px, 30vw, 420px)",
+        boxShadow: hovered ? "0 12px 32px rgba(58,56,50,0.16)" : "0 4px 16px rgba(58,56,50,0.08)",
+        transition: "box-shadow 0.4s ease",
+      }}
+      onClick={onClick}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
+      <Image
+        src={item.previewImage}
+        alt={item.alt}
+        fill
+        className="object-contain"
+        sizes="(max-width: 640px) 88vw, 33vw"
+        style={{
+          transform:      hovered ? "scale(1.05)" : "scale(1)",
+          transition:     "transform 0.6s cubic-bezier(0.22,1,0.36,1)",
+          objectPosition: item.category === "Hair & Makeup" ? "center top" : "center center",
+        }}
+      />
+    </div>
   );
 }
 
@@ -436,83 +463,38 @@ function SliderBtn({
       disabled={disabled}
       aria-label={dir === "prev" ? "Previous" : "Next"}
       style={{
-        flexShrink:     0,
-        width:          48,
-        height:         48,
-        borderRadius:   "50%",
-        background:     "rgba(253,250,246,0.97)",
-        border:         "1.5px solid rgba(58,56,50,0.15)",
-        boxShadow:      "0 4px 18px rgba(58,56,50,0.10), 0 1px 4px rgba(58,56,50,0.06)",
-        opacity:        disabled ? 0.22 : 1,
-        cursor:         disabled ? "default" : "pointer",
-        display:        "flex",
-        alignItems:     "center",
-        justifyContent: "center",
-        transform:      "scale(1)",
-        transition:     "opacity 0.25s, border-color 0.25s, box-shadow 0.25s, transform 0.2s",
+        flexShrink: 0, width: 48, height: 48, borderRadius: "50%",
+        background: "rgba(253,250,246,0.97)",
+        border: "1.5px solid rgba(58,56,50,0.15)",
+        boxShadow: "0 4px 18px rgba(58,56,50,0.10), 0 1px 4px rgba(58,56,50,0.06)",
+        opacity: disabled ? 0.22 : 1,
+        cursor: disabled ? "default" : "pointer",
+        display: "flex", alignItems: "center", justifyContent: "center",
+        transform: "scale(1)",
+        transition: "opacity 0.25s, border-color 0.25s, box-shadow 0.25s, transform 0.2s",
       }}
       onMouseEnter={(e) => {
         if (disabled) return;
         const b = e.currentTarget as HTMLButtonElement;
         b.style.borderColor = "#C9A96E";
-        b.style.boxShadow   = "0 6px 24px rgba(201,169,110,0.28), 0 2px 8px rgba(58,56,50,0.08)";
-        b.style.transform   = "scale(1.08)";
+        b.style.boxShadow = "0 6px 24px rgba(201,169,110,0.28), 0 2px 8px rgba(58,56,50,0.08)";
+        b.style.transform = "scale(1.08)";
       }}
       onMouseLeave={(e) => {
         const b = e.currentTarget as HTMLButtonElement;
         b.style.borderColor = "rgba(58,56,50,0.15)";
-        b.style.boxShadow   = "0 4px 18px rgba(58,56,50,0.10), 0 1px 4px rgba(58,56,50,0.06)";
-        b.style.transform   = "scale(1)";
+        b.style.boxShadow = "0 4px 18px rgba(58,56,50,0.10), 0 1px 4px rgba(58,56,50,0.06)";
+        b.style.transform = "scale(1)";
       }}
     >
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
         stroke="#3A3832" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        {dir === "prev"
-          ? <path d="M15 18l-6-6 6-6" />
-          : <path d="M9 18l6-6-6-6" />}
+        {dir === "prev" ? <path d="M15 18l-6-6 6-6" /> : <path d="M9 18l6-6-6-6" />}
       </svg>
     </button>
   );
 }
 
-/* ─────────────────────────────────────────────
-   Gallery Card — clean full-bleed portrait, no text
-───────────────────────────────────────────── */
-function GalleryCard({ item, onClick }: { item: GalleryItem; onClick: () => void }) {
-  const [hovered, setHovered] = useState(false);
-  return (
-    <div
-      className="relative overflow-hidden rounded-2xl cursor-zoom-in"
-      style={{
-        aspectRatio: "3 / 4",
-        boxShadow: hovered
-          ? "0 12px 32px rgba(58,56,50,0.16)"
-          : "0 4px 16px rgba(58,56,50,0.08)",
-        transition: "box-shadow 0.4s ease",
-      }}
-      onClick={onClick}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-    >
-      <Image
-        src={item.previewImage}
-        alt={item.alt}
-        fill
-        className="object-cover"
-        sizes="(max-width: 640px) 88vw, (max-width: 1024px) 33vw, 220px"
-        style={{
-          transform:     hovered ? "scale(1.05)" : "scale(1)",
-          transition:    "transform 0.6s cubic-bezier(0.22,1,0.36,1)",
-          objectPosition: item.category === "Hair & Makeup" ? "center top" : "center center",
-        }}
-      />
-    </div>
-  );
-}
-
-/* ─────────────────────────────────────────────
-   Video Row  — horizontal scroll for the Videos tab
-───────────────────────────────────────────── */
 /* ─────────────────────────────────────────────
    Video Section
    Two YouTube embeds side by side on desktop,

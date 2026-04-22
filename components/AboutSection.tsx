@@ -290,7 +290,7 @@ export default function AboutSection() {
           }}
         >
           {/* Carousel fills right column */}
-          <div style={{ position: "relative", flex: 1, minHeight: 0, width: "100%", alignSelf: "stretch" }}>
+          <div id="about-carousel-wrap" style={{ position: "relative", flex: 1, minHeight: 0, width: "100%", alignSelf: "stretch" }}>
             <PremiumCarousel />
           </div>
 
@@ -357,9 +357,19 @@ export default function AboutSection() {
       {/* ── RESPONSIVE ──────────────────────────────────────────────────────── */}
       <style>{`
         @media (max-width: 860px) {
+          #our-story {
+            height: auto !important;
+            min-height: 100svh;
+          }
           #about-main-grid {
             grid-template-columns: 1fr !important;
             overflow-y: auto;
+            height: auto !important;
+          }
+          #about-carousel-wrap {
+            min-height: 300px;
+            height: 300px;
+            flex: none !important;
           }
         }
 

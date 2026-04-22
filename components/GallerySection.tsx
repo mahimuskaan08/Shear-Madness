@@ -1,9 +1,8 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
+import { motion, useInView, useAnimationFrame } from "framer-motion";
+import { useRef, useState, useCallback, useEffect } from "react";
 
-// Gallery items — replace src with actual image paths in /public/gallery/
 const galleryItems = [
   { id: 1, caption: "Precision cut", aspect: "aspect-[4/5]", delay: 0 },
   { id: 2, caption: "Balayage blend", aspect: "aspect-square", delay: 0.08 },
@@ -13,7 +12,6 @@ const galleryItems = [
   { id: 6, caption: "Treatment ritual", aspect: "aspect-[3/4]", delay: 0.18 },
 ];
 
-// Tonal placeholder colors to suggest gallery imagery
 const placeholderColors = [
   "from-[#E4DDD4] to-[#D9C9B8]",
   "from-[#D4E0D0] to-[#C4D4BF]",
@@ -23,9 +21,47 @@ const placeholderColors = [
   "from-[#E4D8CC] to-[#D8CCBC]",
 ];
 
+const loopedItems = [...galleryItems, ...galleryItems, ...galleryItems];
+
+const GAP = 24;
+
 export default function GallerySection() {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-60px" });
+
+  const viewportRef = useRef<HTMLDivElement>(null);
+  const offsetRef = useRef(0);
+  const isPausedRef = useRef(false);
+  const [displayOffset, setDisplayOffset] = useState(0);
+  const [cardWidth, setCardWidth] = useState(0);
+
+  // Measure the visible container to derive exact card width
+  useEffect(() => {
+    const update = () => {
+      if (viewportRef.current) {
+        const w = viewportRef.current.offsetWidth;
+        setCardWidth((w - GAP * 2) / 3);
+      }
+    };
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
+
+  // One full set width = 6 cards + 6 gaps
+  const oneSetWidth = cardWidth ? cardWidth * galleryItems.length + GAP * galleryItems.length : 0;
+
+  useAnimationFrame(() => {
+    if (isPausedRef.current || !oneSetWidth) return;
+    offsetRef.current += 0.4;
+    if (offsetRef.current >= oneSetWidth) {
+      offsetRef.current -= oneSetWidth;
+    }
+    setDisplayOffset(offsetRef.current);
+  });
+
+  const pause = useCallback(() => { isPausedRef.current = true; }, []);
+  const resume = useCallback(() => { isPausedRef.current = false; }, []);
 
   return (
     <section id="gallery" className="relative py-28 md:py-40 bg-[#FDFAF6]">
@@ -70,24 +106,51 @@ export default function GallerySection() {
           </motion.p>
         </div>
 
-        {/* Masonry-style Gallery Grid */}
-        <div className="columns-2 md:columns-3 gap-4 space-y-4">
+        {/* Mobile: masonry */}
+        <div className="columns-2 gap-4 space-y-4 md:hidden">
           {galleryItems.map((item, i) => (
             <motion.div
               key={item.id}
               initial={{ opacity: 0, y: 28, scale: 0.97 }}
               animate={isInView ? { opacity: 1, y: 0, scale: 1 } : {}}
-              transition={{
-                duration: 0.85,
-                ease: [0.22, 1, 0.36, 1],
-                delay: item.delay + 0.2,
-              }}
+              transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1], delay: item.delay + 0.2 }}
               className="break-inside-avoid mb-4"
             >
               <GalleryItem item={item} color={placeholderColors[i]} />
             </motion.div>
           ))}
         </div>
+
+        {/* Desktop: 3-up autoscroll carousel */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={isInView ? { opacity: 1 } : {}}
+          transition={{ duration: 0.8, delay: 0.4 }}
+          ref={viewportRef}
+          className="hidden md:block overflow-hidden"
+          onMouseEnter={pause}
+          onMouseLeave={resume}
+        >
+          {cardWidth > 0 && (
+            <div
+              className="flex"
+              style={{
+                gap: GAP,
+                transform: `translateX(-${displayOffset}px)`,
+                willChange: "transform",
+              }}
+            >
+              {loopedItems.map((item, i) => (
+                <div
+                  key={`${item.id}-${i}`}
+                  style={{ width: cardWidth, flexShrink: 0 }}
+                >
+                  <GalleryItem item={item} color={placeholderColors[i % placeholderColors.length]} />
+                </div>
+              ))}
+            </div>
+          )}
+        </motion.div>
 
         {/* CTA */}
         <motion.div
@@ -124,9 +187,7 @@ function GalleryItem({
 }) {
   return (
     <div className="group relative overflow-hidden rounded-sm cursor-pointer">
-      {/* Placeholder image area */}
       <div className={`w-full ${item.aspect} bg-gradient-to-br ${color} transition-transform duration-700 group-hover:scale-105`}>
-        {/* Decorative inner element */}
         <div className="absolute inset-0 flex items-center justify-center opacity-20">
           <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
             <circle cx="20" cy="20" r="18" stroke="#C4A96A" strokeWidth="0.8" />
@@ -139,19 +200,14 @@ function GalleryItem({
         </div>
       </div>
 
-      {/* Hover overlay with caption */}
       <div className="absolute inset-0 bg-gradient-to-t from-[rgba(58,56,50,0.7)] via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500">
         <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-2 group-hover:translate-y-0 transition-transform duration-400">
-          <p
-            className="font-serif text-white italic"
-            style={{ fontSize: "0.95rem" }}
-          >
+          <p className="font-serif text-white italic" style={{ fontSize: "0.95rem" }}>
             {item.caption}
           </p>
         </div>
       </div>
 
-      {/* Top shine on hover */}
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[rgba(196,169,106,0.8)] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
     </div>
   );
