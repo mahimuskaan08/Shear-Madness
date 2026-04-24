@@ -615,7 +615,7 @@ function FallingPetals() {
         aria-hidden="true"
         style={{
           position: "fixed",
-          inset: 0,
+          top: 0, left: 0, right: 0, bottom: 0,
           zIndex: 0,
           pointerEvents: "none",
           overflow: "hidden",
@@ -690,6 +690,7 @@ export default function BookingPageContent() {
 
   return (
     <main
+      className="booking-main"
       style={{
         minHeight: "100svh",
         backgroundImage: "url('/booking-bg.jpg')",
@@ -702,7 +703,7 @@ export default function BookingPageContent() {
     >
       {/* Soft overlay — keeps form legible without fully hiding the background */}
       <div style={{
-        position: "absolute", inset: 0, pointerEvents: "none",
+        position: "absolute", top: 0, left: 0, right: 0, bottom: 0, pointerEvents: "none",
         background: "rgba(253,250,246,0.78)",
         zIndex: 0,
       }} />
@@ -997,6 +998,9 @@ export default function BookingPageContent() {
       <style>{`
         @media (max-width: 540px) {
           .booking-grid-2 { grid-template-columns: 1fr !important; }
+        }
+        @media (max-width: 1024px) {
+          .booking-main { background-attachment: scroll !important; }
         }
       `}</style>
     </main>

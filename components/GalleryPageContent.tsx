@@ -141,10 +141,10 @@ const TESTIMONIALS = [
 export default function GalleryPageContent() {
   const [activeTab, setActiveTab]       = useState<ActiveTab>("All");
   const [lightboxItem, setLightboxItem] = useState<GalleryItem | null>(null);
-  // Lazy initializer runs once on client; SSR returns original order to avoid hydration mismatch
-  const [allItems] = useState<GalleryItem[]>(() =>
-    typeof window === "undefined" ? GALLERY_ITEMS : shuffle([...GALLERY_ITEMS])
-  );
+  // Start with original order on both server and client to avoid hydration mismatch,
+  // then shuffle on the client after mount.
+  const [allItems, setAllItems] = useState<GalleryItem[]>(GALLERY_ITEMS);
+  useEffect(() => { setAllItems(shuffle([...GALLERY_ITEMS])); }, []);
 
   const visibleItems: GalleryItem[] =
     activeTab === "All"    ? allItems :
@@ -170,10 +170,10 @@ export default function GalleryPageContent() {
   return (
     <>
     <section
-      className="relative min-h-screen overflow-x-hidden"
+      className="relative min-h-screen overflow-x-hidden gallery-bg-section"
       style={{
         paddingTop: "calc(var(--navbar-h, 80px) + 2.4rem)",
-        backgroundImage: "url('/gallery-bg2.png')",
+        backgroundImage: "url('/gallery-bg2.jpg')",
         backgroundAttachment: "fixed",
         backgroundSize: "cover",
         backgroundPosition: "center",
@@ -224,7 +224,7 @@ export default function GalleryPageContent() {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: EASE, delay: 0.32 }}
-          className="mt-12 flex flex-wrap items-center justify-center gap-3"
+          className="mt-12 flex flex-wrap items-center justify-center gap-2 sm:gap-3"
           role="tablist"
           aria-label="Gallery categories"
         >
@@ -664,17 +664,17 @@ function ReviewsSection() {
   return (
     <section
       id="reviews"
-      className="w-full relative overflow-hidden"
+      className="w-full relative overflow-hidden gallery-bg-section"
       style={{
         padding: "clamp(1.75rem, 3vw, 2.5rem) 0 clamp(2rem, 4vw, 3rem)",
-        backgroundImage: "url('/gallery-bg2.png')",
+        backgroundImage: "url('/gallery-bg2.jpg')",
         backgroundAttachment: "fixed",
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}
     >
       {/* Same overlay as gallery section */}
-      <div aria-hidden style={{ position: "absolute", inset: 0, background: "rgba(253,250,246,0.50)", pointerEvents: "none", zIndex: 0 }} />
+      <div aria-hidden style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(253,250,246,0.50)", pointerEvents: "none", zIndex: 0 }} />
 
       {/* Thin gold divider */}
       <div
@@ -876,7 +876,7 @@ function TabButton({
       role="tab"
       aria-selected={isActive}
       onClick={onClick}
-      className="inline-flex items-center justify-center rounded-full font-sans text-[11px] tracking-[0.2em] uppercase font-medium transition-all duration-300 hover:-translate-y-px outline-none focus-visible:ring-2 focus-visible:ring-[#C4A96A]/40"
+      className="gallery-tab-btn inline-flex items-center justify-center rounded-full font-sans text-[11px] tracking-[0.2em] uppercase font-medium transition-all duration-300 hover:-translate-y-px outline-none focus-visible:ring-2 focus-visible:ring-[#C4A96A]/40"
       style={{
         padding:    "11px 28px",
         background: isActive ? "linear-gradient(135deg, #C9A96E 0%, #B8935A 55%, #C4A96A 100%)" : "transparent",

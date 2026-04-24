@@ -56,6 +56,12 @@ const STYLES = `
 /* ── RESPONSIVE ─────────────────────────────────────────────────── */
 @media (max-width: 860px) {
   #contact-grid { grid-template-columns: 1fr !important; }
+  /* Remove negative pull-up so stacked columns don't overlap */
+  #contact-grid > *:last-child { margin-top: 0 !important; }
+  /* Prevent hours row from overflowing on narrow screens */
+  .contact-hours-row { flex-wrap: wrap !important; gap: 4px !important; }
+  .contact-hours-time { font-size: 1rem !important; }
+  .contact-hours-day  { font-size: 1rem !important; }
 }
 `;
 
@@ -80,12 +86,12 @@ export default function ContactPage() {
       <style dangerouslySetInnerHTML={{ __html: STYLES }} />
 
       {/* ── WATER BACKGROUND ────────────────────────────────────────────────── */}
-      <div aria-hidden="true" style={{ position: "absolute", inset: 0, zIndex: 0, pointerEvents: "none" }}>
+      <div aria-hidden="true" style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, zIndex: 0, pointerEvents: "none" }}>
         <img
           src="/contact-water.jpg"
           alt=""
           style={{
-            position: "absolute", inset: 0,
+            position: "absolute", top: 0, left: 0, right: 0, bottom: 0,
             width: "100%", height: "100%",
             objectFit: "cover", objectPosition: "center",
             filter: "grayscale(60%) brightness(1.05) saturate(0.5)",
@@ -96,7 +102,7 @@ export default function ContactPage() {
       </div>
 
       {/* ── SUBTLE GOLD GLOW (page-level only) ───────────────────────────────── */}
-      <div aria-hidden="true" style={{ position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0 }}>
+      <div aria-hidden="true" style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, pointerEvents: "none", zIndex: 0 }}>
         <div style={{
           position: "absolute", top: "-10%", left: "-8%",
           width: "50vw", height: "50vw",
@@ -169,7 +175,7 @@ export default function ContactPage() {
                 style={{
                   border: 0, display: "block",
                   width: "100%", height: "100%",
-                  position: "absolute", inset: 0,
+                  position: "absolute", top: 0, left: 0, right: 0, bottom: 0,
                   filter: "grayscale(20%) contrast(1.02)",
                 }}
                 allowFullScreen loading="lazy"
@@ -246,8 +252,8 @@ export default function ContactPage() {
               <InfoBlock label="Hours" inView={inView} delay={0.50}>
                 <div style={{ display: "flex", flexDirection: "column", gap: 6, marginTop: 2 }}>
                   {HOURS.map(({ days, time }) => (
-                    <div key={days} style={{ display: "flex", justifyContent: "space-between", gap: 16 }}>
-                      <span style={{
+                    <div key={days} className="contact-hours-row" style={{ display: "flex", justifyContent: "space-between", gap: 16 }}>
+                      <span className="contact-hours-day" style={{
                         fontFamily: "'Cormorant Garamond', Georgia, serif",
                         fontSize: "clamp(1.2rem, 1.6vw, 1.45rem)",
                         fontWeight: 800, color: "#000000",
@@ -255,7 +261,7 @@ export default function ContactPage() {
                       }}>
                         {days}
                       </span>
-                      <span style={{
+                      <span className="contact-hours-time" style={{
                         fontFamily: "'Cormorant Garamond', Georgia, serif",
                         fontSize: "clamp(1.1rem, 1.5vw, 1.3rem)",
                         fontWeight: 800,

@@ -187,8 +187,20 @@ const PETAL_COLORS = [
 // ─────────────────────────────────────────────────────────────────────────────
 const STYLES = `
   /* iOS Safari does not support background-attachment: fixed — fallback to scroll */
+  /* Also adjust sizing so image fits neatly on all screen sizes               */
   @media (max-width: 1024px) {
-    .svc-page-bg { background-attachment: scroll !important; }
+    .svc-page-bg {
+      background-attachment: scroll !important;
+      background-size: contain !important;
+      background-position: center top !important;
+      filter: brightness(1.12) contrast(0.88) blur(2px) !important;
+    }
+  }
+  @media (max-width: 640px) {
+    .svc-page-bg {
+      background-size: 100% auto !important;
+      background-position: top center !important;
+    }
   }
 
   /* ── CRANE ANIMATION ────────────────────────────────── */
@@ -567,7 +579,7 @@ function BrandMarquee() {
 
       {/* Edge fades */}
       <div aria-hidden style={{
-        position: "absolute", inset: 0, pointerEvents: "none", zIndex: 2,
+        position: "absolute", top: 0, left: 0, right: 0, bottom: 0, pointerEvents: "none", zIndex: 2,
         background: "linear-gradient(to right, rgba(15,10,6,0.90) 0%, transparent 14%, transparent 86%, rgba(15,10,6,0.90) 100%)",
       }} />
 
@@ -681,11 +693,11 @@ export default function ServicesPageContent() {
         <div style={{ position: "relative" }}>
 
           {/* Layer 0: base cream */}
-          <div aria-hidden style={{ position: "absolute", inset: 0, background: "#F5F2EB", zIndex: 0 }} />
+          <div aria-hidden style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, background: "#F5F2EB", zIndex: 0 }} />
 
           {/* Layer 1: fixed bg image — covers entire page from top */}
           <div aria-hidden className="svc-page-bg" style={{
-            position: "absolute", inset: 0,
+            position: "absolute", top: 0, left: 0, right: 0, bottom: 0,
             backgroundImage: "url('/services-page-bg.jpg')",
             backgroundAttachment: "fixed",
             backgroundPosition: "center top",
@@ -697,7 +709,7 @@ export default function ServicesPageContent() {
           }} />
 
           {/* Layer 2: very light cream tint */}
-          <div aria-hidden style={{ position: "absolute", inset: 0, background: "rgba(245,242,235,0.15)", pointerEvents: "none", zIndex: 2 }} />
+          <div aria-hidden style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(245,242,235,0.15)", pointerEvents: "none", zIndex: 2 }} />
 
           {/* Layer 3: all content — hero flows straight into sections, no seam */}
           <div style={{ position: "relative", zIndex: 3 }}>

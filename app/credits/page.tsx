@@ -11,9 +11,9 @@ export default function CreditsPage() {
   return (
     <>
       <Navbar />
-      <main style={{
+      <main className="credits-main" style={{
         minHeight: "100svh",
-        backgroundImage: "url('/credits-bg.png')",
+        backgroundImage: "url('/credits-bg.jpg')",
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundAttachment: "fixed",

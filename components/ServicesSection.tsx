@@ -49,13 +49,14 @@ export default function ServicesSection() {
         padding: "clamp(44px, 6.5vh, 76px) clamp(24px, 6vw, 80px)",
         position: "relative",
         overflow: "hidden",
+        transform: "translateZ(0)",
       }}
     >
       {/* ── SUBTLE GRAIN ────────────────────────────────────────────────────── */}
       <div
         aria-hidden="true"
         style={{
-          position: "absolute", inset: 0, pointerEvents: "none",
+          position: "absolute", top: 0, left: 0, right: 0, bottom: 0, pointerEvents: "none",
           backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.022'/%3E%3C/svg%3E\")",
           backgroundRepeat: "repeat",
         }}
@@ -69,14 +70,14 @@ export default function ServicesSection() {
           {/* Bird watermark — behind heading text only */}
           <div aria-hidden="true" style={{
             position: "absolute",
-            inset: 0,
+            top: 0, left: 0, right: 0, bottom: 0,
             zIndex: 0,
             overflow: "hidden",
             pointerEvents: "none",
           }}>
             {/* All-edge fade: top, bottom, left, right */}
             <div style={{
-              position: "absolute", inset: 0, zIndex: 2,
+              position: "absolute", top: 0, left: 0, right: 0, bottom: 0, zIndex: 2,
               background: `
                 linear-gradient(to bottom, #ECEAE7 0%, transparent 28%, transparent 72%, #ECEAE7 100%),
                 linear-gradient(to right,  #ECEAE7 0%, transparent 18%, transparent 82%, #ECEAE7 100%)
@@ -231,25 +232,25 @@ function ServiceCard({
         <video
           autoPlay muted loop playsInline
           style={{
-            position: "absolute", inset: 0, width: "100%", height: "100%",
+            position: "absolute", top: 0, left: 0, right: 0, bottom: 0, width: "100%", height: "100%",
             objectFit: "cover", display: "block",
           }}
         >
           <source src={svc.video} type="video/mp4" />
         </video>
       ) : (
-        <div aria-hidden="true" style={{ position: "absolute", inset: 0, background: svc.bg }} />
+        <div aria-hidden="true" style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, background: svc.bg }} />
       )}
 
       {/* Dark gradient for text legibility */}
       <div aria-hidden="true" style={{
-        position: "absolute", inset: 0, zIndex: 1,
+        position: "absolute", top: 0, left: 0, right: 0, bottom: 0, zIndex: 1,
         background: "linear-gradient(to top, rgba(10,6,2,0.92) 0%, rgba(10,6,2,0.45) 45%, rgba(10,6,2,0.10) 100%)",
       }} />
 
       {/* Accent color bloom */}
       <div aria-hidden="true" style={{
-        position: "absolute", inset: 0, zIndex: 2,
+        position: "absolute", top: 0, left: 0, right: 0, bottom: 0, zIndex: 2,
         background: `radial-gradient(ellipse 70% 50% at 20% 15%, ${svc.accent} 0%, transparent 70%)`,
       }} />
 
@@ -260,14 +261,14 @@ function ServiceCard({
         transition={{ duration: 0.5 }}
         aria-hidden="true"
         style={{
-          position: "absolute", inset: 0, zIndex: 3, pointerEvents: "none",
+          position: "absolute", top: 0, left: 0, right: 0, bottom: 0, zIndex: 3, pointerEvents: "none",
           background: "linear-gradient(115deg, transparent 30%, rgba(255,248,235,0.07) 50%, transparent 70%)",
         }}
       />
 
       {/* ── CONTENT ──────────────────────────────────────────────────────── */}
       <div style={{
-        position: "absolute", inset: 0, zIndex: 4,
+        position: "absolute", top: 0, left: 0, right: 0, bottom: 0, zIndex: 4,
         display: "flex", flexDirection: "column", justifyContent: "flex-end",
         padding: "clamp(20px, 3vw, 36px)",
       }}>

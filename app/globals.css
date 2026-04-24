@@ -20,6 +20,22 @@
   :root { --navbar-h: 66px; }
 }
 
+/* Gallery tab buttons — compact on small screens */
+@media (max-width: 480px) {
+  .gallery-tab-btn {
+    padding: 8px 14px !important;
+    font-size: 9.5px !important;
+    letter-spacing: 0.13em !important;
+  }
+}
+
+/* iOS/iPadOS doesn't support background-attachment:fixed on non-body elements */
+@media (max-width: 1024px) {
+  .gallery-bg-section { background-attachment: scroll !important; }
+  .credits-main       { background-attachment: scroll !important; }
+  .svc-page-bg        { background-attachment: scroll !important; }
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -77,6 +93,49 @@ img {
   background: rgba(196, 169, 106, 0.25);
   color: var(--color-charcoal);
 }
+
+/* ── ARTIST SECTION BACKGROUND ─────────────────────────────────────────────
+   Defined here (not dangerouslySetInnerHTML) so media queries hot-reload
+   reliably in dev and are always applied on real devices.
+   ──────────────────────────────────────────────────────────────────────── */
+.artist-bg {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  background-image: url('/artist-bg.png');
+  background-repeat: no-repeat;
+  /* Desktop (>1366px): immersive cover */
+  background-size: cover;
+  background-position: center center;
+}
+/* Tablet / iPad up to iPad Pro 13" */
+@media (max-width: 1366px) and (min-width: 641px) {
+  .artist-bg {
+    background-size: 100% auto;
+    background-position: center top;
+    background-repeat: repeat-y;
+  }
+}
+/* Mobile */
+@media (max-width: 640px) {
+  .artist-bg {
+    background-size: 100% auto;
+    background-position: center top;
+    background-repeat: repeat-y;
+  }
+}
+
+/* ── ARTIST PORTRAIT RESPONSIVE HEIGHTS ──────────────────────────────────── */
+.artist-img-wrap {
+  overflow: hidden;
+  position: relative;
+  border-radius: 3px;
+  min-height: 340px;
+}
+@media (max-width: 1366px) { .artist-img-wrap { min-height: 380px; } }
+@media (max-width: 1024px) { .artist-img-wrap { min-height: 340px; } }
+@media (max-width: 640px)  { .artist-img-wrap { min-height: 260px; } }
+@media (max-width: 390px)  { .artist-img-wrap { min-height: 220px; } }
 
 /* Hide scrollbar on horizontal carousels while keeping scroll/transform functionality */
 .hide-scrollbar {

@@ -80,12 +80,13 @@ export default function AboutSection() {
         overflow: "hidden",
         marginTop: "-2px",
         padding: "clamp(20px, 3vh, 36px) clamp(20px, 5vw, 72px) clamp(16px, 2.5vh, 28px)",
+        transform: "translateZ(0)",
       }}
     >
       <style dangerouslySetInnerHTML={{ __html: ABOUT_CSS }} />
 
       {/* ── LAYER 1: BAMBOO PARCHMENT BACKGROUND ───────────────────────────── */}
-      <div aria-hidden="true" style={{ position: "absolute", inset: 0, zIndex: 0 }}>
+      <div aria-hidden="true" style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, zIndex: 0 }}>
         <Image
           src="/about-bg.png"
           alt=""
@@ -97,14 +98,14 @@ export default function AboutSection() {
 
       {/* ── LAYER 2: SEAM COVER — fully opaque at top to match hero, fades out ─── */}
       <div aria-hidden="true" style={{
-        position: "absolute", inset: 0, zIndex: 1, pointerEvents: "none",
+        position: "absolute", top: 0, left: 0, right: 0, bottom: 0, zIndex: 1, pointerEvents: "none",
         background: "linear-gradient(to bottom, rgba(232,230,228,1.0) 0%, rgba(232,230,228,0.50) 8%, rgba(232,230,228,0) 18%, rgba(230,226,220,0.18) 45%, rgba(200,196,190,0.08) 100%)",
       }} />
 
 
 
       {/* ── FALLING PETALS ─────────────────────────────────────────────────── */}
-      <div aria-hidden="true" style={{ position: "absolute", inset: 0, overflow: "hidden", pointerEvents: "none", zIndex: 4 }}>
+      <div aria-hidden="true" style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, overflow: "hidden", pointerEvents: "none", zIndex: 4 }}>
         {ABOUT_PETALS.map(p => (
           <div
             key={p.id}
@@ -571,7 +572,7 @@ function PremiumCarousel() {
   return (
     <div style={{
       position: "absolute",
-      inset: 0,
+      top: 0, left: 0, right: 0, bottom: 0,
       display: "flex",
       flexDirection: "column",
       gap: 10,

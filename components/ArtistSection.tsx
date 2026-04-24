@@ -118,7 +118,7 @@ export default function ArtistSection() {
       {/* Layer 1: greyscale image — fixed to viewport */}
       <div aria-hidden="true" className="artist-bg-fixed" style={{
         position: "absolute", inset: 0, zIndex: 0, pointerEvents: "none",
-        backgroundImage: "url('/artist-bg.png')",
+        backgroundImage: "url('/artist-bg.jpg')",
         backgroundAttachment: "fixed",
         backgroundSize: "cover",
         backgroundPosition: "center",
@@ -129,7 +129,7 @@ export default function ArtistSection() {
       {/* Layer 2: colour restoration — fixed to viewport */}
       <div aria-hidden="true" className="artist-bg-fixed" style={{
         position: "absolute", inset: 0, zIndex: 1, pointerEvents: "none",
-        backgroundImage: "url('/artist-bg.png')",
+        backgroundImage: "url('/artist-bg.jpg')",
         backgroundAttachment: "fixed",
         backgroundSize: "cover",
         backgroundPosition: "center",
@@ -221,7 +221,7 @@ export default function ArtistSection() {
               className="artist-img-wrap"
               style={{
                 flex: 1,
-                minHeight: 0,
+                minHeight: "clamp(320px, 50vh, 560px)",
                 boxShadow: "0 28px 72px rgba(26,18,8,0.16), 0 4px 18px rgba(26,18,8,0.08)",
                 border: "1px solid rgba(198,167,107,0.22)",
               }}
@@ -434,7 +434,7 @@ export default function ArtistSection() {
               className="artist-img-wrap"
               style={{
                 flex: 1,
-                minHeight: 0,
+                minHeight: "clamp(320px, 50vh, 560px)",
                 boxShadow: "0 28px 72px rgba(26,18,8,0.16), 0 4px 18px rgba(26,18,8,0.08)",
                 border: "1px solid rgba(198,167,107,0.22)",
               }}

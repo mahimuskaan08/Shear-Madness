@@ -261,7 +261,7 @@ export default function JoinUsPageContent() {
 
         {/* Background image */}
         <div aria-hidden style={{
-          position: "fixed", inset: 0, zIndex: 0, pointerEvents: "none",
+          position: "fixed", top: 0, left: 0, right: 0, bottom: 0, zIndex: 0, pointerEvents: "none",
         }}>
           <img
             src="/join-bg.jpg"
@@ -269,7 +269,7 @@ export default function JoinUsPageContent() {
             style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", display: "block" }}
           />
           {/* Light wash so text stays legible over the pale painting */}
-          <div style={{ position: "absolute", inset: 0, background: "rgba(253,250,246,0.78)" }} />
+          <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(253,250,246,0.78)" }} />
         </div>
 
         <div className="joi-grid" style={{ position: "relative", zIndex: 1 }}>
