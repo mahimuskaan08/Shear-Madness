@@ -674,6 +674,7 @@ export default function BookingPageContent() {
   const [times,    setTimes]    = useState(["", "", ""]);
   const [notes,    setNotes]    = useState("");
   const [status,   setStatus]   = useState<"idle" | "sending" | "success" | "error">("idle");
+  const [errorMsg, setErrorMsg] = useState("");
 
   const setDate = (i: number, v: string) =>
     setDates((d) => d.map((x, j) => (j === i ? v : x)));
@@ -682,10 +683,34 @@ export default function BookingPageContent() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Client-side validation of required fields
+    if (!name.trim())          { setErrorMsg("Full name is required.");                               return; }
+    if (!email.trim())         { setErrorMsg("Email address is required.");                           return; }
+    if (!phone.trim())         { setErrorMsg("Phone number is required.");                            return; }
+    if (!dates[0] || !times[0]) { setErrorMsg("Please select your first preferred date and time."); return; }
+
     setStatus("sending");
-    /* Replace with your own API / email handler */
-    await new Promise((r) => setTimeout(r, 1200));
-    setStatus("success");
+    setErrorMsg("");
+
+    try {
+      const res  = await fetch("/api/booking", {
+        method:  "POST",
+        headers: { "Content-Type": "application/json" },
+        body:    JSON.stringify({ name, email, phone, stylist, services, dates, times, notes }),
+      });
+      const data = await res.json() as { success?: boolean; error?: string };
+
+      if (res.ok && data.success) {
+        setStatus("success");
+      } else {
+        setStatus("error");
+        setErrorMsg(data.error ?? "Something went wrong. Please try again or call us.");
+      }
+    } catch {
+      setStatus("error");
+      setErrorMsg("Could not connect. Please check your connection and try again.");
+    }
   };
 
   return (
@@ -808,11 +833,12 @@ export default function BookingPageContent() {
                   fontSize: "0.92rem", lineHeight: 1.7, color: "#3A3832",
                   maxWidth: 420, margin: "0 auto 28px",
                 }}>
-                  Thank you! We'll review your request and reach out to confirm your appointment details very soon.
+                  We will be in touch with you shortly to confirm your appointment.
                 </p>
                 <button
                   onClick={() => {
                     setStatus("idle");
+                    setErrorMsg("");
                     setName(""); setEmail(""); setPhone(""); setStylist("No Preference");
                     setServices([]); setDates(["","",""]); setTimes(["","",""]); setNotes("");
                   }}
@@ -918,10 +944,24 @@ export default function BookingPageContent() {
                 <p style={{
                   fontFamily: "'Inter', sans-serif",
                   fontSize: "0.70rem", color: "rgba(58,56,50,0.50)",
-                  marginTop: 20, marginBottom: 28,
+                  marginTop: 20, marginBottom: errorMsg ? 14 : 28,
                 }}>
                   <span style={{ color: "#7A5C10" }}>*</span> Required fields
                 </p>
+
+                {/* ── ERROR MESSAGE ─────────────────────────────────── */}
+                {errorMsg && (
+                  <p style={{
+                    fontFamily: "'Inter', sans-serif",
+                    fontSize: "0.78rem", color: "#8B2E2E",
+                    background: "rgba(139,46,46,0.06)",
+                    border: "1px solid rgba(139,46,46,0.18)",
+                    borderRadius: 8, padding: "10px 14px",
+                    marginBottom: 20, lineHeight: 1.5,
+                  }}>
+                    {errorMsg}
+                  </p>
+                )}
 
                 {/* ── SUBMIT ───────────────────────────────────────── */}
                 <div style={{ display: "flex", justifyContent: "center" }}>
