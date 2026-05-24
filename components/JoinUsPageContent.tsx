@@ -132,6 +132,8 @@ const STYLES = `
 
 function ApplicationForm() {
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading]     = useState(false);
+  const [errorMsg, setErrorMsg]   = useState("");
   const [form, setForm] = useState({
     firstName: "", lastName: "", email: "", phone: "", position: "",
   });
@@ -140,9 +142,34 @@ function ApplicationForm() {
     setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setSubmitted(true);
+    setErrorMsg("");
+
+    if (!form.firstName || !form.lastName || !form.email || !form.phone || !form.position) {
+      setErrorMsg("Please fill in all required fields.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const res  = await fetch("/api/join-us", {
+        method:  "POST",
+        headers: { "Content-Type": "application/json" },
+        body:    JSON.stringify(form),
+      });
+      const data = await res.json() as { success?: boolean; error?: string };
+
+      if (res.ok && data.success) {
+        setSubmitted(true);
+      } else {
+        setErrorMsg(data.error ?? "Something went wrong. Please try again.");
+      }
+    } catch {
+      setErrorMsg("Network error. Please check your connection and try again.");
+    } finally {
+      setLoading(false);
+    }
   }
 
   if (submitted) {
@@ -176,7 +203,7 @@ function ApplicationForm() {
           color: "rgba(26,18,8,0.55)",
           lineHeight: 1.75,
         }}>
-          Our team will review your application and contact you if selected.
+          We will be in touch shortly.
         </p>
       </motion.div>
     );
@@ -220,7 +247,21 @@ function ApplicationForm() {
       </div>
 
       <div style={{ display: "flex", flexDirection: "column", gap: 14, marginTop: 4 }}>
-        <button type="submit" className="joi-submit">Submit Application</button>
+        {errorMsg && (
+          <p style={{
+            fontFamily: "'Inter', sans-serif",
+            fontSize: "0.85rem",
+            fontWeight: 600,
+            color: "#b91c1c",
+            textAlign: "center",
+            lineHeight: 1.5,
+          }}>
+            {errorMsg}
+          </p>
+        )}
+        <button type="submit" className="joi-submit" disabled={loading}>
+          {loading ? "Submitting…" : "Submit Application"}
+        </button>
         <p style={{
           fontFamily: "'Inter', sans-serif",
           fontSize: "clamp(0.88rem, 1.05vw, 1.0rem)",
