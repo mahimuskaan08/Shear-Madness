@@ -84,12 +84,12 @@ export default function Navbar() {
           boxShadow: scrolled ? "0 2px 32px rgba(58,56,50,0.07)" : "none",
         }}
       >
-        <div className="w-full px-6 md:px-10 flex items-center h-[66px] md:h-[72px] relative">
+        <div className="w-full px-6 lg:px-10 flex items-center h-[66px] lg:h-[72px] relative">
 
           {/* ── LOGO — absolute left edge ─────────────────────────────── */}
           <motion.a
             href="/"
-            className="absolute left-6 md:left-10 z-10 flex items-center gap-3"
+            className="absolute left-6 lg:left-10 z-10 flex items-center gap-3"
             animate={{ opacity: showBranding ? 1 : 0, pointerEvents: showBranding ? "auto" : "none" }}
             transition={{ duration: 0.4, ease: EASE }}
           >
@@ -102,7 +102,7 @@ export default function Navbar() {
 
           {/* ── DESKTOP NAV — glass pill, truly centered ─────────────── */}
           <nav
-            className="hidden md:flex items-center gap-4 lg:gap-6 absolute -translate-x-1/2"
+            className="hidden lg:flex items-center gap-4 xl:gap-6 absolute -translate-x-1/2"
             style={{
               left: "50%",
               background: scrolled ? "transparent" : "rgba(255,255,255,0.14)",
@@ -125,7 +125,7 @@ export default function Navbar() {
                 >
                   <a
                     href={link.href}
-                    className="relative text-[#2C2A25] text-[10px] lg:text-[11.5px] tracking-[0.12em] lg:tracking-[0.14em] uppercase font-black transition-colors duration-300 hover:text-[#C4A96A] flex items-center gap-1 whitespace-nowrap"
+                    className="relative text-[#2C2A25] text-[10px] xl:text-[11.5px] tracking-[0.12em] xl:tracking-[0.14em] uppercase font-black transition-colors duration-300 hover:text-[#C4A96A] flex items-center gap-1 whitespace-nowrap"
                     style={{ fontFamily: "'Neue World', Georgia, serif", fontWeight: 900 }}
                   >
                     {link.label}
@@ -178,7 +178,7 @@ export default function Navbar() {
                 <a
                   key={link.label}
                   href={link.href}
-                  className="relative text-[#2C2A25] text-[10px] lg:text-[11.5px] tracking-[0.12em] lg:tracking-[0.14em] uppercase font-black transition-colors duration-300 hover:text-[#C4A96A] group whitespace-nowrap"
+                  className="relative text-[#2C2A25] text-[10px] xl:text-[11.5px] tracking-[0.12em] xl:tracking-[0.14em] uppercase font-black transition-colors duration-300 hover:text-[#C4A96A] group whitespace-nowrap"
                   style={{ fontFamily: "'Neue World', Georgia, serif", fontWeight: 900 }}
                 >
                   {link.label}
@@ -189,7 +189,7 @@ export default function Navbar() {
           </nav>
 
           {/* ── RIGHT BUTTONS: Contact + Book Now — absolute right edge ─ */}
-          <div className="hidden lg:flex items-center gap-3 absolute right-6 lg:right-10">
+          <div className="hidden lg:flex items-center gap-3 absolute right-6 lg:right-10 xl:right-10">
             <NavPillButton href="/contact" label="Contact" />
             <NavPillButton href="/booking" label="Book Now" />
           </div>
@@ -198,7 +198,7 @@ export default function Navbar() {
           <button
             onClick={() => setMenuOpen(!menuOpen)}
             aria-label="Toggle navigation"
-            className="md:hidden absolute right-4 z-[60] flex items-center justify-center w-11 h-11"
+            className="lg:hidden absolute right-4 z-[60] flex items-center justify-center w-11 h-11"
           >
             <div className="flex flex-col justify-center gap-[5px] w-6 h-6 pointer-events-none">
               <motion.span animate={menuOpen ? { rotate: 45, y: 5 } : { rotate: 0, y: 0 }} transition={{ duration: 0.28 }} className="block h-px w-full bg-[#2C2A25]" />
