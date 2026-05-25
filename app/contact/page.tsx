@@ -5,9 +5,16 @@ import CustomCursor from "@/components/CustomCursor";
 import { getSiteImages } from "@/lib/site-images";
 
 export const metadata: Metadata = {
-  title: "Contact | Shear Madness",
+  title: "Contact Us | Shear Madness Hoboken",
   description:
-    "Find Shear Madness salon in East Orange, NJ. Address, hours, and directions.",
+    "Find Shear Madness Hoboken at 80 Park Ave #1, Hoboken, NJ 07030. Call (201) 222-2102 for hours, directions, and appointment info.",
+  alternates: { canonical: "/contact" },
+  openGraph: {
+    title: "Contact Us | Shear Madness Hoboken",
+    description:
+      "Find Shear Madness Hoboken at 80 Park Ave #1, Hoboken, NJ 07030. Call (201) 222-2102 for hours, directions, and appointment info.",
+    url: "/contact",
+  },
 };
 
 export default async function ContactPage() {

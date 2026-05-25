@@ -1,17 +1,60 @@
 import type { Metadata } from "next";
 import "./globals.css";
 
+const BASE_URL = "https://shearmadnesshoboken.com";
+
 export const metadata: Metadata = {
-  title: "Shear Madness Hoboken | Where Style Meets Balance",
+  metadataBase: new URL(BASE_URL),
+  title: "Shear Madness Hoboken | Premium Hair Salon for Men & Women",
   description:
-    "A modern salon experience rooted in calm, precision, and care. Located in the heart of Hoboken, NJ.",
-  keywords:
-    "hair salon, Hoboken, NJ, haircut, color, styling, zen, Asian-inspired, premium salon",
+    "Shear Madness Hoboken is a premium hair salon for men and women in Hoboken, NJ, offering haircuts, styling, color, treatments, bridal services, and online appointment booking.",
+  keywords: [
+    "hair salon Hoboken NJ",
+    "haircut Hoboken",
+    "hair color Hoboken",
+    "men's haircut Hoboken",
+    "women's hair salon Hoboken",
+    "Shear Madness Hoboken",
+    "salon near me Hoboken",
+    "bridal hair Hoboken",
+    "hair treatments Hoboken",
+  ],
+  authors: [{ name: "Shear Madness Hoboken" }],
+  creator: "Shear Madness Hoboken",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
   openGraph: {
-    title: "Shear Madness Hoboken | Where Style Meets Balance",
-    description:
-      "A modern salon experience rooted in calm, precision, and care.",
     type: "website",
+    locale: "en_US",
+    url: BASE_URL,
+    siteName: "Shear Madness Hoboken",
+    title: "Shear Madness Hoboken | Premium Hair Salon for Men & Women",
+    description:
+      "Shear Madness Hoboken is a premium hair salon for men and women in Hoboken, NJ, offering haircuts, styling, color, treatments, bridal services, and online appointment booking.",
+    images: [
+      {
+        url: "/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Shear Madness Hoboken - Premium Hair Salon",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Shear Madness Hoboken | Premium Hair Salon for Men & Women",
+    description:
+      "Shear Madness Hoboken is a premium hair salon for men and women in Hoboken, NJ, offering haircuts, styling, color, treatments, bridal services, and online appointment booking.",
+    images: ["/og-image.jpg"],
   },
 };
 
