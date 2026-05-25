@@ -14,6 +14,9 @@ const wpRedirects = [
   { source: "/book-an-appointment",        destination: "/booking" },
   { source: "/contact-us",                 destination: "/contact" },
   { source: "/videos",                     destination: "/gallery" },
+  { source: "/reviews-page",               destination: "/gallery" },
+  { source: "/the-team",                   destination: "/" },
+  { source: "/promotions",                 destination: "/services" },
 ];
 
 const securityHeaders = [
