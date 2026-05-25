@@ -31,11 +31,12 @@ function NavPillButton({ href, label }: { href: string; label: string }) {
   return (
     <a
       href={href}
-      className="group relative inline-flex items-center justify-center rounded-full text-[9px] xl:text-[11.5px] tracking-[0.14em] xl:tracking-[0.16em] uppercase font-semibold text-white overflow-hidden transition-all duration-300 hover:-translate-y-0.5 px-3 py-2 xl:px-[22px] xl:py-[9px]"
+      className="group relative inline-flex items-center justify-center rounded-full text-[11.5px] tracking-[0.16em] uppercase font-semibold text-white overflow-hidden transition-all duration-300 hover:-translate-y-0.5"
       style={{
         fontFamily: "'Neue World', Georgia, serif",
         fontWeight: 700,
         background: "linear-gradient(135deg, #C9A96E 0%, #B8935A 55%, #C4A96A 100%)",
+        padding: "9px 22px",
         boxShadow: "0 4px 18px rgba(196,169,106,0.40), inset 0 1px 0 rgba(255,255,255,0.20)",
       }}
       onMouseEnter={(e) => {
@@ -188,7 +189,7 @@ export default function Navbar() {
           </nav>
 
           {/* ── RIGHT BUTTONS: Contact + Book Now — absolute right edge ─ */}
-          <div className="hidden lg:flex items-center gap-2 xl:gap-3 absolute right-6 lg:right-8 xl:right-10">
+          <div className="hidden lg:flex items-center gap-3 absolute right-6 lg:right-8 xl:right-10">
             <NavPillButton href="/contact" label="Contact" />
             <NavPillButton href="/booking" label="Book Now" />
           </div>
