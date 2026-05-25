@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /_next/
+Disallow: /wp-admin/
+Disallow: /wp-login.php
+
+Sitemap: https://shearmadnesshoboken.com/sitemap.xml
