@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Navbar from "@/components/Navbar";
 import ContactSection from "@/components/ContactPage";
 import CustomCursor from "@/components/CustomCursor";
+import { getSiteImages } from "@/lib/site-images";
 
 export const metadata: Metadata = {
   title: "Contact | Shear Madness",
@@ -9,7 +10,9 @@ export const metadata: Metadata = {
     "Find Shear Madness salon in East Orange, NJ. Address, hours, and directions.",
 };
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const imgs = await getSiteImages();
+
   return (
     <main style={{ background: "#0B0B0B", minHeight: "100vh" }}>
       <CustomCursor />
@@ -23,7 +26,7 @@ export default function ContactPage() {
       <div className="contact-page">
         <Navbar />
       </div>
-      <ContactSection />
+      <ContactSection bgImage={imgs.contact_background_image ?? undefined} />
     </main>
   );
 }

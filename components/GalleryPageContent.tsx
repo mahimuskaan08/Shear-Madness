@@ -2,6 +2,7 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useCallback, useRef } from "react";
+import type { CmsGalleryImage } from "@/lib/site-images";
 import Image from "next/image";
 
 /* ─────────────────────────────────────────────
@@ -138,13 +139,30 @@ const TESTIMONIALS = [
 /* ─────────────────────────────────────────────
    Page
 ───────────────────────────────────────────── */
-export default function GalleryPageContent() {
+export default function GalleryPageContent({
+  bgImage,
+  cmsGalleryImages,
+}: {
+  bgImage?:          string;
+  cmsGalleryImages?: CmsGalleryImage[];
+}) {
+  // Convert CMS images to GalleryItems (shown in "All" tab only).
+  const cmsItems: GalleryItem[] = (cmsGalleryImages ?? []).map((img, i, arr) => ({
+    id:           -(i + 1),
+    previewImage: img.url,
+    backImage:    arr[(i + 1) % arr.length]?.url ?? img.url,
+    fullImage:    img.url,
+    alt:          img.alt || img.title || `Gallery Image ${i + 1}`,
+    category:     "Men" as ImageCategory,
+  }));
+  const allWithCms = [...cmsItems, ...GALLERY_ITEMS];
+
   const [activeTab, setActiveTab]       = useState<ActiveTab>("All");
   const [lightboxItem, setLightboxItem] = useState<GalleryItem | null>(null);
   // Start with original order on both server and client to avoid hydration mismatch,
   // then shuffle on the client after mount.
-  const [allItems, setAllItems] = useState<GalleryItem[]>(GALLERY_ITEMS);
-  useEffect(() => { setAllItems(shuffle([...GALLERY_ITEMS])); }, []);
+  const [allItems, setAllItems] = useState<GalleryItem[]>(allWithCms);
+  useEffect(() => { setAllItems(shuffle([...allWithCms])); }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const visibleItems: GalleryItem[] =
     activeTab === "All"    ? allItems :
@@ -173,7 +191,7 @@ export default function GalleryPageContent() {
       className="relative min-h-screen overflow-x-hidden gallery-bg-section"
       style={{
         paddingTop: "calc(var(--navbar-h, 80px) + 2.4rem)",
-        backgroundImage: "url('/gallery-bg2.jpg')",
+        backgroundImage: `url('${bgImage ?? "/gallery-bg2.jpg"}')`,
         backgroundAttachment: "fixed",
         backgroundSize: "cover",
         backgroundPosition: "center",
@@ -263,7 +281,7 @@ export default function GalleryPageContent() {
 
       </div>{/* end relative z-10 */}
     </section>
-    <ReviewsSection />
+    <ReviewsSection bgImage={bgImage} />
     </>
   );
 }
@@ -588,7 +606,7 @@ function TestimonialCard({ t }: { t: { name: string; role: string; text: string 
 /* ─────────────────────────────────────────────
    Reviews Section — horizontal testimonial carousel
 ───────────────────────────────────────────── */
-function ReviewsSection() {
+function ReviewsSection({ bgImage }: { bgImage?: string }) {
   const [idx, setIdx]         = useState(0);
   const [paused, setPaused]   = useState(false);
   const [visibleCount, setVC] = useState(3);
@@ -667,7 +685,7 @@ function ReviewsSection() {
       className="w-full relative overflow-hidden gallery-bg-section"
       style={{
         padding: "clamp(1.75rem, 3vw, 2.5rem) 0 clamp(2rem, 4vw, 3rem)",
-        backgroundImage: "url('/gallery-bg2.jpg')",
+        backgroundImage: `url('${bgImage ?? "/gallery-bg2.jpg"}')`,
         backgroundAttachment: "fixed",
         backgroundSize: "cover",
         backgroundPosition: "center",

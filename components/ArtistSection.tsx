@@ -95,7 +95,15 @@ const BAMBOO_CSS = `
   }
 `;
 
-export default function ArtistSection() {
+export default function ArtistSection({
+  artistBg,
+  oscarImage,
+  georgeImage,
+}: {
+  artistBg?:   string;
+  oscarImage?: string;
+  georgeImage?: string;
+}) {
   const ref    = useRef<HTMLElement>(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
   const ref2    = useRef<HTMLDivElement>(null);
@@ -118,7 +126,7 @@ export default function ArtistSection() {
       {/* Layer 1: greyscale image — fixed to viewport */}
       <div aria-hidden="true" className="artist-bg-fixed" style={{
         position: "absolute", inset: 0, zIndex: 0, pointerEvents: "none",
-        backgroundImage: "url('/artist-bg.jpg')",
+        backgroundImage: `url('${artistBg ?? "/artist-bg.jpg"}')`,
         backgroundAttachment: "fixed",
         backgroundSize: "cover",
         backgroundPosition: "center",
@@ -129,7 +137,7 @@ export default function ArtistSection() {
       {/* Layer 2: colour restoration — fixed to viewport */}
       <div aria-hidden="true" className="artist-bg-fixed" style={{
         position: "absolute", inset: 0, zIndex: 1, pointerEvents: "none",
-        backgroundImage: "url('/artist-bg.jpg')",
+        backgroundImage: `url('${artistBg ?? "/artist-bg.jpg"}')`,
         backgroundAttachment: "fixed",
         backgroundSize: "cover",
         backgroundPosition: "center",
@@ -228,7 +236,7 @@ export default function ArtistSection() {
             >
               <Image
                 className="portrait-main"
-                src="/oscar-about.png"
+                src={oscarImage ?? "/oscar-about.png"}
                 alt="Oscar 'Victor' Landicho — Co-Founder & Master Stylist, Shear Madness Hoboken"
                 fill
                 sizes="(max-width: 768px) 100vw, 50vw"
@@ -441,7 +449,7 @@ export default function ArtistSection() {
             >
               <Image
                 className="portrait-main"
-                src="/george-fraggos.jpg"
+                src={georgeImage ?? "/george-fraggos.jpg"}
                 alt="George Fraggos - Stylist"
                 fill
                 sizes="(max-width: 768px) 100vw, 50vw"

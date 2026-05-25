@@ -112,7 +112,7 @@ function PetalSVG({ size, color }: { size: number; color: string }) {
   );
 }
 
-export default function HeroSection() {
+export default function HeroSection({ bgImage }: { bgImage?: string }) {
   const sectionRef = useRef<HTMLElement>(null);
 
   const { scrollYProgress } = useScroll({
@@ -135,7 +135,7 @@ export default function HeroSection() {
       {/* ── LAYER 1: BACKGROUND IMAGE ────────────────────────────────────── */}
       <motion.div style={{ scale: bgScale }} className="absolute inset-0 w-full h-full">
         <Image
-          src="/hero-bg.png"
+          src={bgImage ?? "/hero-bg.png"}
           alt=""
           aria-hidden="true"
           fill

@@ -12,6 +12,15 @@ const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "cms.shearmadnesshoboken.com",
+        pathname: "/wp-content/uploads/**",
+      },
+    ],
+  },
   async headers() {
     return [
       {

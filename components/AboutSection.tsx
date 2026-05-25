@@ -13,8 +13,7 @@ const STATS = [
   { number: "5★", label: "Client Trust" },
 ];
 
-// Replace src values with real image paths when available
-const GALLERY = [
+const DEFAULT_GALLERY = [
   { id: 0, src: "/about/about-1.png", alt: "Salon interior",   bg: "rgba(180,177,173,0.22)" },
   { id: 1, src: "/about/about-2.png", alt: "Hair styling",     bg: "rgba(172,168,164,0.20)" },
   { id: 2, src: "/about/about-3.png", alt: "Color treatment",  bg: "rgba(165,161,157,0.22)" },
@@ -62,7 +61,13 @@ const ABOUT_CSS = `
 
 `;
 
-export default function AboutSection() {
+export default function AboutSection({
+  bgImage,
+  carouselImages,
+}: {
+  bgImage?:       string;
+  carouselImages?: string[];
+}) {
   const ref = useRef<HTMLElement>(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
 
@@ -88,7 +93,7 @@ export default function AboutSection() {
       {/* ── LAYER 1: BAMBOO PARCHMENT BACKGROUND ───────────────────────────── */}
       <div aria-hidden="true" style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, zIndex: 0 }}>
         <Image
-          src="/about-bg.png"
+          src={bgImage ?? "/about-bg.png"}
           alt=""
           fill
           sizes="100vw"
@@ -292,7 +297,7 @@ export default function AboutSection() {
         >
           {/* Carousel fills right column */}
           <div id="about-carousel-wrap" style={{ position: "relative", flex: 1, minHeight: 0, width: "100%", alignSelf: "stretch" }}>
-            <PremiumCarousel />
+            <PremiumCarousel carouselImages={carouselImages} />
           </div>
 
           {/* ── STATS ROW ──────────────────────────────────────────────── */}
@@ -499,7 +504,17 @@ function DictEntry({
 // Center card: full opacity, sharp, scale 1, deepest shadow.
 // Side cards: scale 0.87, 52% opacity, 1.5px blur, partially clipped.
 // Drag/swipe + arrow + dot navigation. Auto-advances every 5s.
-function PremiumCarousel() {
+function PremiumCarousel({ carouselImages }: { carouselImages?: string[] }) {
+  const GALLERY =
+    carouselImages && carouselImages.length > 0
+      ? carouselImages.map((src, i) => ({
+          id: i,
+          src,
+          alt: `About image ${i + 1}`,
+          bg: DEFAULT_GALLERY[i % DEFAULT_GALLERY.length].bg,
+        }))
+      : DEFAULT_GALLERY;
+
   const [active, setActive] = useState(0);
   const trackRef = useRef<HTMLDivElement>(null);
   const [cw, setCw] = useState(0);           // measured container width in px

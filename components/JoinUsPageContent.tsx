@@ -300,7 +300,7 @@ function ApplicationForm() {
   );
 }
 
-export default function JoinUsPageContent() {
+export default function JoinUsPageContent({ bgImage }: { bgImage?: string }) {
   return (
     <>
       <style dangerouslySetInnerHTML={{ __html: STYLES }} />
@@ -314,7 +314,7 @@ export default function JoinUsPageContent() {
           position: "fixed", top: 0, left: 0, right: 0, bottom: 0, zIndex: 0, pointerEvents: "none",
         }}>
           <img
-            src="/join-bg.jpg"
+            src={bgImage ?? "/join-bg.jpg"}
             alt=""
             style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", display: "block" }}
           />

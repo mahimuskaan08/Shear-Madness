@@ -663,7 +663,7 @@ function FallingPetals() {
 }
 
 /* ─── Main component ────────────────────────────────────────────────────── */
-export default function BookingPageContent() {
+export default function BookingPageContent({ bgImage }: { bgImage?: string }) {
   /* form state */
   const [name,     setName]     = useState("");
   const [email,    setEmail]    = useState("");
@@ -719,7 +719,7 @@ export default function BookingPageContent() {
       className="booking-main"
       style={{
         minHeight: "100svh",
-        backgroundImage: "url('/booking-bg.jpg')",
+        backgroundImage: `url('${bgImage ?? "/booking-bg.jpg"}')`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundAttachment: "fixed",

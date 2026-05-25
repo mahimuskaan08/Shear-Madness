@@ -65,7 +65,7 @@ const STYLES = `
 }
 `;
 
-export default function ContactPage() {
+export default function ContactPage({ bgImage }: { bgImage?: string }) {
   const ref = useRef<HTMLElement>(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
 
@@ -88,7 +88,7 @@ export default function ContactPage() {
       {/* ── WATER BACKGROUND ────────────────────────────────────────────────── */}
       <div aria-hidden="true" style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, zIndex: 0, pointerEvents: "none" }}>
         <img
-          src="/contact-water.jpg"
+          src={bgImage ?? "/contact-water.jpg"}
           alt=""
           style={{
             position: "absolute", top: 0, left: 0, right: 0, bottom: 0,
