@@ -11,6 +11,7 @@ const wpRedirects = [
   { source: "/specials",                   destination: "/services" },
   { source: "/products",                   destination: "/services" },
   { source: "/online-appointment-book",    destination: "/booking" },
+  { source: "/book-an-appointment",        destination: "/booking" },
   { source: "/contact-us",                 destination: "/contact" },
   { source: "/videos",                     destination: "/gallery" },
 ];
