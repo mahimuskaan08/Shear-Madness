@@ -675,6 +675,7 @@ export default function BookingPageContent() {
   const [notes,    setNotes]    = useState("");
   const [status,   setStatus]   = useState<"idle" | "sending" | "success" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
+  const [honeypot, setHoneypot] = useState("");
 
   const setDate = (i: number, v: string) =>
     setDates((d) => d.map((x, j) => (j === i ? v : x)));
@@ -697,7 +698,7 @@ export default function BookingPageContent() {
       const res  = await fetch("/api/booking", {
         method:  "POST",
         headers: { "Content-Type": "application/json" },
-        body:    JSON.stringify({ name, email, phone, stylist, services, dates, times, notes }),
+        body:    JSON.stringify({ name, email, phone, stylist, services, dates, times, notes, website: honeypot }),
       });
       const data = await res.json() as { success?: boolean; error?: string };
 
@@ -939,6 +940,14 @@ export default function BookingPageContent() {
                   <Textarea id="notes" value={notes} onChange={setNotes}
                     placeholder="Allergies, accessibility needs, special requests…" />
                 </div>
+
+                {/* Honeypot — hidden from real users, catches bots */}
+                <input
+                  type="text" name="website" value={honeypot}
+                  onChange={(e) => setHoneypot(e.target.value)}
+                  aria-hidden="true" tabIndex={-1} autoComplete="off"
+                  style={{ position: "absolute", left: "-9999px", width: 1, height: 1, opacity: 0 }}
+                />
 
                 {/* ── REQUIRED NOTE ────────────────────────────────── */}
                 <p style={{

@@ -20,9 +20,9 @@
  * Required .env.local:
  *   WP_BASE_URL            https://shearmadnesshoboken.com
  *   GF_FORM_ID             2
- *   GF_PUBLIC_API_KEY      [REDACTED]
- *   GF_PRIVATE_API_KEY     [REDACTED]
- *   GF_IMPERSONATE_ACCOUNT bkw_admin
+ *   GF_PUBLIC_API_KEY      (see Vercel env vars — do not hardcode here)
+ *   GF_PRIVATE_API_KEY     (see Vercel env vars — do not hardcode here)
+ *   GF_IMPERSONATE_ACCOUNT (see Vercel env vars — do not hardcode here)
  */
 
 import crypto from "crypto";

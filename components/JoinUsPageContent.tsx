@@ -134,6 +134,7 @@ function ApplicationForm() {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading]     = useState(false);
   const [errorMsg, setErrorMsg]   = useState("");
+  const [honeypot, setHoneypot]   = useState("");
   const [form, setForm] = useState({
     firstName: "", lastName: "", email: "", phone: "", position: "",
   });
@@ -156,7 +157,7 @@ function ApplicationForm() {
       const res  = await fetch("/api/join-us", {
         method:  "POST",
         headers: { "Content-Type": "application/json" },
-        body:    JSON.stringify(form),
+        body:    JSON.stringify({ ...form, website: honeypot }),
       });
       const data = await res.json() as { success?: boolean; error?: string };
 
@@ -245,6 +246,14 @@ function ApplicationForm() {
           {POSITIONS.map(p => <option key={p} value={p}>{p}</option>)}
         </select>
       </div>
+
+      {/* Honeypot — hidden from real users, catches bots */}
+      <input
+        type="text" name="website" value={honeypot}
+        onChange={(e) => setHoneypot(e.target.value)}
+        aria-hidden="true" tabIndex={-1} autoComplete="off"
+        style={{ position: "absolute", left: "-9999px", width: 1, height: 1, opacity: 0 }}
+      />
 
       <div style={{ display: "flex", flexDirection: "column", gap: 14, marginTop: 4 }}>
         {errorMsg && (
