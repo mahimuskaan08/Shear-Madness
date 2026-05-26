@@ -133,7 +133,7 @@ export default function HeroSection({ bgImage }: { bgImage?: string }) {
       <style dangerouslySetInnerHTML={{ __html: PETAL_KF + HERO_FADE }} />
 
       {/* ── LAYER 1: BACKGROUND IMAGE ────────────────────────────────────── */}
-      <motion.div style={{ scale: bgScale }} className="absolute inset-0 w-full h-full">
+      <motion.div style={{ scale: bgScale }} className="absolute inset-0 w-full h-full hero-bg-layer">
         <Image
           src={bgImage ?? "/hero-bg.png"}
           alt=""
