@@ -185,20 +185,27 @@ export default function GalleryPageContent({
     return () => { document.body.style.overflow = ""; };
   }, [lightboxItem]);
 
+  const resolvedBg = bgImage ?? "/gallery-bg2.jpg";
+
   return (
     <>
-    {/* ── MOBILE FIXED BACKGROUND ──────────────────────────────────────────
-        On mobile, background-attachment:fixed is unsupported on iOS for
-        non-body elements. This single fixed div covers the entire gallery
-        page (both gallery + reviews sections) as a stable backdrop.
-        Hidden on desktop — the section's own background-attachment:fixed
-        handles it there.
-    ─────────────────────────────────────────────────────────────────────── */}
-    <div
-      className="gallery-bg-fixed-layer"
-      aria-hidden
-      style={{ backgroundImage: `url('${bgImage ?? "/gallery-bg2.jpg"}')` }}
-    />
+    {/*
+      Mobile fixed background — iOS Safari only honours background-attachment:fixed
+      on <body>, not on arbitrary elements. Injecting a scoped <style> that sets it
+      on body is the reliable cross-browser solution. The sections' own
+      background-image is cleared via .gallery-bg-section CSS so there's no scroll
+      copy underneath. Desktop keeps background-attachment:fixed on the sections.
+    */}
+    <style dangerouslySetInnerHTML={{ __html: `
+      @media (max-width: 767px) {
+        body {
+          background-image: url("${resolvedBg}");
+          background-attachment: fixed;
+          background-size: cover;
+          background-position: center;
+        }
+      }
+    ` }} />
     <section
       className="relative min-h-screen overflow-x-hidden gallery-bg-section"
       data-cms-bg={bgImage ?? "FALLBACK:/gallery-bg2.jpg"}

@@ -36,29 +36,15 @@
   .svc-page-bg        { background-attachment: scroll !important; }
 }
 
-/* ── GALLERY PAGE MOBILE FIXED BACKGROUND ────────────────────────────────────
-   On mobile the fixed-layer div takes over. The section's own background-image
-   is cleared so there's no double-render. The overlay and content inside each
-   section still paint on top (z-index > 0).
-   ─────────────────────────────────────────────────────────────────────────── */
-.gallery-bg-fixed-layer {
-  display: none; /* desktop: sections use background-attachment:fixed */
-  position: fixed;
-  top: 0; left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-size: cover;
-  background-position: center;
-  z-index: 0;
-  pointer-events: none;
-}
+/* ── GALLERY PAGE MOBILE: strip section backgrounds (body carries the fixed bg) ──
+   background-attachment:fixed works on <body> on iOS but NOT on other elements.
+   On mobile we move the image to body via an injected <style> tag in
+   GalleryPageContent, then clear it from the sections so there's no scroll/double.
+   ─────────────────────────────────────────────────────────────────────────────── */
 @media (max-width: 767px) {
-  .gallery-bg-fixed-layer {
-    display: block;
-  }
-  /* Strip the background from the sections — the fixed layer handles it */
   .gallery-bg-section {
     background-image: none !important;
+    background-color: transparent !important;
     background-attachment: scroll !important;
   }
 }
