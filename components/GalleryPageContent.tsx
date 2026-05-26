@@ -187,6 +187,18 @@ export default function GalleryPageContent({
 
   return (
     <>
+    {/* ── MOBILE FIXED BACKGROUND ──────────────────────────────────────────
+        On mobile, background-attachment:fixed is unsupported on iOS for
+        non-body elements. This single fixed div covers the entire gallery
+        page (both gallery + reviews sections) as a stable backdrop.
+        Hidden on desktop — the section's own background-attachment:fixed
+        handles it there.
+    ─────────────────────────────────────────────────────────────────────── */}
+    <div
+      className="gallery-bg-fixed-layer"
+      aria-hidden
+      style={{ backgroundImage: `url('${bgImage ?? "/gallery-bg2.jpg"}')` }}
+    />
     <section
       className="relative min-h-screen overflow-x-hidden gallery-bg-section"
       data-cms-bg={bgImage ?? "FALLBACK:/gallery-bg2.jpg"}

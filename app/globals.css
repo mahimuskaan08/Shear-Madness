@@ -36,6 +36,33 @@
   .svc-page-bg        { background-attachment: scroll !important; }
 }
 
+/* ── GALLERY PAGE MOBILE FIXED BACKGROUND ────────────────────────────────────
+   On mobile the fixed-layer div takes over. The section's own background-image
+   is cleared so there's no double-render. The overlay and content inside each
+   section still paint on top (z-index > 0).
+   ─────────────────────────────────────────────────────────────────────────── */
+.gallery-bg-fixed-layer {
+  display: none; /* desktop: sections use background-attachment:fixed */
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-size: cover;
+  background-position: center;
+  z-index: 0;
+  pointer-events: none;
+}
+@media (max-width: 767px) {
+  .gallery-bg-fixed-layer {
+    display: block;
+  }
+  /* Strip the background from the sections — the fixed layer handles it */
+  .gallery-bg-section {
+    background-image: none !important;
+    background-attachment: scroll !important;
+  }
+}
+
 /* ── MOBILE: FIXED HERO BACKGROUND ──────────────────────────────────────────
    Pin the hero background image to the viewport on mobile so only the text,
    buttons, and other content scroll over it. Subsequent sections cover it
