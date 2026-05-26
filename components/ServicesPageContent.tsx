@@ -682,7 +682,7 @@ function HeroSection() {
 // ─────────────────────────────────────────────────────────────────────────────
 // PAGE ROOT
 // ─────────────────────────────────────────────────────────────────────────────
-export default function ServicesPageContent() {
+export default function ServicesPageContent({ bgImage }: { bgImage?: string }) {
   return (
     <>
       <style dangerouslySetInnerHTML={{ __html: STYLES }} />
@@ -698,7 +698,7 @@ export default function ServicesPageContent() {
           {/* Layer 1: fixed bg image — covers entire page from top */}
           <div aria-hidden className="svc-page-bg" style={{
             position: "absolute", top: 0, left: 0, right: 0, bottom: 0,
-            backgroundImage: "url('/services-page-bg.jpg')",
+            backgroundImage: `url('${bgImage ?? "/services-page-bg.jpg"}')`,
             backgroundAttachment: "fixed",
             backgroundPosition: "center top",
             backgroundRepeat: "no-repeat",

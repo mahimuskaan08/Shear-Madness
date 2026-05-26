@@ -1,19 +1,23 @@
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { getSiteImages } from "@/lib/site-images";
 
 export const metadata = {
   title: "Credits | Shear Madness Hoboken",
   description: "With gratitude to everyone who helped make Shear Madness what it is.",
 };
 
-export default function CreditsPage() {
+export default async function CreditsPage() {
+  const imgs = await getSiteImages();
+  const creditsBg = imgs.credits_background_image ?? "/credits-bg.jpg";
+
   return (
     <>
       <Navbar />
       <main className="credits-main" style={{
         minHeight: "100svh",
-        backgroundImage: "url('/credits-bg.jpg')",
+        backgroundImage: `url('${creditsBg}')`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundAttachment: "fixed",
@@ -152,7 +156,16 @@ export default function CreditsPage() {
 
         </div>
       </main>
-      <Footer />
+      <Footer
+        phone={imgs.site_phone || undefined}
+        email={imgs.site_email || undefined}
+        addressLine1={imgs.site_address_line_1 || undefined}
+        cityStateZip={imgs.site_city_state_zip || undefined}
+        hoursTueThu={imgs.hours_tue_thu || undefined}
+        hoursFri={imgs.hours_fri || undefined}
+        hoursSat={imgs.hours_sat || undefined}
+        hoursSunMon={imgs.hours_sun_mon || undefined}
+      />
     </>
   );
 }

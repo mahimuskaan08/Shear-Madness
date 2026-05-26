@@ -14,7 +14,7 @@ const NAV_LINKS = [
   { label: "Contact Us", href: "/contact"    },
 ];
 
-const HOURS = [
+const DEFAULT_HOURS = [
   { days: "Tue – Thu", time: "10:00 am – 9:00 pm" },
   { days: "Fri",       time: "10:00 am – 8:00 pm" },
   { days: "Sat",       time: "10:00 am – 6:00 pm" },
@@ -65,9 +65,39 @@ const SOCIALS = [
   },
 ];
 
-export default function Footer() {
+export default function Footer({
+  phone,
+  email,
+  addressLine1,
+  cityStateZip,
+  hoursTueThu,
+  hoursFri,
+  hoursSat,
+  hoursSunMon,
+}: {
+  phone?:        string;
+  email?:        string;
+  addressLine1?: string;
+  cityStateZip?: string;
+  hoursTueThu?:  string;
+  hoursFri?:     string;
+  hoursSat?:     string;
+  hoursSunMon?:  string;
+} = {}) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-40px" });
+
+  const displayPhone       = phone        || "(201) 222-2102";
+  const displayEmail       = email        || "info@shearmadnesshoboken.com";
+  const displayAddr1       = addressLine1 || "80 Park Ave";
+  const displayCityStateZip = cityStateZip || "Hoboken, NJ 07030";
+  const telHref            = `tel:+1${displayPhone.replace(/\D/g, "")}`;
+  const HOURS = [
+    { days: "Tue – Thu", time: hoursTueThu ?? DEFAULT_HOURS[0].time },
+    { days: "Fri",       time: hoursFri    ?? DEFAULT_HOURS[1].time },
+    { days: "Sat",       time: hoursSat    ?? DEFAULT_HOURS[2].time },
+    { days: "Sun – Mon", time: hoursSunMon ?? DEFAULT_HOURS[3].time },
+  ];
 
   return (
     <footer
@@ -153,9 +183,9 @@ export default function Footer() {
                 color: "rgba(250,246,239,0.62)",
                 lineHeight: 1.7,
               }}>
-                80 Park Ave<br />Hoboken, NJ 07030
+                {displayAddr1}<br />{displayCityStateZip}
               </p>
-              <a href="mailto:info@shearmadnesshoboken.com" style={{
+              <a href={`mailto:${displayEmail}`} style={{
                 fontFamily: "'Inter', sans-serif",
                 fontSize: "0.78rem",
                 color: "rgba(250,246,239,0.52)",
@@ -166,9 +196,9 @@ export default function Footer() {
                 onMouseEnter={e => (e.currentTarget.style.color = "#C6A76B")}
                 onMouseLeave={e => (e.currentTarget.style.color = "rgba(250,246,239,0.52)")}
               >
-                info@shearmadnesshoboken.com
+                {displayEmail}
               </a>
-              <a href="tel:+12012222102" style={{
+              <a href={telHref} style={{
                 fontFamily: "'Inter', sans-serif",
                 fontSize: "0.78rem",
                 color: "rgba(250,246,239,0.52)",
@@ -179,7 +209,7 @@ export default function Footer() {
                 onMouseEnter={e => (e.currentTarget.style.color = "#C6A76B")}
                 onMouseLeave={e => (e.currentTarget.style.color = "rgba(250,246,239,0.52)")}
               >
-                (201) 222-2102
+                {displayPhone}
               </a>
             </div>
           </motion.div>

@@ -29,7 +29,16 @@ export default async function GalleryPage() {
           cmsGalleryImages={imgs.gallery_images.length > 0 ? imgs.gallery_images : undefined}
         />
       </main>
-      <Footer />
+      <Footer
+        phone={imgs.site_phone || undefined}
+        email={imgs.site_email || undefined}
+        addressLine1={imgs.site_address_line_1 || undefined}
+        cityStateZip={imgs.site_city_state_zip || undefined}
+        hoursTueThu={imgs.hours_tue_thu || undefined}
+        hoursFri={imgs.hours_fri || undefined}
+        hoursSat={imgs.hours_sat || undefined}
+        hoursSunMon={imgs.hours_sun_mon || undefined}
+      />
     </>
   );
 }

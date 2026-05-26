@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import ServicesPageContent from "@/components/ServicesPageContent";
+import { getSiteImages } from "@/lib/site-images";
 
 export const metadata: Metadata = {
   title: "Salon Services | Shear Madness Hoboken",
@@ -14,6 +15,11 @@ export const metadata: Metadata = {
   },
 };
 
-export default function ServicesPage() {
-  return <ServicesPageContent />;
+export default async function ServicesPage() {
+  const imgs = await getSiteImages();
+  return (
+    <ServicesPageContent
+      bgImage={imgs.services_page_background_image ?? undefined}
+    />
+  );
 }

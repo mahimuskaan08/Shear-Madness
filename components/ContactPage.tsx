@@ -6,7 +6,7 @@ import { motion, useInView } from "framer-motion";
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 const BG = "#ECEAE7";
 
-const HOURS = [
+const DEFAULT_CONTACT_HOURS = [
   { days: "Tue – Thu", time: "10:00 am – 9:00 pm" },
   { days: "Fri",       time: "10:00 am – 8:00 pm" },
   { days: "Sat",       time: "10:00 am – 6:00 pm" },
@@ -65,9 +65,44 @@ const STYLES = `
 }
 `;
 
-export default function ContactPage({ bgImage }: { bgImage?: string }) {
+export default function ContactPage({
+  bgImage,
+  phone,
+  email,
+  addressLine1,
+  cityStateZip,
+  hoursTueThu,
+  hoursFri,
+  hoursSat,
+  hoursSunMon,
+  mapsUrl,
+}: {
+  bgImage?:      string;
+  phone?:        string;
+  email?:        string;
+  addressLine1?: string;
+  cityStateZip?: string;
+  hoursTueThu?:  string;
+  hoursFri?:     string;
+  hoursSat?:     string;
+  hoursSunMon?:  string;
+  mapsUrl?:      string;
+}) {
   const ref = useRef<HTMLElement>(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
+
+  const displayPhone        = phone        || "(201) 222-2102";
+  const displayEmail        = email        || "info@shearmadnesshoboken.com";
+  const displayAddr1        = addressLine1 || "80 Park Ave";
+  const displayCityStateZip = cityStateZip || "Hoboken, NJ 07030";
+  const displayMapsUrl      = mapsUrl      || "https://www.google.com/maps/dir/?api=1&destination=80+Park+Ave,+Hoboken,+NJ+07030";
+  const telHref             = `tel:+1${displayPhone.replace(/\D/g, "")}`;
+  const HOURS = [
+    { days: "Tue – Thu", time: hoursTueThu ?? DEFAULT_CONTACT_HOURS[0].time },
+    { days: "Fri",       time: hoursFri    ?? DEFAULT_CONTACT_HOURS[1].time },
+    { days: "Sat",       time: hoursSat    ?? DEFAULT_CONTACT_HOURS[2].time },
+    { days: "Sun – Mon", time: hoursSunMon ?? DEFAULT_CONTACT_HOURS[3].time },
+  ];
 
   return (
     <section
@@ -245,8 +280,8 @@ export default function ContactPage({ bgImage }: { bgImage?: string }) {
             }}>
 
               <InfoBlock label="Address" inView={inView} delay={0.38}>
-                <InfoLine primary>80 Park Ave</InfoLine>
-                <InfoLine>Hoboken, NJ 07030</InfoLine>
+                <InfoLine primary>{displayAddr1}</InfoLine>
+                <InfoLine>{displayCityStateZip}</InfoLine>
               </InfoBlock>
 
               <InfoBlock label="Hours" inView={inView} delay={0.50}>
@@ -276,8 +311,8 @@ export default function ContactPage({ bgImage }: { bgImage?: string }) {
               </InfoBlock>
 
               <InfoBlock label="Contact" inView={inView} delay={0.62}>
-                <InfoLine primary>info@shearmadnesshoboken.com</InfoLine>
-                <InfoLine>(201) 222-2102</InfoLine>
+                <InfoLine primary>{displayEmail}</InfoLine>
+                <InfoLine>{displayPhone}</InfoLine>
               </InfoBlock>
 
               <motion.div
@@ -286,7 +321,7 @@ export default function ContactPage({ bgImage }: { bgImage?: string }) {
                 transition={{ duration: 0.85, ease: EASE, delay: 0.76 }}
               >
                 <a
-                  href="https://www.google.com/maps/dir/?api=1&destination=80+Park+Ave,+Hoboken,+NJ+07030"
+                  href={displayMapsUrl}
                   style={{
                     display: "inline-flex", alignItems: "center", gap: 10,
                     fontFamily: "'Inter', sans-serif",

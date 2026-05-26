@@ -1,0 +1,28 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -sI https://shearmadnesshoboken.com/sitemap.xml)",
+      "Bash(curl -sI https://shearmadnesshoboken.com/robots.txt)",
+      "Bash(curl -sI https://www.shearmadnesshoboken.com/sitemap.xml)",
+      "Bash(curl -s https://www.shearmadnesshoboken.com/sitemap.xml)",
+      "Bash(curl -s https://www.shearmadnesshoboken.com/robots.txt)",
+      "Bash(git -C c:/Shear add next.config.ts)",
+      "Bash(git -C c:/Shear commit -m ' *)",
+      "Bash(curl -sIL \"https://shearmadnesshoboken.com/the-salon\")",
+      "Bash(git -C c:/Shear commit -m 'Add redirect: /book-an-appointment → /booking *)",
+      "Bash(curl -sIL \"https://shearmadnesshoboken.com/book-an-appointment\")",
+      "Bash(curl -sIL \"https://www.shearmadnesshoboken.com\")",
+      "Bash(curl -s \"https://www.shearmadnesshoboken.com\")",
+      "Bash(git -C c:/Shear commit -m 'Add redirects: /reviews-page, /the-team, /promotions *)",
+      "PowerShell(Compress-Archive -Path \"c:\\\\Shear\\\\wp-plugin\\\\shear-site-images-v5\" -DestinationPath \"c:\\\\Shear\\\\wp-plugin\\\\shear-site-images-v5.zip\" -Force)",
+      "PowerShell(Compress-Archive -Path \"C:\\\\Shear\\\\wp-plugin\\\\shear-site-images-v6\" -DestinationPath \"C:\\\\Shear\\\\wp-plugin\\\\shear-site-images-v6.zip\" -Force)",
+      "PowerShell(if \\($?\\) { \"ZIP created OK\" } else { \"ZIP FAILED\" })",
+      "PowerShell($zip = [System.IO.Compression.ZipFile]::OpenRead\\(\"C:\\\\Shear\\\\wp-plugin\\\\shear-site-images-v6.zip\"\\); $zip.Entries | Select-Object FullName, Length; $zip.Dispose\\(\\))",
+      "PowerShell(Add-Type -AssemblyName System.IO.Compression.FileSystem; $zip = [System.IO.Compression.ZipFile]::OpenRead\\(\"C:\\\\Shear\\\\wp-plugin\\\\shear-site-images-v6.zip\"\\); $zip.Entries | Select-Object FullName, Length; $zip.Dispose\\(\\))",
+      "Bash(python3 -c ' *)",
+      "Bash(Test-Path \"c:\\\\Shear\\\\public\\\\services-page-bg.jpg\")",
+      "Bash(python3 -c \"import zipfile; z=zipfile.ZipFile\\('C:/Shear/wp-plugin/shear-site-images-v7.zip'\\); [print\\(i.filename, i.file_size\\) for i in z.infolist\\(\\)]\")",
+      "Bash(python -c ' *)"
+    ]
+  }
+}

@@ -72,7 +72,16 @@ export default async function Home() {
         georgeImage={imgs.george_artist_image ?? undefined}
       />
       <ContactSection bgImage={imgs.contact_background_image ?? undefined} />
-      <Footer />
+      <Footer
+        phone={imgs.site_phone || undefined}
+        email={imgs.site_email || undefined}
+        addressLine1={imgs.site_address_line_1 || undefined}
+        cityStateZip={imgs.site_city_state_zip || undefined}
+        hoursTueThu={imgs.hours_tue_thu || undefined}
+        hoursFri={imgs.hours_fri || undefined}
+        hoursSat={imgs.hours_sat || undefined}
+        hoursSunMon={imgs.hours_sun_mon || undefined}
+      />
     </main>
   );
 }
