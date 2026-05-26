@@ -9,6 +9,8 @@ import Footer from "@/components/Footer";
 import CustomCursor from "@/components/CustomCursor";
 import { getSiteImages } from "@/lib/site-images";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Shear Madness Hoboken | Premium Hair Salon for Men & Women",
   description:

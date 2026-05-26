@@ -92,6 +92,7 @@ export async function getSiteImages(): Promise<SiteImages> {
     const res = await fetch(ENDPOINT, { cache: "no-store" });
     if (!res.ok) return EMPTY;
     const raw = (await res.json()) as Record<string, unknown>;
+    console.log("[CMS] gallery_background_image:", raw.gallery_background_image);
     const merged = { ...EMPTY, ...raw } as SiteImages;
     // Normalise single-image fields: null / undefined / "" / false → null
     for (const key of SINGLE_KEYS) {

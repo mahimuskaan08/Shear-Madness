@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import ServicesPageContent from "@/components/ServicesPageContent";
 import { getSiteImages } from "@/lib/site-images";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Salon Services | Shear Madness Hoboken",
   description:

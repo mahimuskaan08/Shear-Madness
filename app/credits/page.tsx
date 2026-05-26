@@ -3,6 +3,8 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { getSiteImages } from "@/lib/site-images";
 
+export const dynamic = "force-dynamic";
+
 export const metadata = {
   title: "Credits | Shear Madness Hoboken",
   description: "With gratitude to everyone who helped make Shear Madness what it is.",

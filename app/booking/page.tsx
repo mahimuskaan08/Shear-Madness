@@ -4,6 +4,8 @@ import Footer from "@/components/Footer";
 import BookingPageContent from "@/components/BookingPageContent";
 import { getSiteImages } from "@/lib/site-images";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Book an Appointment | Shear Madness Hoboken",
   description:

@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import JoinUsPageContent from "@/components/JoinUsPageContent";
 import { getSiteImages } from "@/lib/site-images";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Join Our Team | Shear Madness Hoboken",
   description:

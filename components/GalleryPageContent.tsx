@@ -189,6 +189,7 @@ export default function GalleryPageContent({
     <>
     <section
       className="relative min-h-screen overflow-x-hidden gallery-bg-section"
+      data-cms-bg={bgImage ?? "FALLBACK:/gallery-bg2.jpg"}
       style={{
         paddingTop: "calc(var(--navbar-h, 80px) + 2.4rem)",
         backgroundImage: `url('${bgImage ?? "/gallery-bg2.jpg"}')`,

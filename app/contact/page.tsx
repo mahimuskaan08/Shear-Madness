@@ -4,6 +4,8 @@ import ContactSection from "@/components/ContactPage";
 import CustomCursor from "@/components/CustomCursor";
 import { getSiteImages } from "@/lib/site-images";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Contact Us | Shear Madness Hoboken",
   description:
