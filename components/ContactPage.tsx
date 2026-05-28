@@ -311,8 +311,8 @@ export default function ContactPage({
               </InfoBlock>
 
               <InfoBlock label="Contact" inView={inView} delay={0.62}>
-                <InfoLine primary>{displayEmail}</InfoLine>
-                <InfoLine>{displayPhone}</InfoLine>
+                <InfoLine primary href={`mailto:${displayEmail}`}>{displayEmail}</InfoLine>
+                <InfoLine href={telHref}>{displayPhone}</InfoLine>
               </InfoBlock>
 
               <motion.div
@@ -386,16 +386,23 @@ function InfoBlock({
   );
 }
 
-function InfoLine({ children, primary }: { children: React.ReactNode; primary?: boolean }) {
-  return (
-    <p style={{
-      fontFamily: "'Cormorant Garamond', Georgia, serif",
-      fontSize: "clamp(1.45rem, 2vw, 1.8rem)",
-      fontWeight: 400, lineHeight: 1.55,
-      color: primary ? "#0A0A0A" : "rgba(10,10,10,0.78)",
-      letterSpacing: "0.01em",
-    }}>
-      {children}
-    </p>
-  );
+function InfoLine({ children, primary, href }: { children: React.ReactNode; primary?: boolean; href?: string }) {
+  const style: React.CSSProperties = {
+    fontFamily: "'Cormorant Garamond', Georgia, serif",
+    fontSize: "clamp(1.45rem, 2vw, 1.8rem)",
+    fontWeight: 400, lineHeight: 1.55,
+    color: primary ? "#0A0A0A" : "rgba(10,10,10,0.78)",
+    letterSpacing: "0.01em",
+  };
+  if (href) {
+    return (
+      <a href={href} style={{ ...style, textDecoration: "none", transition: "color 0.2s" }}
+        onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = "#C4A96A"; }}
+        onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = primary ? "#0A0A0A" : "rgba(10,10,10,0.78)"; }}
+      >
+        {children}
+      </a>
+    );
+  }
+  return <p style={style}>{children}</p>;
 }
