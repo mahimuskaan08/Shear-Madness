@@ -1035,8 +1035,8 @@ export default function BookingPageContent({ bgImage }: { bgImage?: string }) {
           }}
         >
           Prefer to call? Reach us at{" "}
-          <a href="tel:+12015551234" style={{ color: "#7A5C10", textDecoration: "none" }}>
-            (201) 555-1234
+          <a href="tel:+12012222102" style={{ color: "#7A5C10", textDecoration: "none" }}>
+            (201) 222-2102
           </a>
           {" "}— we're happy to book your appointment over the phone.
         </motion.p>

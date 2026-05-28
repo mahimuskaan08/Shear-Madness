@@ -54,13 +54,13 @@ const contactDetails = [
   },
   {
     label: "Phone",
-    value: "(201) 555-1234",
+    value: "(201) 222-2102",
     icon: (
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
         <path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.4 21 3 13.6 3 4.5c0-.6.4-1 1-1H8c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z" />
       </svg>
     ),
-    action: { label: "Call Now", href: "tel:+12015551234" },
+    action: { label: "Call Now", href: "tel:+12012222102" },
   },
   {
     label: "Email",
@@ -261,7 +261,7 @@ function ContactHero() {
 
           {/* Call Us */}
           <a
-            href="tel:+12015551234"
+            href="tel:+12012222102"
             className="group relative inline-flex items-center justify-center gap-2 rounded-full font-sans text-[11px] tracking-[0.22em] uppercase font-medium text-[#2C2A25] transition-all duration-400 hover:-translate-y-0.5 overflow-hidden"
             style={{
               padding: "14px 38px",
@@ -856,7 +856,7 @@ function ContactBookingCTA() {
 
           {/* Call Us */}
           <a
-            href="tel:+12015551234"
+            href="tel:+12012222102"
             className="inline-flex items-center justify-center gap-2.5 rounded-full font-sans text-[11px] tracking-[0.2em] uppercase font-medium text-[#2C2A25] transition-all duration-400 hover:-translate-y-0.5"
             style={{
               padding: "15px 36px",

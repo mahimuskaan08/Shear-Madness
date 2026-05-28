@@ -141,7 +141,7 @@ export default function BookingCTA() {
 
           {/* Secondary — outlined pill */}
           <a
-            href="tel:+12015551234"
+            href="tel:+12012222102"
             className="inline-flex items-center justify-center gap-2.5 rounded-full font-sans text-[11px] tracking-[0.2em] uppercase font-medium text-[#2C2A25] transition-all duration-400 hover:-translate-y-0.5 hover:border-[#C4A96A]/55"
             style={{
               padding: "15px 36px",
