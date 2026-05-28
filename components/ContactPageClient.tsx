@@ -390,12 +390,22 @@ function ContactInfoMap() {
                   <p className="font-sans text-[#8FA68C] text-[9px] tracking-[0.32em] uppercase font-medium mb-1.5">
                     {item.label}
                   </p>
-                  <p
-                    className="font-serif text-[#2C2A25] whitespace-pre-line"
-                    style={{ fontSize: "1.05rem", fontWeight: 400, lineHeight: 1.55 }}
-                  >
-                    {item.value}
-                  </p>
+                  {item.action?.href.startsWith("mailto:") ? (
+                    <a
+                      href={item.action.href}
+                      className="font-serif text-[#2C2A25] whitespace-pre-line hover:text-[#C4A96A] transition-colors duration-300"
+                      style={{ fontSize: "1.05rem", fontWeight: 400, lineHeight: 1.55, textDecoration: "none" }}
+                    >
+                      {item.value}
+                    </a>
+                  ) : (
+                    <p
+                      className="font-serif text-[#2C2A25] whitespace-pre-line"
+                      style={{ fontSize: "1.05rem", fontWeight: 400, lineHeight: 1.55 }}
+                    >
+                      {item.value}
+                    </p>
+                  )}
                   {item.action && (
                     <a
                       href={item.action.href}
