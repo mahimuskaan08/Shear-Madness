@@ -88,12 +88,19 @@ const BAMBOO_CSS = `
     #artist-grid2 { grid-template-columns: 1fr !important; }
     #artist-grid2 > *:last-child  { max-width: 420px; margin: 0 auto; width: 100%; order: -1; }
   }
-  @media (max-width: 640px) {
+  @media (min-width: 641px) and (max-width: 1024px) {
     .artist-bg-fixed {
-      background-attachment: scroll !important;
+      background-size: 100% auto !important;
+      background-repeat: no-repeat !important;
+      background-position: top center !important;
+    }
+    #experience {
+      height: auto !important;
+      min-height: 100svh !important;
     }
   }
 `;
+
 
 export default function ArtistSection({
   artistBg,
@@ -123,38 +130,13 @@ export default function ArtistSection({
 
       {/* ── FIXED BACKGROUND LAYERS — viewport-pinned, clipped by section overflow:hidden ── */}
 
-      {/* Layer 1: greyscale image — fixed to viewport */}
+      {/* Background — full colour, fixed to viewport */}
       <div aria-hidden="true" className="artist-bg-fixed" style={{
         position: "absolute", inset: 0, zIndex: 0, pointerEvents: "none",
         backgroundImage: `url('${artistBg ?? "/artist-bg.jpg"}')`,
         backgroundAttachment: "fixed",
         backgroundSize: "cover",
         backgroundPosition: "center",
-        filter: "grayscale(100%) brightness(1.04) contrast(0.92)",
-        opacity: 0.55,
-      }} />
-
-      {/* Layer 2: colour restoration — fixed to viewport */}
-      <div aria-hidden="true" className="artist-bg-fixed" style={{
-        position: "absolute", inset: 0, zIndex: 1, pointerEvents: "none",
-        backgroundImage: `url('${artistBg ?? "/artist-bg.jpg"}')`,
-        backgroundAttachment: "fixed",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        opacity: 0.28,
-        mixBlendMode: "color",
-      }} />
-
-      {/* Layer 3: blend wash */}
-      <div aria-hidden="true" style={{
-        position: "absolute", inset: 0, zIndex: 2, pointerEvents: "none",
-        background: "linear-gradient(to bottom, rgba(236,234,231,0.60) 0%, rgba(236,234,231,0.28) 30%, rgba(236,234,231,0.22) 70%, rgba(236,234,231,0.60) 100%)",
-      }} />
-
-      {/* Layer 4: gold accent */}
-      <div aria-hidden="true" style={{
-        position: "absolute", inset: 0, zIndex: 2, pointerEvents: "none",
-        background: "radial-gradient(ellipse 55% 60% at 80% 55%, rgba(198,167,107,0.06) 0%, transparent 70%)",
       }} />
 
       {/* Bamboo leaves */}

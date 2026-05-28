@@ -89,6 +89,27 @@ const HERO_FADE = `
 @media (max-width: 480px) {
   .sm-letter-large { margin-right: -2px; }
 }
+@media (max-width: 1024px) {
+  .hero-bg-img {
+    object-fit: contain !important;
+    object-position: center top !important;
+  }
+  .hero-bg-wrapper {
+    background: #ede8e3;
+  }
+  .hero-section {
+    height: auto !important;
+    min-height: unset !important;
+    aspect-ratio: 2528 / 1522;
+  }
+}
+@media (max-width: 768px) {
+  .hero-content-wrap { margin-top: 0 !important; }
+  .hero-spacer       { height: 4px !important; }
+  .hero-subtitle     { margin-bottom: 2px !important; font-size: 0.8rem !important; }
+  .hero-tagline      { margin-bottom: 8px !important; font-size: 0.68rem !important; }
+  .hero-btn          { padding: 9px 18px !important; font-size: 9px !important; }
+}
 `;
 
 // ── PETAL SVG ─────────────────────────────────────────────────────────────────
@@ -127,7 +148,7 @@ export default function HeroSection({ bgImage }: { bgImage?: string }) {
   return (
     <section
       ref={sectionRef}
-      className="relative flex items-center justify-center overflow-hidden"
+      className="relative flex items-center justify-center overflow-hidden hero-section"
       style={{ height: "100svh", minHeight: 680, animation: "hero-fade-in 1.8s ease-out both" }}
     >
       <style dangerouslySetInnerHTML={{ __html: PETAL_KF + HERO_FADE }} />
@@ -141,51 +162,11 @@ export default function HeroSection({ bgImage }: { bgImage?: string }) {
           fill
           priority
           sizes="100vw"
+          className="hero-bg-img"
           style={{ objectFit: "cover", objectPosition: "center 22%" }}
         />
       </motion.div>
 
-      {/* ── LAYER 2: WARM SEPIA WASH ─────────────────────────────────────── */}
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            "linear-gradient(168deg, rgba(237,231,225,0.26) 0%, rgba(194,182,168,0.18) 55%, rgba(178,162,144,0.14) 100%)",
-          mixBlendMode: "multiply",
-        }}
-      />
-
-      {/* ── LAYER 3: MOUNTAIN MIST BLOOM ─────────────────────────────────── */}
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(ellipse 82% 40% at 50% 26%, rgba(194,182,168,0.24) 0%, transparent 68%)",
-        }}
-      />
-
-      {/* ── LAYER 4: EDGE VIGNETTE ───────────────────────────────────────── */}
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(ellipse 78% 72% at 50% 44%, transparent 0%, rgba(180,164,146,0.14) 100%)",
-        }}
-      />
-
-      {/* ── LAYER 5: BOTTOM FADE — fully opaque at the seam, blends upward ──── */}
-      <div
-        aria-hidden="true"
-        className="absolute bottom-0 left-0 right-0 pointer-events-none"
-        style={{
-          height: "16%",
-          background:
-            "linear-gradient(to top, rgba(232,230,228,1.0) 0%, rgba(232,230,228,0.55) 40%, rgba(232,230,228,0) 100%)",
-        }}
-      />
 
       {/* ── LAYER 6: PETALS ──────────────────────────────────────────────── */}
       <div
@@ -219,6 +200,7 @@ export default function HeroSection({ bgImage }: { bgImage?: string }) {
           initial={{ opacity: 0, y: 28 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.5, ease: EASE, delay: 0.4 }}
+          className="hero-content-wrap"
           style={{ display: "flex", flexDirection: "column", alignItems: "center", marginTop: "8%", gap: 0 }}
         >
           {/* ── MAIN TITLE ───────────────────────────────────────────────── */}
@@ -259,10 +241,10 @@ export default function HeroSection({ bgImage }: { bgImage?: string }) {
           </div>
 
           {/* Spacing */}
-          <div style={{ height: 14 }} />
+          <div className="hero-spacer" style={{ height: 14 }} />
 
           {/* Subtitle */}
-          <p style={{
+          <p className="hero-subtitle" style={{
             fontFamily: "'Times New Roman', Times, serif",
             fontSize: "clamp(0.95rem, 2.4vw, 1.38rem)",
             fontWeight: 700,
@@ -275,7 +257,7 @@ export default function HeroSection({ bgImage }: { bgImage?: string }) {
             A Salon For Men &amp; Women
           </p>
 
-          <p style={{
+          <p className="hero-tagline" style={{
             fontFamily: "'Cormorant Garamond', Georgia, serif",
             fontSize: "clamp(0.78rem, 1.8vw, 1.0rem)",
             fontWeight: 500,
@@ -290,11 +272,11 @@ export default function HeroSection({ bgImage }: { bgImage?: string }) {
 
           {/* Buttons */}
           <div
-            className="flex flex-col sm:flex-row items-center justify-center gap-4"
+            className="flex flex-row items-center justify-center gap-3"
           >
             <a
               href="/booking"
-              className="inline-flex items-center justify-center rounded-full font-sans text-[11px] tracking-[0.22em] uppercase font-medium text-white"
+              className="hero-btn inline-flex items-center justify-center rounded-full font-sans text-[11px] tracking-[0.22em] uppercase font-medium text-white"
               style={{
                 padding: "15px 40px",
                 background: "linear-gradient(135deg, #CAA96E 0%, #B8935A 55%, #C6A76B 100%)",
@@ -319,7 +301,7 @@ export default function HeroSection({ bgImage }: { bgImage?: string }) {
 
             <a
               href="#contact"
-              className="inline-flex items-center justify-center rounded-full font-sans text-[11px] tracking-[0.22em] uppercase font-semibold"
+              className="hero-btn inline-flex items-center justify-center rounded-full font-sans text-[11px] tracking-[0.22em] uppercase font-semibold"
               style={{
                 padding: "14px 39px",
                 background: "transparent",

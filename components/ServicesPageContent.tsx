@@ -188,19 +188,18 @@ const PETAL_COLORS = [
 const STYLES = `
   /* iOS Safari does not support background-attachment: fixed — fallback to scroll */
   /* Also adjust sizing so image fits neatly on all screen sizes               */
-  @media (max-width: 1024px) {
-    .svc-page-bg {
-      background-attachment: scroll !important;
-      background-size: contain !important;
-      background-position: center top !important;
-      filter: brightness(1.12) contrast(0.88) blur(2px) !important;
-    }
-  }
-  @media (max-width: 640px) {
+  @media (min-width: 768px) and (max-width: 1024px) {
     .svc-page-bg {
       background-size: 100% auto !important;
+      background-repeat: no-repeat !important;
       background-position: top center !important;
     }
+  }
+
+  /* Mobile: hide desktop absolute bg layers — replaced by the fixed mobile layer */
+  @media (max-width: 767px) {
+    .svc-page-bg    { display: none !important; }
+    .svc-base-cream { display: none !important; }
   }
 
   /* ── CRANE ANIMATION ────────────────────────────────── */
@@ -689,11 +688,32 @@ export default function ServicesPageContent({ bgImage }: { bgImage?: string }) {
       <CustomCursor />
       <Navbar />
       <main>
+        {/* ── Mobile-only: true viewport-fixed background (iOS-safe) ── */}
+        <div
+          aria-hidden
+          className="md:hidden"
+          style={{ position: "fixed", inset: 0, zIndex: 0, pointerEvents: "none" }}
+        >
+          {/* Image layer — colour-enhanced, focal point centred */}
+          <div style={{
+            position: "absolute", inset: 0,
+            backgroundImage: "url('/services-page-bg.jpg')",
+            backgroundSize: "cover",
+            backgroundPosition: "center 35%",
+            filter: "brightness(1.08) saturate(1.32) contrast(1.10)",
+          }} />
+          {/* Premium warm-cream vignette — light enough to let colours breathe */}
+          <div style={{
+            position: "absolute", inset: 0,
+            background: "linear-gradient(170deg, rgba(252,247,236,0.22) 0%, rgba(243,232,208,0.38) 100%)",
+          }} />
+        </div>
+
         {/* ── ONE unified background wrapper — hero + all sections blend seamlessly */}
         <div style={{ position: "relative" }}>
 
-          {/* Layer 0: base cream */}
-          <div aria-hidden style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, background: "#F5F2EB", zIndex: 0 }} />
+          {/* Layer 0: base cream — desktop only */}
+          <div aria-hidden className="svc-base-cream" style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, background: "#F5F2EB", zIndex: 0 }} />
 
           {/* Layer 1: fixed bg image — covers entire page from top */}
           <div aria-hidden className="svc-page-bg" style={{
@@ -703,16 +723,11 @@ export default function ServicesPageContent({ bgImage }: { bgImage?: string }) {
             backgroundPosition: "center top",
             backgroundRepeat: "no-repeat",
             backgroundSize: "cover",
-            opacity: 0.5,
-            filter: "brightness(1.12) contrast(0.88) blur(4px)",
             zIndex: 1,
           }} />
 
-          {/* Layer 2: very light cream tint */}
-          <div aria-hidden style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(245,242,235,0.15)", pointerEvents: "none", zIndex: 2 }} />
-
           {/* Layer 3: all content — hero flows straight into sections, no seam */}
-          <div style={{ position: "relative", zIndex: 3 }}>
+          <div style={{ position: "relative", zIndex: 2 }}>
             <HeroSection />
             {CATEGORIES.map(cat => <CategorySection key={cat.id} cat={cat} />)}
             <NotesSection />

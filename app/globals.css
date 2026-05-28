@@ -34,6 +34,8 @@
   .gallery-bg-section { background-attachment: scroll !important; }
   .credits-main       { background-attachment: scroll !important; }
   .svc-page-bg        { background-attachment: scroll !important; }
+  .booking-main       { background-attachment: scroll !important; }
+  .artist-bg-fixed    { background-attachment: scroll !important; }
 }
 
 /* ── GALLERY PAGE MOBILE: strip section backgrounds (body carries the fixed bg) ──
