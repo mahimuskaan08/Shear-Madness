@@ -396,7 +396,7 @@ function InfoLine({ children, primary, href }: { children: React.ReactNode; prim
   };
   if (href) {
     return (
-      <a href={href} style={{ ...style, textDecoration: "none", transition: "color 0.2s" }}
+      <a href={href} style={{ ...style, display: "block", textDecoration: "none", transition: "color 0.2s" }}
         onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = "#C4A96A"; }}
         onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = primary ? "#0A0A0A" : "rgba(10,10,10,0.78)"; }}
       >
