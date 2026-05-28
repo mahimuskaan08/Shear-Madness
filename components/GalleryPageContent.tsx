@@ -287,6 +287,7 @@ export default function GalleryPageContent({
               key={activeTab}
               items={visibleItems}
               onCardClick={setLightboxItem}
+              lightboxOpen={lightboxItem !== null}
             />
           )}
         </AnimatePresence>
@@ -313,9 +314,11 @@ export default function GalleryPageContent({
 function CardGrid({
   items,
   onCardClick,
+  lightboxOpen,
 }: {
   items: GalleryItem[];
   onCardClick: (item: GalleryItem) => void;
+  lightboxOpen: boolean;
 }) {
   const [current,      setCurrent]      = useState(0);
   const [paused,       setPaused]       = useState(false);
@@ -347,12 +350,12 @@ function CardGrid({
   }, []);
 
   useEffect(() => {
-    if (paused || N <= visibleCount) return;
+    if (paused || lightboxOpen || N <= visibleCount) return;
     autoRef.current = setInterval(() => {
       setCurrent(c => (c >= maxIndex ? 0 : c + 1));
     }, 3000);
     return () => clearInterval(autoRef.current);
-  }, [paused, N, visibleCount, maxIndex]);
+  }, [paused, lightboxOpen, N, visibleCount, maxIndex]);
 
   const prev = useCallback(() => setCurrent(c => Math.max(0, c - 1)), []);
   const next = useCallback(() => setCurrent(c => Math.min(maxIndex, c + 1)), [maxIndex]);
