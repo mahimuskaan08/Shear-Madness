@@ -727,12 +727,6 @@ export default function BookingPageContent({ bgImage }: { bgImage?: string }) {
         padding: "clamp(110px, 14vh, 140px) clamp(20px, 6vw, 60px) clamp(72px, 10vh, 100px)",
       }}
     >
-      {/* Soft overlay — keeps form legible without fully hiding the background */}
-      <div style={{
-        position: "absolute", top: 0, left: 0, right: 0, bottom: 0, pointerEvents: "none",
-        background: "rgba(253,250,246,0.78)",
-        zIndex: 0,
-      }} />
 
       {/* ── Falling petals layer (z-index 1, pointer-events: none) ─── */}
       <FallingPetals />
@@ -1048,8 +1042,12 @@ export default function BookingPageContent({ bgImage }: { bgImage?: string }) {
         @media (max-width: 540px) {
           .booking-grid-2 { grid-template-columns: 1fr !important; }
         }
-        @media (max-width: 1024px) {
-          .booking-main { background-attachment: scroll !important; }
+        @media (min-width: 641px) and (max-width: 1024px) {
+          .booking-main {
+            background-size: 100% auto !important;
+            background-repeat: no-repeat !important;
+            background-position: top center !important;
+          }
         }
       `}</style>
     </main>

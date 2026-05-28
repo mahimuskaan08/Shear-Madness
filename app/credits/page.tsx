@@ -19,14 +19,20 @@ export default async function CreditsPage() {
       <Navbar />
       <main className="credits-main" style={{
         minHeight: "100svh",
-        backgroundImage: `url('${creditsBg}')`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundAttachment: "fixed",
         position: "relative",
         padding: "clamp(110px, 15vh, 150px) clamp(24px, 8vw, 96px) clamp(72px, 10vh, 100px)",
       }}>
-        <div style={{ position: "absolute", inset: 0, background: "rgba(236,234,231,0.75)", pointerEvents: "none" }} />
+        {/* Fixed background — position:fixed works on all devices incl. iOS Safari
+            where background-attachment:fixed is broken */}
+        <div aria-hidden style={{
+          position: "fixed", inset: 0, zIndex: 0, pointerEvents: "none",
+          backgroundImage: `url('${creditsBg}')`,
+          backgroundSize: "cover", backgroundPosition: "center",
+        }} />
+        <div aria-hidden style={{
+          position: "fixed", inset: 0, zIndex: 0, pointerEvents: "none",
+          background: "rgba(236,234,231,0.75)",
+        }} />
         <div style={{ maxWidth: 760, margin: "0 auto", position: "relative", zIndex: 1 }}>
 
           {/* ── HEADER ──────────────────────────────────────────────────── */}

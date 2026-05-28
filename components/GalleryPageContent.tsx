@@ -181,21 +181,27 @@ export default function GalleryPageContent({
   }, [lightboxItem, closeLightbox]);
 
   useEffect(() => {
-    document.body.style.overflow = lightboxItem ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
+    if (!lightboxItem) return;
+    const scrollY = window.scrollY;
+    document.body.style.position = "fixed";
+    document.body.style.top      = `-${scrollY}px`;
+    document.body.style.width    = "100%";
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.position = "";
+      document.body.style.top      = "";
+      document.body.style.width    = "";
+      document.body.style.overflow = "";
+      window.scrollTo(0, scrollY);
+    };
   }, [lightboxItem]);
 
   const resolvedBg = bgImage ?? "/gallery-bg2.jpg";
 
   return (
     <>
-    {/*
-      Mobile fixed background — iOS Safari only honours background-attachment:fixed
-      on <body>, not on arbitrary elements. Injecting a scoped <style> that sets it
-      on body is the reliable cross-browser solution. The sections' own
-      background-image is cleared via .gallery-bg-section CSS so there's no scroll
-      copy underneath. Desktop keeps background-attachment:fixed on the sections.
-    */}
+    {/* Mobile: inject bg on body (iOS Safari only supports fixed attachment on body).
+        Tablet: adjust bg sizing via .gallery-bg-section class. */}
     <style dangerouslySetInnerHTML={{ __html: `
       @media (max-width: 767px) {
         body {
@@ -205,22 +211,33 @@ export default function GalleryPageContent({
           background-position: center;
         }
       }
+      @media (min-width: 641px) and (max-width: 1024px) {
+        .gallery-bg-section {
+          background-size: 100% auto !important;
+          background-repeat: no-repeat !important;
+          background-position: top center !important;
+        }
+      }
     ` }} />
-    <section
-      className="relative min-h-screen overflow-x-hidden gallery-bg-section"
+    <div
+      className="gallery-bg-section"
       data-cms-bg={bgImage ?? "FALLBACK:/gallery-bg2.jpg"}
       style={{
-        paddingTop: "calc(var(--navbar-h, 80px) + 2.4rem)",
+        position: "relative",
         backgroundImage: `url('${bgImage ?? "/gallery-bg2.jpg"}')`,
         backgroundAttachment: "fixed",
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}
     >
-      {/* ── Translucent overlay for 50% visibility ── */}
-      <div aria-hidden className="absolute inset-0 z-0 pointer-events-none"
-        style={{ background: "rgba(253,250,246,0.50)" }} />
 
+    <section
+      className="relative min-h-screen overflow-x-hidden"
+      style={{
+        paddingTop: "calc(var(--navbar-h, 80px) + 2.4rem)",
+        zIndex: 1,
+      }}
+    >
       {/* ── All content above bg ── */}
       <div className="relative z-10">
 
@@ -301,7 +318,8 @@ export default function GalleryPageContent({
 
       </div>{/* end relative z-10 */}
     </section>
-    <ReviewsSection bgImage={bgImage} />
+    <ReviewsSection />
+    </div>{/* end shared bg wrapper */}
     </>
   );
 }
@@ -384,6 +402,9 @@ function CardGrid({
           style={{ cursor: "grab", touchAction: "pan-y" }}
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => { setPaused(false); dragStart.current = null; }}
+          onTouchStart={() => setPaused(true)}
+          onTouchEnd={() => setPaused(false)}
+          onTouchCancel={() => setPaused(false)}
           onPointerDown={onPointerDown}
           onPointerUp={onPointerUp}
           onPointerLeave={() => { dragStart.current = null; }}
@@ -399,7 +420,12 @@ function CardGrid({
           >
             {items.map((item) => (
               <div key={item.id} style={{ flexShrink: 0, width: cardW || "auto" }}>
-                <GalleryCard item={item} onClick={() => onCardClick(item)} />
+                <GalleryCard
+                  item={item}
+                  onClick={() => onCardClick(item)}
+                  onHoverStart={() => setPaused(true)}
+                  onHoverEnd={() => setPaused(false)}
+                />
               </div>
             ))}
           </div>
@@ -452,7 +478,17 @@ function CardGrid({
 /* ─────────────────────────────────────────────
    Gallery Card
 ───────────────────────────────────────────── */
-function GalleryCard({ item, onClick }: { item: GalleryItem; onClick: () => void }) {
+function GalleryCard({
+  item,
+  onClick,
+  onHoverStart,
+  onHoverEnd,
+}: {
+  item: GalleryItem;
+  onClick: () => void;
+  onHoverStart?: () => void;
+  onHoverEnd?: () => void;
+}) {
   const [hovered, setHovered] = useState(false);
   return (
     <div
@@ -464,8 +500,8 @@ function GalleryCard({ item, onClick }: { item: GalleryItem; onClick: () => void
         transition: "box-shadow 0.4s ease",
       }}
       onClick={onClick}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+      onMouseEnter={() => { setHovered(true); onHoverStart?.(); }}
+      onMouseLeave={() => { setHovered(false); onHoverEnd?.(); }}
     >
       <Image
         src={item.previewImage}
@@ -626,7 +662,7 @@ function TestimonialCard({ t }: { t: { name: string; role: string; text: string 
 /* ─────────────────────────────────────────────
    Reviews Section — horizontal testimonial carousel
 ───────────────────────────────────────────── */
-function ReviewsSection({ bgImage }: { bgImage?: string }) {
+function ReviewsSection() {
   const [idx, setIdx]         = useState(0);
   const [paused, setPaused]   = useState(false);
   const [visibleCount, setVC] = useState(3);
@@ -702,17 +738,12 @@ function ReviewsSection({ bgImage }: { bgImage?: string }) {
   return (
     <section
       id="reviews"
-      className="w-full relative overflow-hidden gallery-bg-section"
+      className="w-full relative overflow-hidden"
       style={{
         padding: "clamp(1.75rem, 3vw, 2.5rem) 0 clamp(2rem, 4vw, 3rem)",
-        backgroundImage: `url('${bgImage ?? "/gallery-bg2.jpg"}')`,
-        backgroundAttachment: "fixed",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
+        zIndex: 1,
       }}
     >
-      {/* Same overlay as gallery section */}
-      <div aria-hidden style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(253,250,246,0.50)", pointerEvents: "none", zIndex: 0 }} />
 
       {/* Thin gold divider */}
       <div
@@ -758,6 +789,9 @@ function ReviewsSection({ bgImage }: { bgImage?: string }) {
           style={{ overflow: "hidden", cursor: "grab", userSelect: "none", touchAction: "pan-y" }}
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => { setPaused(false); dragStart.current = null; }}
+          onTouchStart={() => setPaused(true)}
+          onTouchEnd={() => setPaused(false)}
+          onTouchCancel={() => setPaused(false)}
           onPointerDown={onPointerDown}
           onPointerUp={onPointerUp}
           onPointerLeave={() => { dragStart.current = null; }}
@@ -833,7 +867,7 @@ function Lightbox({ item, onClose }: { item: GalleryItem; onClose: () => void })
       exit={{ opacity: 0 }}
       transition={{ duration: 0.28 }}
       className="fixed inset-0 z-50 flex items-center justify-center p-6 md:p-12"
-      style={{ background: "rgba(18,16,12,0.9)", backdropFilter: "blur(6px)" }}
+      style={{ background: "rgba(18,16,12,0.9)", backdropFilter: "blur(6px)", touchAction: "none", overscrollBehavior: "none" }}
       onClick={onClose}
     >
       <motion.div

@@ -43,6 +43,28 @@ const ABOUT_PETAL_COLORS = [
 ];
 
 const ABOUT_CSS = `
+  /* ── MOBILE: no background image ────────────────────────────────────── */
+  @media (max-width: 640px) {
+    .about-bg-wrapper { display: none !important; }
+    #our-story {
+      background: #EDE5D8 !important;
+      min-height: unset !important;
+      height: auto !important;
+    }
+  }
+
+  /* ── TABLET/iPad: full image visible, no cropping ───────────────────── */
+  @media (min-width: 641px) and (max-width: 1024px) {
+    .about-bg-img {
+      object-fit: contain !important;
+      object-position: center top !important;
+    }
+    #our-story {
+      height: auto !important;
+      min-height: 100svh !important;
+    }
+  }
+
   /* ── PREMIUM SCROLLBAR ───────────────────────────────────────────────── */
   .dict-scroll { scrollbar-width: thin; scrollbar-color: rgba(198,167,107,0.45) transparent; }
   .dict-scroll::-webkit-scrollbar { width: 4px; }
@@ -91,12 +113,13 @@ export default function AboutSection({
       <style dangerouslySetInnerHTML={{ __html: ABOUT_CSS }} />
 
       {/* ── LAYER 1: BAMBOO PARCHMENT BACKGROUND ───────────────────────────── */}
-      <div aria-hidden="true" style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, zIndex: 0 }}>
+      <div aria-hidden="true" className="about-bg-wrapper" style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, zIndex: 0 }}>
         <Image
           src={bgImage ?? "/about-bg.png"}
           alt=""
           fill
           sizes="100vw"
+          className="about-bg-img"
           style={{ objectFit: "cover", objectPosition: "center" }}
         />
       </div>
