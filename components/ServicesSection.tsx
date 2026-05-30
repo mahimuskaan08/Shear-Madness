@@ -49,60 +49,38 @@ export default function ServicesSection() {
         padding: "clamp(44px, 6.5vh, 76px) clamp(24px, 6vw, 80px)",
         position: "relative",
         overflow: "hidden",
-        transform: "translateZ(0)",
       }}
     >
+      {/* ── FIXED BACKGROUND IMAGE ───────────────────────────────────────────── */}
+      <div
+        aria-hidden="true"
+        className="services-fixed-bg"
+        style={{
+          position: "absolute", inset: 0, zIndex: 0, pointerEvents: "none",
+          backgroundImage: "url('/services-koi-bg.png')",
+          backgroundAttachment: "fixed",
+          backgroundSize: "cover",
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "center",
+          opacity: 0.55,
+          mixBlendMode: "multiply",
+        }}
+      />
+
       {/* ── SUBTLE GRAIN ────────────────────────────────────────────────────── */}
       <div
         aria-hidden="true"
         style={{
-          position: "absolute", top: 0, left: 0, right: 0, bottom: 0, pointerEvents: "none",
+          position: "absolute", top: 0, left: 0, right: 0, bottom: 0, pointerEvents: "none", zIndex: 1,
           backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.022'/%3E%3C/svg%3E\")",
           backgroundRepeat: "repeat",
         }}
       />
 
-      <div style={{ maxWidth: 1280, margin: "0 auto" }}>
+      <div style={{ maxWidth: 1280, margin: "0 auto", position: "relative", zIndex: 2 }}>
 
         {/* ── HEADING BLOCK ────────────────────────────────────────────────── */}
         <div style={{ position: "relative" }}>
-
-          {/* Bird watermark — behind heading text only */}
-          <div aria-hidden="true" style={{
-            position: "absolute",
-            top: 0, left: 0, right: 0, bottom: 0,
-            zIndex: 0,
-            overflow: "hidden",
-            pointerEvents: "none",
-          }}>
-            {/* All-edge fade: top, bottom, left, right */}
-            <div style={{
-              position: "absolute", top: 0, left: 0, right: 0, bottom: 0, zIndex: 2,
-              background: `
-                linear-gradient(to bottom, #ECEAE7 0%, transparent 28%, transparent 72%, #ECEAE7 100%),
-                linear-gradient(to right,  #ECEAE7 0%, transparent 18%, transparent 82%, #ECEAE7 100%)
-              `,
-            }} />
-            <img
-              id="services-bg-img"
-              src="/services-bg.png"
-              alt=""
-              style={{
-                position: "absolute",
-                top: "50%",
-                left: "50%",
-                transform: "translate(-50%, -50%)",
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
-                objectPosition: "center",
-                opacity: 0.18,
-                filter: "grayscale(100%) blur(0.5px) brightness(1.1) contrast(0.85)",
-                mixBlendMode: "luminosity",
-                userSelect: "none",
-              }}
-            />
-          </div>
 
         <motion.div
           initial={{ opacity: 0, y: 28 }}
@@ -189,7 +167,14 @@ export default function ServicesSection() {
         }
         @media (max-width: 560px) {
           #services-grid { grid-template-columns: 1fr !important; }
-          #services-bg-img { opacity: 0.06 !important; }
+        }
+        /* iOS Safari: background-attachment:fixed is unsupported — fall back to scroll */
+        @supports (-webkit-touch-callout: none) {
+          #services .services-fixed-bg {
+            background-attachment: scroll !important;
+            background-size: cover !important;
+            background-position: center top !important;
+          }
         }
       `}</style>
     </section>

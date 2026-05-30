@@ -103,6 +103,26 @@ const HERO_FADE = `
     aspect-ratio: 2528 / 1522;
   }
 }
+
+/* ── TABLET (768–1024px): full-viewport hero, cover bg ── */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .hero-bg-img {
+    object-fit: cover !important;
+    object-position: center top !important;
+  }
+  .hero-bg-wrapper {
+    background: transparent !important;
+  }
+  .hero-section {
+    height: 100svh !important;
+    min-height: 680px !important;
+    aspect-ratio: unset !important;
+  }
+  .hero-content-wrap {
+    margin-top: 4% !important;
+  }
+}
+
 @media (max-width: 768px) {
   .hero-content-wrap { margin-top: 0 !important; }
   .hero-spacer       { height: 4px !important; }

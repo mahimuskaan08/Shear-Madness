@@ -186,18 +186,27 @@ const PETAL_COLORS = [
 // STYLES
 // ─────────────────────────────────────────────────────────────────────────────
 const STYLES = `
-  /* iOS Safari does not support background-attachment: fixed — fallback to scroll */
-  /* Also adjust sizing so image fits neatly on all screen sizes               */
-  @media (min-width: 768px) and (max-width: 1024px) {
-    .svc-page-bg {
-      background-size: 100% auto !important;
-      background-repeat: no-repeat !important;
-      background-position: top center !important;
-    }
+  /* Tablet fixed bg — hidden by default, shown only on tablet */
+  .svc-tablet-bg { display: none; }
+
+  /* Tablet (641–1024px): use position:fixed layer — background-attachment:fixed
+     is broken on iOS Safari so we replicate it with a truly fixed div instead  */
+  @media (min-width: 641px) and (max-width: 1024px) {
+    .svc-tablet-bg  { display: block !important; }
+    .svc-page-bg    { display: none !important; }
+    .svc-base-cream { display: none !important; }
+
+    /* Bigger, more legible headings on tablet */
+    .svc-hero-eyebrow  { font-size: 0.78rem !important; letter-spacing: 0.36em !important; }
+    .svc-hero-h1       { font-size: clamp(3.4rem, 7vw, 5.0rem) !important; }
+    .svc-hero-subtitle { font-size: clamp(1.2rem, 2.2vw, 1.5rem) !important; }
+    .svc-cat-eyebrow   { font-size: 0.74rem !important; letter-spacing: 0.30em !important; }
+    .svc-cat-h2        { font-size: clamp(2.8rem, 5vw, 4.0rem) !important; }
+    .svc-cat-desc      { font-size: clamp(1.05rem, 1.6vw, 1.18rem) !important; }
   }
 
   /* Mobile: hide desktop absolute bg layers — replaced by the fixed mobile layer */
-  @media (max-width: 767px) {
+  @media (max-width: 640px) {
     .svc-page-bg    { display: none !important; }
     .svc-base-cream { display: none !important; }
   }
@@ -493,19 +502,19 @@ function CategorySection({ cat }: { cat: CategoryData }) {
 
           {/* Left: eyebrow + title + description */}
           <div style={{ display:"flex", flexDirection:"column", gap:14, flex:1, minWidth:0 }}>
-            <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"0.60rem", fontWeight:500, letterSpacing:"0.34em", textTransform:"uppercase", color:"#7A5C10" }}>
-              {cat.eyebrow}
+            <p className="svc-cat-eyebrow" style={{ fontFamily:"'Inter',sans-serif", fontSize:"0.60rem", fontWeight:500, letterSpacing:"0.34em", textTransform:"uppercase", color:"#7A5C10" }}>
+              <span style={{ background:"rgba(252,248,240,0.55)", backdropFilter:"blur(8px)", WebkitBackdropFilter:"blur(8px)", borderRadius:4, padding:"2px 10px" }}>{cat.eyebrow}</span>
             </p>
             <div>
-              <h2 style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"clamp(2.2rem,4vw,3.4rem)", fontWeight:600, lineHeight:1.1, letterSpacing:"0.01em", color:"#556B2F", marginBottom:14 }}>
-                {cat.title}
+              <h2 className="svc-cat-h2" style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"clamp(2.2rem,4vw,3.4rem)", fontWeight:600, lineHeight:1.1, letterSpacing:"0.01em", color:"#556B2F", marginBottom:14 }}>
+                <span style={{ background:"rgba(252,248,240,0.55)", backdropFilter:"blur(8px)", WebkitBackdropFilter:"blur(8px)", borderRadius:8, padding:"2px 14px" }}>{cat.title}</span>
               </h2>
               <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:14 }}>
                 <div style={{ width:5, height:5, borderRadius:"50%", background:"#C6A76B", flexShrink:0 }}/>
                 <div style={{ height:1, width:56, background:"linear-gradient(to right, rgba(198,167,107,0.60), transparent)" }}/>
               </div>
-              <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"clamp(1.0rem,1.05vw,1.06rem)", fontWeight:400, lineHeight:1.78, color:"#111111", letterSpacing:"0.012em", maxWidth:580, textShadow:"0 1px 2px rgba(255,255,255,0.35)" }}>
-                {cat.description}
+              <p className="svc-cat-desc" style={{ fontFamily:"'Inter',sans-serif", fontSize:"clamp(1.0rem,1.05vw,1.06rem)", fontWeight:400, lineHeight:1.78, color:"#111111", letterSpacing:"0.012em", maxWidth:580 }}>
+                <span style={{ background:"rgba(252,248,240,0.55)", backdropFilter:"blur(8px)", WebkitBackdropFilter:"blur(8px)", borderRadius:6, padding:"4px 12px" }}>{cat.description}</span>
               </p>
             </div>
           </div>
@@ -638,13 +647,15 @@ function HeroSection() {
         <div style={{ textAlign:"center", maxWidth:700, margin:"0 auto" }}>
 
           <motion.p initial={{ opacity:0, y:20 }} animate={{ opacity:1, y:0 }} transition={{ duration:0.9, ease:EASE, delay:0.2 }}
+            className="svc-hero-eyebrow"
             style={{ fontFamily:"'Inter',sans-serif", fontSize:"0.60rem", fontWeight:500, letterSpacing:"0.40em", textTransform:"uppercase", color:"#7A5C10", marginBottom:14 }}>
-            Our Services
+            <span style={{ background:"rgba(252,248,240,0.55)", backdropFilter:"blur(8px)", WebkitBackdropFilter:"blur(8px)", borderRadius:4, padding:"2px 10px" }}>Our Services</span>
           </motion.p>
 
           <motion.h1 initial={{ opacity:0, y:26 }} animate={{ opacity:1, y:0 }} transition={{ duration:1.1, ease:EASE, delay:0.34 }}
+            className="svc-hero-h1"
             style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"clamp(2.8rem,6vw,5.0rem)", fontWeight:600, lineHeight:1.0, letterSpacing:"0.01em", color:"#556B2F", marginBottom:18 }}>
-            Salon <em>Services</em>
+            <span style={{ background:"rgba(252,248,240,0.55)", backdropFilter:"blur(8px)", WebkitBackdropFilter:"blur(8px)", borderRadius:8, padding:"4px 16px" }}>Salon <em>Services</em></span>
           </motion.h1>
 
           <motion.div initial={{ opacity:0, scaleX:0 }} animate={{ opacity:1, scaleX:1 }} transition={{ duration:1.0, ease:EASE, delay:0.50 }}
@@ -655,13 +666,14 @@ function HeroSection() {
           </motion.div>
 
           <motion.p initial={{ opacity:0, y:14 }} animate={{ opacity:1, y:0 }} transition={{ duration:1.0, ease:EASE, delay:0.62 }}
-            style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"clamp(1.05rem,1.5vw,1.25rem)", fontStyle:"italic", fontWeight:400, lineHeight:1.75, color:"#111111", letterSpacing:"0.01em", textShadow:"0 1px 2px rgba(255,255,255,0.35)" }}>
-            Tailored beauty, precision styling, and elevated care for every occasion.
+            className="svc-hero-subtitle"
+            style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"clamp(1.05rem,1.5vw,1.25rem)", fontStyle:"italic", fontWeight:400, lineHeight:1.75, color:"#111111", letterSpacing:"0.01em", marginBottom:28 }}>
+            <span style={{ background:"rgba(252,248,240,0.55)", backdropFilter:"blur(8px)", WebkitBackdropFilter:"blur(8px)", borderRadius:4, padding:"2px 10px" }}>Tailored beauty, precision styling, and elevated care for every occasion.</span>
           </motion.p>
 
           {/* Book CTA */}
           <motion.div initial={{ opacity:0, y:14 }} animate={{ opacity:1, y:0 }} transition={{ duration:1.0, ease:EASE, delay:0.78 }}
-            style={{ marginTop:28 }}>
+            style={{ marginTop:0 }}>
             <a href="/booking"
               style={{ display:"inline-flex", alignItems:"center", justifyContent:"center", fontFamily:"'Inter',sans-serif", fontSize:"0.72rem", fontWeight:600, letterSpacing:"0.22em", textTransform:"uppercase", color:"#0A0A0A", background:"linear-gradient(135deg,#C9A96E 0%,#B8935A 55%,#C4A96A 100%)", padding:"13px 38px", borderRadius:100, boxShadow:"0 4px 22px rgba(198,167,107,0.45)", transition:"box-shadow 0.4s ease,transform 0.4s ease", textDecoration:"none" }}
               onMouseEnter={e => { const el = e.currentTarget as HTMLAnchorElement; el.style.boxShadow="0 8px 32px rgba(198,167,107,0.65)"; el.style.transform="translateY(-2px)"; }}
@@ -694,18 +706,36 @@ export default function ServicesPageContent({ bgImage }: { bgImage?: string }) {
           className="md:hidden"
           style={{ position: "fixed", inset: 0, zIndex: 0, pointerEvents: "none" }}
         >
-          {/* Image layer — colour-enhanced, focal point centred */}
+          {/* Image layer */}
           <div style={{
             position: "absolute", inset: 0,
-            backgroundImage: "url('/services-page-bg.jpg')",
+            backgroundImage: "url('/services-bg.png')",
             backgroundSize: "cover",
-            backgroundPosition: "center 35%",
-            filter: "brightness(1.08) saturate(1.32) contrast(1.10)",
+            backgroundPosition: "center center",
+            mixBlendMode: "multiply",
+            opacity: 0.85,
           }} />
-          {/* Premium warm-cream vignette — light enough to let colours breathe */}
+          {/* Warm-cream vignette */}
           <div style={{
             position: "absolute", inset: 0,
             background: "linear-gradient(170deg, rgba(252,247,236,0.22) 0%, rgba(243,232,208,0.38) 100%)",
+          }} />
+        </div>
+
+        {/* ── Tablet-only: position:fixed bg (641–1024px, iOS-safe) ── */}
+        <div
+          aria-hidden
+          className="svc-tablet-bg"
+          style={{ position: "fixed", inset: 0, zIndex: 0, pointerEvents: "none" }}
+        >
+          <div style={{ position: "absolute", inset: 0, background: "#F5F2EB" }} />
+          <div style={{
+            position: "absolute", inset: 0,
+            backgroundImage: `url('${bgImage ?? "/services-bg.png"}')`,
+            backgroundSize: "cover",
+            backgroundPosition: "center center",
+            mixBlendMode: "multiply",
+            opacity: 0.85,
           }} />
         </div>
 
@@ -718,11 +748,13 @@ export default function ServicesPageContent({ bgImage }: { bgImage?: string }) {
           {/* Layer 1: fixed bg image — covers entire page from top */}
           <div aria-hidden className="svc-page-bg" style={{
             position: "absolute", top: 0, left: 0, right: 0, bottom: 0,
-            backgroundImage: `url('${bgImage ?? "/services-page-bg.jpg"}')`,
+            backgroundImage: `url('${bgImage ?? "/services-bg.png"}')`,
             backgroundAttachment: "fixed",
-            backgroundPosition: "center top",
+            backgroundPosition: "center center",
             backgroundRepeat: "no-repeat",
             backgroundSize: "cover",
+            mixBlendMode: "multiply",
+            opacity: 0.85,
             zIndex: 1,
           }} />
 

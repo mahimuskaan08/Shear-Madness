@@ -664,6 +664,8 @@ function FallingPetals() {
 
 /* ─── Main component ────────────────────────────────────────────────────── */
 export default function BookingPageContent({ bgImage }: { bgImage?: string }) {
+  const resolvedBg = bgImage ?? "/booking-bg.jpg";
+
   /* form state */
   const [name,     setName]     = useState("");
   const [email,    setEmail]    = useState("");
@@ -715,11 +717,38 @@ export default function BookingPageContent({ bgImage }: { bgImage?: string }) {
   };
 
   return (
+    <>
+    {/* Mobile: inject bg on body — iOS Safari only supports fixed attachment on body */}
+    <style dangerouslySetInnerHTML={{ __html: `
+      @media (max-width: 767px) {
+        body {
+          background-image: url("${resolvedBg}");
+          background-attachment: fixed;
+          background-size: cover;
+          background-position: center;
+        }
+      }
+    ` }} />
+
+    {/* Tablet-only: position:fixed bg (641–1024px, iOS-safe) */}
+    <div
+      aria-hidden
+      className="book-tablet-bg"
+      style={{ position: "fixed", inset: 0, zIndex: 0, pointerEvents: "none" }}
+    >
+      <div style={{
+        position: "absolute", inset: 0,
+        backgroundImage: `url('${resolvedBg}')`,
+        backgroundSize: "cover",
+        backgroundPosition: "center center",
+      }} />
+    </div>
+
     <main
       className="booking-main"
       style={{
         minHeight: "100svh",
-        backgroundImage: `url('${bgImage ?? "/booking-bg.jpg"}')`,
+        backgroundImage: `url('${resolvedBg}')`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundAttachment: "fixed",
@@ -785,7 +814,7 @@ export default function BookingPageContent({ bgImage }: { bgImage?: string }) {
           transition={{ duration: 0.9, ease: EASE, delay: 0.15 }}
           style={{
             /* ── Semi-transparent card — lets the floral bg breathe through ── */
-            background: "rgba(253,250,244,0.20)",
+            background: "rgba(253,250,244,0.03)",
             backdropFilter: "blur(10px) saturate(1.3)",
             WebkitBackdropFilter: "blur(10px) saturate(1.3)",
             border: "1px solid rgba(196,169,106,0.28)",
@@ -1042,14 +1071,8 @@ export default function BookingPageContent({ bgImage }: { bgImage?: string }) {
         @media (max-width: 540px) {
           .booking-grid-2 { grid-template-columns: 1fr !important; }
         }
-        @media (min-width: 641px) and (max-width: 1024px) {
-          .booking-main {
-            background-size: 100% auto !important;
-            background-repeat: no-repeat !important;
-            background-position: top center !important;
-          }
-        }
       `}</style>
     </main>
+    </>
   );
 }

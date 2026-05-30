@@ -38,12 +38,47 @@
   .artist-bg-fixed    { background-attachment: scroll !important; }
 }
 
+/* Booking page mobile — strip bg from <main> so body carries it (iOS-safe) */
+@media (max-width: 767px) {
+  .booking-main {
+    background-image: none !important;
+    background-color: transparent !important;
+    background-attachment: scroll !important;
+  }
+}
+
+/* Booking page tablet fixed bg — hidden by default, shown only on tablet */
+.book-tablet-bg { display: none; }
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .book-tablet-bg { display: block !important; }
+  .booking-main {
+    background-image: none !important;
+    background-color: transparent !important;
+    background-attachment: scroll !important;
+  }
+}
+
 /* ── GALLERY PAGE MOBILE: strip section backgrounds (body carries the fixed bg) ──
    background-attachment:fixed works on <body> on iOS but NOT on other elements.
    On mobile we move the image to body via an injected <style> tag in
    GalleryPageContent, then clear it from the sections so there's no scroll/double.
    ─────────────────────────────────────────────────────────────────────────────── */
 @media (max-width: 767px) {
+  .gallery-bg-section {
+    background-image: none !important;
+    background-color: transparent !important;
+    background-attachment: scroll !important;
+  }
+}
+
+/* Gallery tablet fixed bg — hidden by default, shown only on tablet */
+.gal-tablet-bg { display: none; }
+
+/* Tablet (641–1024px): replace background-attachment:fixed (broken on iOS Safari)
+   with a truly position:fixed div — same technique as the services page */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .gal-tablet-bg { display: block !important; }
   .gallery-bg-section {
     background-image: none !important;
     background-color: transparent !important;
@@ -145,17 +180,17 @@ img {
 /* Tablet / iPad up to iPad Pro 13" */
 @media (max-width: 1366px) and (min-width: 641px) {
   .artist-bg {
-    background-size: 100% auto;
+    background-size: cover;
     background-position: center top;
-    background-repeat: repeat-y;
+    background-repeat: no-repeat;
   }
 }
 /* Mobile */
 @media (max-width: 640px) {
   .artist-bg {
-    background-size: 100% auto;
+    background-size: cover;
     background-position: center top;
-    background-repeat: repeat-y;
+    background-repeat: no-repeat;
   }
 }
 
@@ -178,4 +213,69 @@ img {
 }
 .hide-scrollbar::-webkit-scrollbar {
   display: none;              /* Chrome / Safari / Opera */
+}
+
+/* ── TABLET / iPAD: 768px – 1024px ────────────────────────────────────────────
+   background-attachment:fixed is unreliable on iPad/Safari. Each section uses
+   position:absolute fill + object-fit:cover on its background layer instead.
+   Content sits on position:relative z-index:10 and scrolls naturally above.
+   ─────────────────────────────────────────────────────────────────────────── */
+@media (min-width: 768px) and (max-width: 1024px) {
+
+  /* ── HERO ── full-viewport, background covers without cropping key top area */
+  .hero-section {
+    height: 100svh !important;
+    min-height: 680px !important;
+    aspect-ratio: unset !important;
+  }
+  .hero-bg-img {
+    object-fit: cover !important;
+    object-position: center top !important;
+  }
+  .hero-bg-wrapper {
+    background: transparent !important;
+  }
+
+  /* ── ABOUT ── generous breathing room on both iPad orientations */
+  #our-story {
+    padding: 52px 44px 40px !important;
+  }
+  #about-main-grid {
+    gap: 24px !important;
+  }
+
+  /* ── SERVICES ── keep 2-column grid (900px breakpoint already triggers this,
+     but reinforce so 1024px landscape iPad never reverts to 3) */
+  #services {
+    padding: 60px 44px !important;
+  }
+  #services-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 20px !important;
+  }
+
+  /* ── ARTIST ── section padding + portrait max-widths for single-column stack */
+  #experience {
+    padding: 68px 44px 56px !important;
+  }
+  .artist-bg-fixed {
+    background-size: cover !important;
+    background-position: center top !important;
+    background-repeat: no-repeat !important;
+    background-attachment: scroll !important;
+  }
+  .artist-img-wrap {
+    min-height: 360px !important;
+  }
+
+  /* ── CONTACT ── */
+  #contact-grid {
+    gap: 24px !important;
+  }
+
+  /* ── TYPOGRAPHY GUARD — prevent overflow on narrow tablet columns ── */
+  h1, h2, h3, h4, p, li {
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
 }

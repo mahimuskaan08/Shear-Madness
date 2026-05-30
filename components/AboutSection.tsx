@@ -53,10 +53,10 @@ const ABOUT_CSS = `
     }
   }
 
-  /* ── TABLET/iPad: full image visible, no cropping ───────────────────── */
+  /* ── TABLET/iPad: cover so bg fills the full (taller) stacked layout ── */
   @media (min-width: 641px) and (max-width: 1024px) {
     .about-bg-img {
-      object-fit: contain !important;
+      object-fit: cover !important;
       object-position: center top !important;
     }
     #our-story {
@@ -392,13 +392,32 @@ export default function AboutSection({
           }
           #about-main-grid {
             grid-template-columns: 1fr !important;
-            overflow-y: auto;
+            overflow-y: visible;
             height: auto !important;
           }
           #about-carousel-wrap {
-            min-height: 300px;
-            height: 300px;
+            min-height: 280px;
+            height: 280px;
             flex: none !important;
+          }
+        }
+
+        /* Tablet single-column: give the grid room to breathe */
+        @media (min-width: 768px) and (max-width: 860px) {
+          #about-main-grid {
+            max-width: 640px;
+            margin: 0 auto;
+          }
+          #about-carousel-wrap {
+            min-height: 360px !important;
+            height: 360px !important;
+          }
+        }
+
+        /* Tablet landscape (860–1024px): 2-col still active, just add spacing */
+        @media (min-width: 860px) and (max-width: 1024px) {
+          #about-main-grid {
+            gap: 24px !important;
           }
         }
 
