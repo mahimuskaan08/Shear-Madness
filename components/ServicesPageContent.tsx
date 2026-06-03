@@ -186,29 +186,14 @@ const PETAL_COLORS = [
 // STYLES
 // ─────────────────────────────────────────────────────────────────────────────
 const STYLES = `
-  /* Tablet fixed bg — hidden by default, shown only on tablet */
-  .svc-tablet-bg { display: none; }
-
-  /* Tablet (641–1024px): use position:fixed layer — background-attachment:fixed
-     is broken on iOS Safari so we replicate it with a truly fixed div instead  */
+  /* Tablet (641–1024px): bigger, more legible headings */
   @media (min-width: 641px) and (max-width: 1024px) {
-    .svc-tablet-bg  { display: block !important; }
-    .svc-page-bg    { display: none !important; }
-    .svc-base-cream { display: none !important; }
-
-    /* Bigger, more legible headings on tablet */
     .svc-hero-eyebrow  { font-size: 0.78rem !important; letter-spacing: 0.36em !important; }
     .svc-hero-h1       { font-size: clamp(3.4rem, 7vw, 5.0rem) !important; }
     .svc-hero-subtitle { font-size: clamp(1.2rem, 2.2vw, 1.5rem) !important; }
     .svc-cat-eyebrow   { font-size: 0.74rem !important; letter-spacing: 0.30em !important; }
     .svc-cat-h2        { font-size: clamp(2.8rem, 5vw, 4.0rem) !important; }
     .svc-cat-desc      { font-size: clamp(1.05rem, 1.6vw, 1.18rem) !important; }
-  }
-
-  /* Mobile: hide desktop absolute bg layers — replaced by the fixed mobile layer */
-  @media (max-width: 640px) {
-    .svc-page-bg    { display: none !important; }
-    .svc-base-cream { display: none !important; }
   }
 
   /* ── CRANE ANIMATION ────────────────────────────────── */
@@ -700,56 +685,16 @@ export default function ServicesPageContent({ bgImage }: { bgImage?: string }) {
       <CustomCursor />
       <Navbar />
       <main>
-        {/* ── Mobile-only: true viewport-fixed background (iOS-safe) ── */}
-        <div
-          aria-hidden
-          className="md:hidden"
-          style={{ position: "fixed", inset: 0, zIndex: 0, pointerEvents: "none" }}
-        >
-          {/* Image layer */}
-          <div style={{
-            position: "absolute", inset: 0,
-            backgroundImage: "url('/services-bg.png')",
-            backgroundSize: "cover",
-            backgroundPosition: "center center",
-            mixBlendMode: "multiply",
-            opacity: 0.85,
-          }} />
-          {/* Warm-cream vignette */}
-          <div style={{
-            position: "absolute", inset: 0,
-            background: "linear-gradient(170deg, rgba(252,247,236,0.22) 0%, rgba(243,232,208,0.38) 100%)",
-          }} />
-        </div>
-
-        {/* ── Tablet-only: position:fixed bg (641–1024px, iOS-safe) ── */}
-        <div
-          aria-hidden
-          className="svc-tablet-bg"
-          style={{ position: "fixed", inset: 0, zIndex: 0, pointerEvents: "none" }}
-        >
-          <div style={{ position: "absolute", inset: 0, background: "#F5F2EB" }} />
-          <div style={{
-            position: "absolute", inset: 0,
-            backgroundImage: `url('${bgImage ?? "/services-bg.png"}')`,
-            backgroundSize: "cover",
-            backgroundPosition: "center center",
-            mixBlendMode: "multiply",
-            opacity: 0.85,
-          }} />
-        </div>
-
         {/* ── ONE unified background wrapper — hero + all sections blend seamlessly */}
         <div style={{ position: "relative" }}>
 
-          {/* Layer 0: base cream — desktop only */}
-          <div aria-hidden className="svc-base-cream" style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, background: "#F5F2EB", zIndex: 0 }} />
+          {/* Layer 0: base cream */}
+          <div aria-hidden style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, background: "#F5F2EB", zIndex: 0 }} />
 
-          {/* Layer 1: fixed bg image — covers entire page from top */}
-          <div aria-hidden className="svc-page-bg" style={{
-            position: "absolute", top: 0, left: 0, right: 0, bottom: 0,
+          {/* Layer 1: bg image */}
+          <div aria-hidden style={{
+            position: "fixed", top: 0, left: 0, right: 0, bottom: 0,
             backgroundImage: `url('${bgImage ?? "/services-bg.png"}')`,
-            backgroundAttachment: "fixed",
             backgroundPosition: "center center",
             backgroundRepeat: "no-repeat",
             backgroundSize: "cover",

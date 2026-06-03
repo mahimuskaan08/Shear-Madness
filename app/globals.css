@@ -29,81 +29,6 @@
   }
 }
 
-/* iOS/iPadOS doesn't support background-attachment:fixed on non-body elements */
-@media (max-width: 1024px) {
-  .gallery-bg-section { background-attachment: scroll !important; }
-  .credits-main       { background-attachment: scroll !important; }
-  .svc-page-bg        { background-attachment: scroll !important; }
-  .booking-main       { background-attachment: scroll !important; }
-  .artist-bg-fixed    { background-attachment: scroll !important; }
-}
-
-/* Booking page mobile — strip bg from <main> so body carries it (iOS-safe) */
-@media (max-width: 767px) {
-  .booking-main {
-    background-image: none !important;
-    background-color: transparent !important;
-    background-attachment: scroll !important;
-  }
-}
-
-/* Booking page tablet fixed bg — hidden by default, shown only on tablet */
-.book-tablet-bg { display: none; }
-
-@media (min-width: 641px) and (max-width: 1024px) {
-  .book-tablet-bg { display: block !important; }
-  .booking-main {
-    background-image: none !important;
-    background-color: transparent !important;
-    background-attachment: scroll !important;
-  }
-}
-
-/* ── GALLERY PAGE MOBILE: strip section backgrounds (body carries the fixed bg) ──
-   background-attachment:fixed works on <body> on iOS but NOT on other elements.
-   On mobile we move the image to body via an injected <style> tag in
-   GalleryPageContent, then clear it from the sections so there's no scroll/double.
-   ─────────────────────────────────────────────────────────────────────────────── */
-@media (max-width: 767px) {
-  .gallery-bg-section {
-    background-image: none !important;
-    background-color: transparent !important;
-    background-attachment: scroll !important;
-  }
-}
-
-/* Gallery tablet fixed bg — hidden by default, shown only on tablet */
-.gal-tablet-bg { display: none; }
-
-/* Tablet (641–1024px): replace background-attachment:fixed (broken on iOS Safari)
-   with a truly position:fixed div — same technique as the services page */
-@media (min-width: 641px) and (max-width: 1024px) {
-  .gal-tablet-bg { display: block !important; }
-  .gallery-bg-section {
-    background-image: none !important;
-    background-color: transparent !important;
-    background-attachment: scroll !important;
-  }
-}
-
-/* ── MOBILE: FIXED HERO BACKGROUND ──────────────────────────────────────────
-   Pin the hero background image to the viewport on mobile so only the text,
-   buttons, and other content scroll over it. Subsequent sections cover it
-   naturally as they scroll into view via their own solid backgrounds.
-   Uses !important to override both Tailwind (position:absolute) and the
-   framer-motion inline transform (scale). Desktop is unaffected.
-   ─────────────────────────────────────────────────────────────────────────── */
-@media (max-width: 767px) {
-  .hero-bg-layer {
-    position: fixed !important;
-    transform: none !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 100vw !important;
-    height: 100svh !important;
-    z-index: 0;
-  }
-}
 
 * {
   box-sizing: border-box;
@@ -262,7 +187,6 @@ img {
     background-size: cover !important;
     background-position: center top !important;
     background-repeat: no-repeat !important;
-    background-attachment: scroll !important;
   }
   .artist-img-wrap {
     min-height: 360px !important;

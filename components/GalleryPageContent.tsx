@@ -200,38 +200,13 @@ export default function GalleryPageContent({
 
   return (
     <>
-    {/* Mobile: inject bg on body (iOS Safari only supports fixed attachment on body). */}
-    <style dangerouslySetInnerHTML={{ __html: `
-      @media (max-width: 767px) {
-        body {
-          background-image: url("${resolvedBg}");
-          background-attachment: fixed;
-          background-size: cover;
-          background-position: center;
-        }
-      }
-    ` }} />
-
-    {/* Tablet-only: position:fixed bg (641–1024px, iOS-safe) — same technique as services page */}
-    <div
-      aria-hidden
-      className="gal-tablet-bg"
-      style={{ position: "fixed", inset: 0, zIndex: 0, pointerEvents: "none" }}
-    >
-      <div style={{
-        position: "absolute", inset: 0,
-        backgroundImage: `url('${resolvedBg}')`,
-        backgroundSize: "cover",
-        backgroundPosition: "center center",
-      }} />
-    </div>
     <div
       className="gallery-bg-section"
       data-cms-bg={bgImage ?? "FALLBACK:/gallery-bg2.jpg"}
       style={{
         position: "relative",
         backgroundImage: `url('${bgImage ?? "/gallery-bg2.jpg"}')`,
-        backgroundAttachment: "fixed",
+        backgroundAttachment: "scroll",
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}

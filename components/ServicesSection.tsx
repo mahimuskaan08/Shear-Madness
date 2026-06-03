@@ -45,10 +45,11 @@ export default function ServicesSection() {
       id="services"
       style={{
         width: "100%",
+        minHeight: "110vh",
         background: "#ECEAE7",
-        padding: "clamp(44px, 6.5vh, 76px) clamp(24px, 6vw, 80px)",
+        padding: "clamp(80px, 10vh, 120px) clamp(24px, 6vw, 80px) clamp(100px, 14vh, 160px)",
         position: "relative",
-        overflow: "hidden",
+        overflow: "clip",
       }}
     >
       {/* ── FIXED BACKGROUND IMAGE ───────────────────────────────────────────── */}
@@ -58,11 +59,11 @@ export default function ServicesSection() {
         style={{
           position: "absolute", inset: 0, zIndex: 0, pointerEvents: "none",
           backgroundImage: "url('/services-koi-bg.png')",
-          backgroundAttachment: "fixed",
+          backgroundAttachment: "scroll",
           backgroundSize: "cover",
           backgroundRepeat: "no-repeat",
-          backgroundPosition: "center",
-          opacity: 0.55,
+          backgroundPosition: "center center",
+          opacity: 0.72,
           mixBlendMode: "multiply",
         }}
       />
@@ -168,14 +169,7 @@ export default function ServicesSection() {
         @media (max-width: 560px) {
           #services-grid { grid-template-columns: 1fr !important; }
         }
-        /* iOS Safari: background-attachment:fixed is unsupported — fall back to scroll */
-        @supports (-webkit-touch-callout: none) {
-          #services .services-fixed-bg {
-            background-attachment: scroll !important;
-            background-size: cover !important;
-            background-position: center top !important;
-          }
-        }
+
       `}</style>
     </section>
   );
@@ -206,7 +200,7 @@ function ServiceCard({
         position: "relative",
         borderRadius: 16,
         overflow: "hidden",
-        aspectRatio: "3/2.8",
+        aspectRatio: "3/2",
         cursor: "pointer",
         boxShadow: "0 12px 48px rgba(20,12,4,0.18), 0 3px 12px rgba(20,12,4,0.10)",
         background: svc.bg,

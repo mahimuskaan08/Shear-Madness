@@ -20,6 +20,7 @@ const STYLES = `
 
   .joi-page {
     min-height: 100svh;
+    position: relative;
     display: flex;
     flex-direction: column;
     background: transparent;
@@ -311,7 +312,7 @@ export default function JoinUsPageContent({ bgImage }: { bgImage?: string }) {
 
         {/* Background image */}
         <div aria-hidden style={{
-          position: "fixed", top: 0, left: 0, right: 0, bottom: 0, zIndex: 0, pointerEvents: "none",
+          position: "absolute", top: 0, left: 0, right: 0, bottom: 0, zIndex: 0, pointerEvents: "none",
         }}>
           <img
             src={bgImage ?? "/join-bg.jpg"}

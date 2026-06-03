@@ -149,7 +149,7 @@ export default function ArtistSection({
       <div aria-hidden="true" className="artist-bg-fixed" style={{
         position: "absolute", inset: 0, zIndex: 0, pointerEvents: "none",
         backgroundImage: `url('${artistBg ?? "/artist-bg.jpg"}')`,
-        backgroundAttachment: "fixed",
+        backgroundAttachment: "scroll",
         backgroundSize: "cover",
         backgroundPosition: "center",
       }} />
@@ -188,7 +188,7 @@ export default function ArtistSection({
             letterSpacing: "0.30em", textTransform: "uppercase",
             color: "#7A5C10", marginBottom: 8,
           }}>
-            Meet the Artist
+            Meet the Artists
           </p>
           <h2 style={{
             fontFamily: "'Cormorant Garamond', Georgia, serif",
@@ -196,7 +196,7 @@ export default function ArtistSection({
             fontWeight: 600, lineHeight: 1.0,
             letterSpacing: "0.01em", color: "#556B2F", marginBottom: 14,
           }}>
-            Our <em>Artist</em>
+            Our <em>Artists</em>
           </h2>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <div style={{ height: 1, width: 44, background: "linear-gradient(to right, transparent, rgba(198,167,107,0.65))" }} />

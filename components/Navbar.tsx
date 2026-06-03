@@ -98,6 +98,23 @@ export default function Navbar() {
               alt="Shear Madness"
               style={{ height: 38, width: "auto", objectFit: "contain" }}
             />
+            <span
+              className="hidden lg:flex flex-col justify-center"
+              style={{ borderLeft: "1px solid rgba(196,169,106,0.45)", paddingLeft: 10 }}
+            >
+              <span style={{
+                fontFamily: "Georgia, 'Cormorant Garamond', serif",
+                fontSize: "8.5px",
+                letterSpacing: "0.20em",
+                textTransform: "uppercase",
+                color: "rgba(58,56,50,0.85)",
+                fontStyle: "italic",
+                lineHeight: 1,
+                whiteSpace: "nowrap",
+              }}>
+                Salon for Men &amp; Women
+              </span>
+            </span>
           </motion.a>
 
           {/* ── DESKTOP NAV — glass pill, truly centered ─────────────── */}

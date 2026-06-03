@@ -25,12 +25,12 @@ export default async function CreditsPage() {
         {/* Fixed background — position:fixed works on all devices incl. iOS Safari
             where background-attachment:fixed is broken */}
         <div aria-hidden style={{
-          position: "fixed", inset: 0, zIndex: 0, pointerEvents: "none",
+          position: "absolute", inset: 0, zIndex: 0, pointerEvents: "none",
           backgroundImage: `url('${creditsBg}')`,
           backgroundSize: "cover", backgroundPosition: "center",
         }} />
         <div aria-hidden style={{
-          position: "fixed", inset: 0, zIndex: 0, pointerEvents: "none",
+          position: "absolute", inset: 0, zIndex: 0, pointerEvents: "none",
           background: "rgba(236,234,231,0.75)",
         }} />
         <div style={{ maxWidth: 760, margin: "0 auto", position: "relative", zIndex: 1 }}>

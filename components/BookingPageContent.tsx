@@ -718,40 +718,13 @@ export default function BookingPageContent({ bgImage }: { bgImage?: string }) {
 
   return (
     <>
-    {/* Mobile: inject bg on body — iOS Safari only supports fixed attachment on body */}
-    <style dangerouslySetInnerHTML={{ __html: `
-      @media (max-width: 767px) {
-        body {
-          background-image: url("${resolvedBg}");
-          background-attachment: fixed;
-          background-size: cover;
-          background-position: center;
-        }
-      }
-    ` }} />
-
-    {/* Tablet-only: position:fixed bg (641–1024px, iOS-safe) */}
-    <div
-      aria-hidden
-      className="book-tablet-bg"
-      style={{ position: "fixed", inset: 0, zIndex: 0, pointerEvents: "none" }}
-    >
-      <div style={{
-        position: "absolute", inset: 0,
-        backgroundImage: `url('${resolvedBg}')`,
-        backgroundSize: "cover",
-        backgroundPosition: "center center",
-      }} />
-    </div>
-
     <main
-      className="booking-main"
       style={{
         minHeight: "100svh",
         backgroundImage: `url('${resolvedBg}')`,
         backgroundSize: "cover",
         backgroundPosition: "center",
-        backgroundAttachment: "fixed",
+        backgroundAttachment: "scroll",
         position: "relative",
         padding: "clamp(110px, 14vh, 140px) clamp(20px, 6vw, 60px) clamp(72px, 10vh, 100px)",
       }}
