@@ -721,14 +721,16 @@ export default function BookingPageContent({ bgImage }: { bgImage?: string }) {
     <main
       style={{
         minHeight: "100svh",
-        backgroundImage: `url('${resolvedBg}')`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundAttachment: "scroll",
         position: "relative",
         padding: "clamp(110px, 14vh, 140px) clamp(20px, 6vw, 60px) clamp(72px, 10vh, 100px)",
       }}
     >
+      {/* Fixed full background — no overlay so full image shows */}
+      <div aria-hidden style={{
+        position: "fixed", inset: 0, zIndex: 0, pointerEvents: "none",
+        backgroundImage: `url('${resolvedBg}')`,
+        backgroundSize: "cover", backgroundPosition: "center",
+      }} />
 
       {/* ── Falling petals layer (z-index 1, pointer-events: none) ─── */}
       <FallingPetals />

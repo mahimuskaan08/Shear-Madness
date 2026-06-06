@@ -111,9 +111,15 @@ export default function ServicesSection() {
             letterSpacing: "0.01em",
             color: "#556B2F",
             marginBottom: 8,
+            display: "inline-block",
+            background: "rgba(255,252,245,0.45)",
+            backdropFilter: "blur(6px)",
+            WebkitBackdropFilter: "blur(6px)",
+            borderRadius: 6,
+            padding: "2px 12px",
           }}>
             Our{" "}
-            <span style={{ fontStyle: "italic", fontWeight: 300 }}>Services</span>
+            <span style={{ fontStyle: "italic", fontWeight: 700 }}>Services</span>
           </h2>
 
           {/* Editorial statement */}

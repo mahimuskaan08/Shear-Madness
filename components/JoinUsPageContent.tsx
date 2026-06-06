@@ -320,13 +320,20 @@ export default function JoinUsPageContent({ bgImage }: { bgImage?: string }) {
             style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", display: "block" }}
           />
           {/* Light wash so text stays legible over the pale painting */}
-          <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(253,250,246,0.78)" }} />
+          <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(253,250,246,0.45)" }} />
         </div>
 
         <div className="joi-grid" style={{ position: "relative", zIndex: 1 }}>
 
           {/* ── LEFT: TEXT ──────────────────────────────────────────────── */}
-          <div>
+          <div style={{
+            background: "rgba(245,242,237,0.01)",
+            backdropFilter: "blur(6px)",
+            WebkitBackdropFilter: "blur(6px)",
+            borderRadius: 16,
+            padding: "clamp(32px, 5vw, 60px) clamp(24px, 5vw, 56px)",
+            boxShadow: "0 4px 32px rgba(0,0,0,0.04)",
+          }}>
 
             <motion.p
               initial={{ opacity: 0, y: 16 }}

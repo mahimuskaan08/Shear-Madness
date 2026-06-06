@@ -99,14 +99,13 @@ export default function Navbar() {
               style={{ height: 38, width: "auto", objectFit: "contain" }}
             />
             <span
-              className="hidden lg:flex flex-col justify-center"
+              className="hidden md:flex flex-col justify-center"
               style={{ borderLeft: "1px solid rgba(196,169,106,0.45)", paddingLeft: 10 }}
             >
               <span style={{
-                fontFamily: "Georgia, 'Cormorant Garamond', serif",
-                fontSize: "8.5px",
-                letterSpacing: "0.20em",
-                textTransform: "uppercase",
+                fontFamily: "Georgia, serif",
+                fontSize: "10px",
+                letterSpacing: "0.04em",
                 color: "rgba(58,56,50,0.85)",
                 fontStyle: "italic",
                 lineHeight: 1,
@@ -119,7 +118,7 @@ export default function Navbar() {
 
           {/* ── DESKTOP NAV — glass pill, truly centered ─────────────── */}
           <nav
-            className="hidden md:flex items-center gap-3 lg:gap-5 xl:gap-6 absolute -translate-x-1/2"
+            className="hidden lg:flex items-center gap-3 lg:gap-5 xl:gap-6 absolute -translate-x-1/2"
             style={{
               left: "50%",
               background: scrolled ? "transparent" : "rgba(255,255,255,0.14)",
@@ -215,7 +214,7 @@ export default function Navbar() {
           <button
             onClick={() => setMenuOpen(!menuOpen)}
             aria-label="Toggle navigation"
-            className="lg:hidden absolute right-4 z-[60] flex items-center justify-center w-11 h-11"
+            className={`lg:hidden absolute right-4 z-[60] flex items-center justify-center w-11 h-11 ${menuOpen ? "opacity-0 pointer-events-none" : ""}`}
           >
             <div className="flex flex-col justify-center gap-[5px] w-6 h-6 pointer-events-none">
               <motion.span animate={menuOpen ? { rotate: 45, y: 5 } : { rotate: 0, y: 0 }} transition={{ duration: 0.28 }} className="block h-px w-full bg-[#2C2A25]" />
@@ -231,12 +230,23 @@ export default function Navbar() {
         initial={false}
         animate={menuOpen ? { opacity: 1, pointerEvents: "auto" as const } : { opacity: 0, pointerEvents: "none" as const }}
         transition={{ duration: 0.35 }}
-        className="fixed inset-0 z-[55] flex flex-col items-center justify-center"
+        className="fixed inset-0 z-[55] flex flex-col items-center overflow-y-auto"
         style={{ background: "rgba(250,246,239,0.97)", backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)" }}
       >
+        {/* ── Close (X) button ────────────────────────────────────────── */}
+        <button
+          onClick={() => setMenuOpen(false)}
+          aria-label="Close menu"
+          className="absolute top-5 right-5 z-[65] flex items-center justify-center w-11 h-11 rounded-full border border-[rgba(196,169,106,0.45)] bg-[rgba(253,250,244,0.85)] hover:bg-[rgba(196,169,106,0.12)] transition-colors duration-200"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2C2A25" strokeWidth="2" strokeLinecap="round">
+            <path d="M18 6L6 18M6 6l12 12" />
+          </svg>
+        </button>
+
         <div className="absolute top-24 left-1/2 -translate-x-1/2 w-12 h-px bg-[#C4A96A]/40" />
 
-        <div className="flex flex-col items-center gap-7 mt-8">
+        <div className="flex flex-col items-center gap-4 pt-20 pb-10">
           {navLinks.map((link, i) =>
             link.dropdown ? (
               <div key={link.label} className="flex flex-col items-center gap-3">

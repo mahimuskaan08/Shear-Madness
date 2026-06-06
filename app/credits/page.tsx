@@ -22,18 +22,30 @@ export default async function CreditsPage() {
         position: "relative",
         padding: "clamp(110px, 15vh, 150px) clamp(24px, 8vw, 96px) clamp(72px, 10vh, 100px)",
       }}>
-        {/* Fixed background — position:fixed works on all devices incl. iOS Safari
-            where background-attachment:fixed is broken */}
+        {/* Fixed background — viewport-locked so cover never zooms into a tall page */}
         <div aria-hidden style={{
-          position: "absolute", inset: 0, zIndex: 0, pointerEvents: "none",
+          position: "fixed", inset: 0, zIndex: 0, pointerEvents: "none",
           backgroundImage: `url('${creditsBg}')`,
           backgroundSize: "cover", backgroundPosition: "center",
         }} />
         <div aria-hidden style={{
-          position: "absolute", inset: 0, zIndex: 0, pointerEvents: "none",
-          background: "rgba(236,234,231,0.75)",
+          position: "fixed", inset: 0, zIndex: 0, pointerEvents: "none",
+          background: "rgba(236,234,231,0.45)",
         }} />
-        <div style={{ maxWidth: 760, margin: "0 auto", position: "relative", zIndex: 1 }}>
+        <style>{`
+          .credits-box { background: rgba(245,242,237,0.02); }
+          @media (min-width: 600px) and (max-width: 1199px) {
+            .credits-box { background: rgba(245,242,237,0.005); }
+          }
+        `}</style>
+        <div className="credits-box" style={{
+          maxWidth: 760, margin: "0 auto", position: "relative", zIndex: 1,
+          backdropFilter: "blur(6px)",
+          WebkitBackdropFilter: "blur(6px)",
+          borderRadius: 16,
+          padding: "clamp(32px, 5vw, 60px) clamp(24px, 5vw, 56px)",
+          boxShadow: "0 4px 32px rgba(0,0,0,0.06)",
+        }}>
 
           {/* ── HEADER ──────────────────────────────────────────────────── */}
           <header style={{ textAlign: "center", marginBottom: "clamp(48px, 7vh, 72px)" }}>
@@ -53,7 +65,7 @@ export default async function CreditsPage() {
               marginBottom: 20,
             }}>
               Credits for{" "}
-              <em style={{ fontWeight: 300 }}>Shear Madness</em>
+              <em style={{ fontWeight: 700 }}>Shear Madness</em>
             </h1>
 
             {/* Divider */}
