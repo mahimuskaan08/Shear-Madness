@@ -326,6 +326,20 @@ function DateTimePair({ index, date, time, onDate, onTime, required }: {
   const ordinals = ["First", "Second", "Third"];
   const label = ordinals[index];
   const today = new Date().toISOString().split("T")[0];
+  const [dateError, setDateError] = useState("");
+
+  function handleDateChange(v: string) {
+    if (v) {
+      const day = new Date(v).getUTCDay(); // 0 = Sun, 1 = Mon
+      if (day === 0 || day === 1) {
+        setDateError("We're closed on Sundays and Mondays. Please choose another day.");
+        onDate("");
+        return;
+      }
+    }
+    setDateError("");
+    onDate(v);
+  }
 
   return (
     <div className="booking-datetime-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
@@ -334,7 +348,12 @@ function DateTimePair({ index, date, time, onDate, onTime, required }: {
           {label} preferred date
         </FieldLabel>
         <Input id={`date-${index}`} type="date" required={required}
-          value={date} onChange={onDate} min={today} />
+          value={date} onChange={handleDateChange} min={today} />
+        {dateError && (
+          <p style={{ marginTop: 5, fontSize: "0.75rem", color: "#B8462A", fontFamily: "'Inter', sans-serif" }}>
+            {dateError}
+          </p>
+        )}
       </div>
       <div>
         <FieldLabel htmlFor={`time-${index}`} required={required}>
