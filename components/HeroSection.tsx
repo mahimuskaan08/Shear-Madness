@@ -89,29 +89,31 @@ const HERO_FADE = `
 @media (max-width: 480px) {
   .sm-letter-large { margin-right: -2px; }
 }
-@media (max-width: 1024px) {
+@media (max-width: 767px) {
   .hero-bg-img {
     object-fit: contain !important;
     object-position: center top !important;
   }
-  .hero-bg-wrapper {
-    background: #ede8e3;
+  .hero-bg-layer {
+    background: #ede8e3 !important;
   }
   .hero-section {
     height: auto !important;
-    min-height: unset !important;
+    /* 280px floor so content is never cramped on narrow phones (320-375px);
+       aspect-ratio kicks in on wider viewports (≥466px) and overrides min-height */
+    min-height: 280px !important;
     aspect-ratio: 2528 / 1522;
   }
 }
 
-/* ── TABLET (768–1024px): full-viewport hero, cover bg ── */
+/* ── TABLET (768–1024px): full-viewport hero, contain so full image visible ── */
 @media (min-width: 768px) and (max-width: 1024px) {
   .hero-bg-img {
-    object-fit: cover !important;
+    object-fit: contain !important;
     object-position: center top !important;
   }
-  .hero-bg-wrapper {
-    background: transparent !important;
+  .hero-bg-layer {
+    background: #ede8e3 !important;
   }
   .hero-section {
     height: 100svh !important;
@@ -174,7 +176,7 @@ export default function HeroSection({ bgImage }: { bgImage?: string }) {
       <style dangerouslySetInnerHTML={{ __html: PETAL_KF + HERO_FADE }} />
 
       {/* ── LAYER 1: BACKGROUND IMAGE ────────────────────────────────────── */}
-      <motion.div style={{ scale: bgScale }} className="absolute inset-0 w-full h-full hero-bg-layer">
+      <motion.div style={{ scale: bgScale, background: "#EDE8E3" }} className="absolute inset-0 w-full h-full hero-bg-layer">
         <Image
           src={bgImage ?? "/hero-bg.png"}
           alt=""
@@ -183,7 +185,7 @@ export default function HeroSection({ bgImage }: { bgImage?: string }) {
           priority
           sizes="100vw"
           className="hero-bg-img"
-          style={{ objectFit: "cover", objectPosition: "center 22%" }}
+          style={{ objectFit: "contain", objectPosition: "center top" }}
         />
       </motion.div>
 

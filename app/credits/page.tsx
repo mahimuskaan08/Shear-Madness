@@ -26,7 +26,11 @@ export default async function CreditsPage() {
         <div aria-hidden style={{
           position: "fixed", inset: 0, zIndex: 0, pointerEvents: "none",
           backgroundImage: `url('${creditsBg}')`,
-          backgroundSize: "cover", backgroundPosition: "center",
+          backgroundSize: "contain",
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "center top",
+          backgroundColor: "#FAF6EF",
+          transform: "translateZ(0)",
         }} />
         <div aria-hidden style={{
           position: "fixed", inset: 0, zIndex: 0, pointerEvents: "none",

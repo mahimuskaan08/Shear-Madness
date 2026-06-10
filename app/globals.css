@@ -98,14 +98,13 @@ img {
   pointer-events: none;
   background-image: url('/artist-bg.png');
   background-repeat: no-repeat;
-  /* Desktop (>1366px): immersive cover */
-  background-size: cover;
-  background-position: center center;
+  background-size: contain;
+  background-position: center top;
 }
 /* Tablet / iPad up to iPad Pro 13" */
 @media (max-width: 1366px) and (min-width: 641px) {
   .artist-bg {
-    background-size: cover;
+    background-size: contain;
     background-position: center top;
     background-repeat: no-repeat;
   }
@@ -113,7 +112,7 @@ img {
 /* Mobile */
 @media (max-width: 640px) {
   .artist-bg {
-    background-size: cover;
+    background-size: contain;
     background-position: center top;
     background-repeat: no-repeat;
   }
@@ -140,56 +139,81 @@ img {
   display: none;              /* Chrome / Safari / Opera */
 }
 
-/* ── TABLET / iPAD: 768px – 1024px ────────────────────────────────────────────
+/* ── TABLET / iPAD: 768px – 1180px ───────────────────────────────────────────
    background-attachment:fixed is unreliable on iPad/Safari. Each section uses
    position:absolute fill + object-fit:cover on its background layer instead.
    Content sits on position:relative z-index:10 and scrolls naturally above.
    ─────────────────────────────────────────────────────────────────────────── */
-@media (min-width: 768px) and (max-width: 1024px) {
+@media (min-width: 768px) and (max-width: 1180px) {
 
-  /* ── HERO ── full-viewport, background covers without cropping key top area */
+  /* ── HERO ── full-viewport, full image visible with contain + cream fill */
   .hero-section {
     height: 100svh !important;
     min-height: 680px !important;
     aspect-ratio: unset !important;
   }
   .hero-bg-img {
-    object-fit: cover !important;
+    object-fit: contain !important;
     object-position: center top !important;
   }
-  .hero-bg-wrapper {
-    background: transparent !important;
+  .hero-bg-layer {
+    background: #EDE8E3 !important;
   }
 
-  /* ── ABOUT ── generous breathing room on both iPad orientations */
+  /* ── ABOUT ── account for sticky navbar height when anchored via #our-story */
   #our-story {
-    padding: 52px 44px 40px !important;
+    padding: clamp(88px, 11vh, 108px) 44px 40px !important;
+    scroll-margin-top: 72px;
   }
   #about-main-grid {
     gap: 24px !important;
   }
 
-  /* ── SERVICES ── keep 2-column grid (900px breakpoint already triggers this,
-     but reinforce so 1024px landscape iPad never reverts to 3) */
+  /* ── SERVICES (home page) ── 3-column layout on all tablet widths */
   #services {
-    padding: 60px 44px !important;
+    padding: 72px 44px 80px !important;
   }
   #services-grid {
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 20px !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 18px !important;
   }
 
-  /* ── ARTIST ── section padding + portrait max-widths for single-column stack */
+  /* ── SERVICES PAGE HERO ── enough top clearance for sticky nav */
+  .svc-page-hero {
+    padding-top: clamp(90px, 11vh, 112px) !important;
+  }
+
+  /* ── SERVICES PAGE GRID ── 3-col on tablet (inline class override) */
+  .svc-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: clamp(12px, 1.6vw, 20px) !important;
+  }
+
+  /* ── ARTIST ── larger portraits to fill horizontal space, desktop-like */
   #experience {
-    padding: 68px 44px 56px !important;
+    padding: 72px 44px 60px !important;
   }
   .artist-bg-fixed {
-    background-size: cover !important;
+    background-size: contain !important;
     background-position: center top !important;
     background-repeat: no-repeat !important;
   }
   .artist-img-wrap {
-    min-height: 360px !important;
+    min-height: 380px !important;
+  }
+  .artist-portrait-box {
+    width: clamp(210px, 28vw, 290px) !important;
+    height: clamp(420px, 44vw, 520px) !important;
+    aspect-ratio: unset !important;
+  }
+  .bio-desktop-panel {
+    height: clamp(420px, 44vw, 520px) !important;
+  }
+
+  /* ── GALLERY PAGE ── proportional horizontal padding for carousel */
+  .gallery-card-grid-pad {
+    padding-left: clamp(1.5rem, 5vw, 6rem) !important;
+    padding-right: clamp(1.5rem, 5vw, 6rem) !important;
   }
 
   /* ── CONTACT ── */
@@ -201,5 +225,47 @@ img {
   h1, h2, h3, h4, p, li {
     overflow-wrap: break-word;
     word-break: break-word;
+  }
+}
+
+/* ── MOBILE (≤767px): background image visibility fixes ──────────────────────
+   All changes here are mobile-ONLY. Desktop and tablet are untouched.
+   Goal: full artwork visible, no cropping, no cover zoom, cream fallback.
+   ─────────────────────────────────────────────────────────────────────────── */
+@media (max-width: 767px) {
+
+  /* ── Gallery page background wrapper ── */
+  .gallery-bg-section {
+    background-size: contain !important;
+    background-position: top center !important;
+    background-repeat: no-repeat !important;
+    background-color: #FAF6EF !important;
+    /* scroll (not fixed) is the safe choice on iOS Safari */
+    background-attachment: scroll !important;
+  }
+
+  /* ── Services section (home page) koi/watercolor layer ── */
+  .services-fixed-bg {
+    background-size: contain !important;
+    background-position: top center !important;
+    background-repeat: no-repeat !important;
+  }
+
+  /* ── Services page fixed background layer ──
+     Remove multiply blend mode on mobile so the artwork is fully visible
+     against the cream base; opacity raised to compensate.            */
+  .svc-bg-layer {
+    mix-blend-mode: normal !important;
+    opacity: 0.95 !important;
+    background-position: top center !important;
+    background-size: contain !important;
+    background-repeat: no-repeat !important;
+    background-color: #FAF6EF !important;
+  }
+
+  /* ── Booking page ── date/time pairs: single column so inputs aren't cramped */
+  .booking-datetime-grid {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
   }
 }

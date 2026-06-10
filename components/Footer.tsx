@@ -146,15 +146,35 @@ export default function Footer({
           >
             {/* Logo */}
             <div style={{ marginBottom: 20 }}>
-              <span style={{
-                fontFamily: "'Cormorant Garamond', Georgia, serif",
-                fontSize: "1.45rem",
-                fontWeight: 300,
-                color: "#FAF6EF",
-                letterSpacing: "0.02em",
-              }}>
-                Shear <em>Madness</em>
-              </span>
+              <div style={{ display: "flex", alignItems: "center", gap: 0 }}>
+                <span style={{
+                  fontFamily: "'Cormorant Garamond', Georgia, serif",
+                  fontSize: "1.45rem",
+                  fontWeight: 300,
+                  color: "#FAF6EF",
+                  letterSpacing: "0.02em",
+                }}>
+                  Shear <em>Madness</em>
+                </span>
+                <span style={{
+                  borderLeft: "1px solid rgba(196,169,106,0.45)",
+                  paddingLeft: 10,
+                  marginLeft: 10,
+                }}>
+                  <span style={{
+                    fontFamily: "Georgia, serif",
+                    fontSize: "10px",
+                    letterSpacing: "0.04em",
+                    color: "rgba(250,246,239,0.55)",
+                    fontStyle: "italic",
+                    lineHeight: 1,
+                    whiteSpace: "nowrap",
+                    display: "block",
+                  }}>
+                    A Salon for Men &amp; Women
+                  </span>
+                </span>
+              </div>
               <p style={{
                 fontFamily: "'Inter', sans-serif",
                 fontSize: "0.5rem",
@@ -287,11 +307,12 @@ export default function Footer({
               textTransform: "uppercase",
               color: "#7A5C10",
               marginBottom: 16,
+              textAlign: "center",
             }}>
               Navigation
             </p>
 
-            <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: 9, marginBottom: 28 }}>
+            <ul style={{ listStyle: "none", display: "flex", flexDirection: "row", flexWrap: "wrap", gap: "8px 20px", marginBottom: 28, justifyContent: "center" }}>
               {NAV_LINKS.map(link => (
                 <li key={link.label}>
                   <a
@@ -316,7 +337,7 @@ export default function Footer({
             </ul>
 
             {/* Social icons */}
-            <div style={{ display: "flex", gap: 10 }}>
+            <div style={{ display: "flex", gap: 10, justifyContent: "center" }}>
               {SOCIALS.map(s => (
                 <a
                   key={s.label}

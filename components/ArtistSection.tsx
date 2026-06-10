@@ -76,21 +76,18 @@ const BAMBOO_CSS = `
 
   /* ── RESPONSIVE ───────────────────────────────────────────────────────── */
 
-  /* Tablet / iPad (768–1024 px) */
-  @media (min-width: 768px) and (max-width: 1024px) {
+  /* Tablet / iPad (768–1180 px) — desktop-like hover layout, larger portraits */
+  @media (min-width: 768px) and (max-width: 1180px) {
     .artists-row {
-      gap: clamp(16px, 3vw, 32px) !important;
-    }
-    .artist-unit-inner {
-      transform: none !important;
+      gap: clamp(20px, 3.5vw, 48px) !important;
     }
     .artist-portrait-box {
-      width: clamp(180px, 22vw, 240px) !important;
-      height: clamp(340px, 36vw, 420px) !important;
+      width: clamp(210px, 28vw, 290px) !important;
+      height: clamp(420px, 44vw, 520px) !important;
       aspect-ratio: unset !important;
     }
     .bio-desktop-panel {
-      height: clamp(340px, 36vw, 420px) !important;
+      height: clamp(420px, 44vw, 520px) !important;
     }
   }
 
@@ -123,9 +120,9 @@ const BAMBOO_CSS = `
   }
 
   /* Background fix for tablets */
-  @media (min-width: 641px) and (max-width: 1024px) {
+  @media (min-width: 641px) and (max-width: 1180px) {
     .artist-bg-fixed {
-      background-size: cover !important;
+      background-size: contain !important;
       background-repeat: no-repeat !important;
       background-position: center top !important;
     }
@@ -177,8 +174,11 @@ export default function ArtistSection({
   const [vw, setVw] = useState(0);
 
   useEffect(() => {
-    setIsTouch(window.matchMedia("(pointer: coarse)").matches);
-    const update = () => setVw(window.innerWidth);
+    // Only treat as touch on small screens (mobile); iPads use desktop hover layout
+    const update = () => {
+      setVw(window.innerWidth);
+      setIsTouch(window.matchMedia("(pointer: coarse)").matches && window.innerWidth < 768);
+    };
     update();
     window.addEventListener("resize", update);
     return () => window.removeEventListener("resize", update);
@@ -192,8 +192,8 @@ export default function ArtistSection({
   const isMobile = vw > 0 && vw < 768;
 
   // Bio width mirrors portrait width formula at each breakpoint
-  const bioWidth = vw >= 768 && vw <= 1024
-    ? Math.min(240, Math.max(180, Math.round(vw * 0.22)))
+  const bioWidth = vw >= 768 && vw <= 1180
+    ? Math.min(260, Math.max(200, Math.round(vw * 0.24)))
     : Math.min(285, Math.max(240, Math.round(vw * 0.17)));
 
   const shadow = (active: boolean) =>
@@ -219,8 +219,9 @@ export default function ArtistSection({
         position: "absolute", inset: 0, zIndex: 0, pointerEvents: "none",
         backgroundImage: `url('${artistBg ?? "/artist-bg.jpg"}')`,
         backgroundAttachment: "scroll",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
+        backgroundSize: "contain",
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "center top",
       }} />
 
       {/* Bamboo leaves */}
@@ -327,7 +328,7 @@ export default function ArtistSection({
             <motion.div
               className="artist-unit-inner artist-unit-hover"
               animate={{
-                x:       isMobile ? 0 : hoveredArtist === "oscar" ? -44 : hoveredArtist === "george" ? -40 : 0,
+                x:       isMobile ? 0 : hoveredArtist === "george" ? -40 : 0,
                 scale:   isMobile ? 1 : hoveredArtist === "george" ? 0.82 : 1,
                 opacity: isMobile ? 1 : hoveredArtist === "george" ? 0.38 : 1,
               }}

@@ -53,12 +53,19 @@ const ABOUT_CSS = `
     }
   }
 
-  /* ── TABLET/iPad: cover so bg fills the full (taller) stacked layout ── */
-  @media (min-width: 641px) and (max-width: 1024px) {
+  /* ── DESKTOP: fixed viewport height so 2-col layout fills screen ────── */
+  @media (min-width: 1181px) {
+    #our-story { height: 100svh; }
+  }
+
+  /* ── TABLET/iPad: full image visible with contain ─────────────────── */
+  @media (min-width: 641px) and (max-width: 1180px) {
     .about-bg-img {
-      object-fit: cover !important;
+      object-fit: contain !important;
       object-position: center top !important;
     }
+    /* Hide the seam cover — it was burying the only visible part of the image */
+    .about-seam-cover { display: none !important; }
     #our-story {
       height: auto !important;
       min-height: 100svh !important;
@@ -98,7 +105,6 @@ export default function AboutSection({
       ref={ref}
       id="our-story"
       style={{
-        height: "100svh",
         minHeight: 700,
         display: "flex",
         flexDirection: "column",
@@ -108,6 +114,7 @@ export default function AboutSection({
         marginTop: "-2px",
         padding: "clamp(20px, 3vh, 36px) clamp(20px, 5vw, 72px) clamp(16px, 2.5vh, 28px)",
         transform: "translateZ(0)",
+        scrollMarginTop: "var(--navbar-h, 72px)",
       }}
     >
       <style dangerouslySetInnerHTML={{ __html: ABOUT_CSS }} />
@@ -120,14 +127,14 @@ export default function AboutSection({
           fill
           sizes="100vw"
           className="about-bg-img"
-          style={{ objectFit: "cover", objectPosition: "center" }}
+          style={{ objectFit: "contain", objectPosition: "center top" }}
         />
       </div>
 
-      {/* ── LAYER 2: SEAM COVER — fully opaque at top to match hero, fades out ─── */}
-      <div aria-hidden="true" style={{
+      {/* ── LAYER 2: SEAM COVER — hidden on tablet (would bury the flower branch) */}
+      <div aria-hidden="true" className="about-seam-cover" style={{
         position: "absolute", top: 0, left: 0, right: 0, bottom: 0, zIndex: 1, pointerEvents: "none",
-        background: "linear-gradient(to bottom, rgba(232,230,228,1.0) 0%, rgba(232,230,228,0.50) 8%, rgba(232,230,228,0) 18%, rgba(230,226,220,0.18) 45%, rgba(200,196,190,0.08) 100%)",
+        background: "linear-gradient(to bottom, rgba(232,230,228,0.88) 0%, rgba(232,230,228,0.30) 5%, rgba(232,230,228,0) 10%, rgba(230,226,220,0.08) 50%, rgba(200,196,190,0.04) 100%)",
       }} />
 
 
@@ -235,18 +242,17 @@ export default function AboutSection({
               flexShrink: 0,
             }}
           >
-            We are Hoboken&apos;s top-rated beauty salon for professional haircuts, waxes, hair coloring,
-            straightening, extensions and much more. Tucked away just three blocks behind Hoboken City
-            Hall, Shear Madness was born in 2003 with one simple mission – recreate the professional
-            salon experience by providing top notch beauty services for men and women; without the
-            pretense of other fine salons, in a warm and inviting atmosphere, atypical from the rest.
-            Staffed with top notch artists/stylists from many backgrounds, using the finest quality
-            products available, in a comfortable Asian inspired setting, the Shear Madness team can help
-            find and interpret the vision of even the most discerning client. Once you are here, you&apos;re
-            not just a client but a member of the Shear Madness family. Trust me, relaxing in one of our
-            chairs, it will feel like a second home! Whether you&apos;re looking for a dramatic change – a new
-            hair color perhaps – or just maintaining your current style, from avant guarde to traditional,
-            you owe it to yourself to call us today and FEEL THE MADNESS!
+            Tucked away just three blocks behind Hoboken City Hall, Shear Madness was born in 2003
+            with one simple mission – recreate the professional salon experience by providing top notch
+            beauty services for men and women; without the pretense of other fine salons, in a warm and
+            inviting atmosphere, atypical from the rest. Staffed with top notch artists/stylists from
+            many backgrounds, using the finest quality products available, in a comfortable Asian inspired
+            setting, the Shear Madness team can help find and interpret the vision of even the most
+            discerning client. Once you are here, you&apos;re not just a client but a member of the Shear
+            Madness family. Relaxing in one of our chairs, it will feel like a second home! Whether
+            you&apos;re looking for a dramatic change – a new hair color perhaps – or just maintaining your
+            current style, from avant guarde to traditional, you owe it to yourself to call us today and
+            FEEL THE MADNESS!
           </motion.p>
 
           {/* ── DICTIONARY BLOCK ────────────────────────────────────────────── */}
@@ -402,22 +408,25 @@ export default function AboutSection({
           }
         }
 
-        /* Tablet single-column: give the grid room to breathe */
+        /* Tablet portrait (768–860px): single-column centered layout */
         @media (min-width: 768px) and (max-width: 860px) {
           #about-main-grid {
-            max-width: 640px;
+            max-width: 660px;
             margin: 0 auto;
           }
           #about-carousel-wrap {
-            min-height: 360px !important;
-            height: 360px !important;
+            min-height: 380px !important;
+            height: 380px !important;
           }
         }
 
-        /* Tablet landscape (860–1024px): 2-col still active, just add spacing */
-        @media (min-width: 860px) and (max-width: 1024px) {
+        /* Tablet landscape (860–1180px): 2-col with comfortable spacing */
+        @media (min-width: 860px) and (max-width: 1180px) {
           #about-main-grid {
-            gap: 24px !important;
+            gap: 28px !important;
+          }
+          #about-carousel-wrap {
+            min-height: 0;
           }
         }
 

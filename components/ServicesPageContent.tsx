@@ -194,6 +194,9 @@ const STYLES = `
     .svc-cat-eyebrow   { font-size: 0.74rem !important; letter-spacing: 0.30em !important; }
     .svc-cat-h2        { font-size: clamp(2.8rem, 5vw, 4.0rem) !important; }
     .svc-cat-desc      { font-size: clamp(1.05rem, 1.6vw, 1.18rem) !important; }
+    /* Stack note callout below the heading so the title gets full width */
+    .svc-cat-header    { flex-direction: column !important; align-items: flex-start !important; }
+    .svc-cat-note      { text-align: left !important; align-self: auto !important; }
   }
 
   /* ── CRANE ANIMATION ────────────────────────────────── */
@@ -274,8 +277,9 @@ const STYLES = `
     grid-template-columns: repeat(3, 1fr);
     gap: clamp(14px, 1.8vw, 22px);
   }
-  @media (max-width: 1024px) { .svc-grid { grid-template-columns: repeat(2,1fr); } }
-  @media (max-width: 560px)  { .svc-grid { grid-template-columns: 1fr; } }
+  /* 3-col on all tablet widths (768–1180px); 2-col only on small mobile */
+  @media (max-width: 767px) { .svc-grid { grid-template-columns: repeat(2,1fr); } }
+  @media (max-width: 560px) { .svc-grid { grid-template-columns: 1fr; } }
 
   /* ── NOTES GRID ─────────────────────────────────────── */
   .notes-grid {
@@ -481,6 +485,7 @@ function CategorySection({ cat }: { cat: CategoryData }) {
 
         {/* ── CATEGORY HEADING ────────────────────────────────────────── */}
         <motion.div
+          className="svc-cat-header"
           initial={{ opacity:0, y:22 }} animate={inView ? { opacity:1, y:0 } : {}}
           transition={{ duration:1.0, ease:EASE }}
           style={{ display:"flex", alignItems:"flex-start", justifyContent:"space-between", gap:24, flexWrap:"wrap" }}>
@@ -506,7 +511,7 @@ function CategorySection({ cat }: { cat: CategoryData }) {
 
           {/* Right: note callout */}
           {cat.note && (
-            <div style={{ display:"flex", alignItems:"flex-start", gap:8, flexShrink:0, alignSelf:"center", textAlign:"right" }}>
+            <div className="svc-cat-note" style={{ display:"flex", alignItems:"flex-start", gap:8, flexShrink:0, alignSelf:"center", textAlign:"right" }}>
               <span style={{ color:"#7A5C10", fontSize:"0.60rem", flexShrink:0, marginTop:1 }}>✦</span>
               <p style={{ fontFamily:"'Inter',sans-serif", fontSize:"clamp(0.80rem,0.95vw,0.90rem)", fontWeight:700, fontStyle:"normal", color:"#0A0A0A", letterSpacing:"0.01em", lineHeight:1.55 }}>
                 {cat.note}
@@ -628,7 +633,7 @@ function HeroSection() {
       </div>
 
       {/* ── CONTENT ───────────────────────────────────────────────────── */}
-      <div style={{ maxWidth:1280, margin:"0 auto", width:"100%", position:"relative", zIndex:2, padding:"clamp(72px,9vh,80px) clamp(24px,7vw,96px) clamp(3px,0.4vh,5px)" }}>
+      <div className="svc-page-hero" style={{ maxWidth:1280, margin:"0 auto", width:"100%", position:"relative", zIndex:2, padding:"clamp(72px,9vh,80px) clamp(24px,7vw,96px) clamp(3px,0.4vh,5px)" }}>
         <div style={{ textAlign:"center", maxWidth:700, margin:"0 auto" }}>
 
           <motion.p initial={{ opacity:0, y:20 }} animate={{ opacity:1, y:0 }} transition={{ duration:0.9, ease:EASE, delay:0.2 }}
@@ -692,12 +697,14 @@ export default function ServicesPageContent({ bgImage }: { bgImage?: string }) {
           <div aria-hidden style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, background: "#F5F2EB", zIndex: 0 }} />
 
           {/* Layer 1: bg image */}
-          <div aria-hidden style={{
+          <div aria-hidden className="svc-bg-layer" style={{
             position: "fixed", top: 0, left: 0, right: 0, bottom: 0,
             backgroundImage: `url('${bgImage ?? "/services-bg.png"}')`,
-            backgroundPosition: "center center",
+            backgroundPosition: "center top",
             backgroundRepeat: "no-repeat",
-            backgroundSize: "cover",
+            backgroundSize: "contain",
+            backgroundColor: "#FAF6EF",
+            transform: "translateZ(0)",
             mixBlendMode: "multiply",
             opacity: 0.85,
             zIndex: 1,

@@ -31,7 +31,9 @@ export default function GallerySection() {
 
   const viewportRef = useRef<HTMLDivElement>(null);
   const offsetRef = useRef(0);
-  const isPausedRef = useRef(false);
+  const hoverPausedRef = useRef(false);
+  const manualPausedRef = useRef(false);
+  const [isManuallyPaused, setIsManuallyPaused] = useState(false);
   const [displayOffset, setDisplayOffset] = useState(0);
   const [cardWidth, setCardWidth] = useState(0);
 
@@ -52,7 +54,7 @@ export default function GallerySection() {
   const oneSetWidth = cardWidth ? cardWidth * galleryItems.length + GAP * galleryItems.length : 0;
 
   useAnimationFrame(() => {
-    if (isPausedRef.current || !oneSetWidth) return;
+    if (hoverPausedRef.current || manualPausedRef.current || !oneSetWidth) return;
     offsetRef.current += 0.4;
     if (offsetRef.current >= oneSetWidth) {
       offsetRef.current -= oneSetWidth;
@@ -60,12 +62,17 @@ export default function GallerySection() {
     setDisplayOffset(offsetRef.current);
   });
 
-  const pause = useCallback(() => { isPausedRef.current = true; }, []);
-  const resume = useCallback(() => { isPausedRef.current = false; }, []);
+  const pause = useCallback(() => { hoverPausedRef.current = true; }, []);
+  const resume = useCallback(() => { hoverPausedRef.current = false; }, []);
+
+  const togglePause = useCallback(() => {
+    manualPausedRef.current = !manualPausedRef.current;
+    setIsManuallyPaused(manualPausedRef.current);
+  }, []);
 
   return (
-    <section id="gallery" className="relative py-28 md:py-40 bg-[#FDFAF6]">
-      <div className="max-w-7xl mx-auto px-6 md:px-12">
+    <section id="gallery" className="relative py-20 md:py-32 bg-[#FDFAF6]">
+      <div className="max-w-7xl mx-auto px-6 md:px-10 lg:px-12">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-16 gap-6" ref={ref}>
           <div>
@@ -126,8 +133,48 @@ export default function GallerySection() {
           initial={{ opacity: 0 }}
           animate={isInView ? { opacity: 1 } : {}}
           transition={{ duration: 0.8, delay: 0.4 }}
+          className="hidden md:block relative"
+        >
+          {/* Pause / Play button */}
+          <button
+            onClick={togglePause}
+            aria-label={isManuallyPaused ? "Play" : "Pause"}
+            style={{
+              position: "absolute",
+              bottom: 12,
+              right: 12,
+              zIndex: 10,
+              width: 30,
+              height: 30,
+              borderRadius: "50%",
+              border: "1px solid rgba(196,169,106,0.45)",
+              background: "rgba(253,250,246,0.82)",
+              backdropFilter: "blur(6px)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              cursor: "pointer",
+              boxShadow: "0 2px 8px rgba(58,56,50,0.10)",
+              transition: "background 0.2s, border-color 0.2s",
+            }}
+          >
+            {isManuallyPaused ? (
+              /* Play icon */
+              <svg width="10" height="11" viewBox="0 0 10 11" fill="none">
+                <path d="M2 1.5L8.5 5.5L2 9.5V1.5Z" fill="#8A6840" />
+              </svg>
+            ) : (
+              /* Pause icon */
+              <svg width="10" height="11" viewBox="0 0 10 11" fill="none">
+                <rect x="1.5" y="1.5" width="2.5" height="8" rx="1" fill="#8A6840" />
+                <rect x="6" y="1.5" width="2.5" height="8" rx="1" fill="#8A6840" />
+              </svg>
+            )}
+          </button>
+
+          <div
           ref={viewportRef}
-          className="hidden md:block overflow-hidden"
+          className="overflow-hidden"
           onMouseEnter={pause}
           onMouseLeave={resume}
         >
@@ -150,6 +197,7 @@ export default function GallerySection() {
               ))}
             </div>
           )}
+          </div>
         </motion.div>
 
         {/* CTA */}

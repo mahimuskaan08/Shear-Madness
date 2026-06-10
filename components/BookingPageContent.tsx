@@ -328,7 +328,7 @@ function DateTimePair({ index, date, time, onDate, onTime, required }: {
   const today = new Date().toISOString().split("T")[0];
 
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+    <div className="booking-datetime-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
       <div>
         <FieldLabel htmlFor={`date-${index}`} required={required}>
           {label} preferred date
@@ -729,14 +729,18 @@ export default function BookingPageContent({ bgImage }: { bgImage?: string }) {
       <div aria-hidden style={{
         position: "fixed", inset: 0, zIndex: 0, pointerEvents: "none",
         backgroundImage: `url('${resolvedBg}')`,
-        backgroundSize: "cover", backgroundPosition: "center",
+        backgroundSize: "contain",
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "center top",
+        backgroundColor: "#FAF6EF",
+        transform: "translateZ(0)",
       }} />
 
       {/* ── Falling petals layer (z-index 1, pointer-events: none) ─── */}
       <FallingPetals />
 
       {/* ── All form content sits above the petals (z-index 2) ──────── */}
-      <div style={{ maxWidth: 780, margin: "0 auto", position: "relative", zIndex: 2 }}>
+      <div className="booking-form-wrap" style={{ maxWidth: 780, margin: "0 auto", position: "relative", zIndex: 2 }}>
 
         {/* ── PAGE HEADER ─────────────────────────────────────────────── */}
         <motion.header
@@ -761,7 +765,7 @@ export default function BookingPageContent({ bgImage }: { bgImage?: string }) {
             letterSpacing: "0.01em", color: "#556B2F",
             marginBottom: 18,
           }}>
-            Online Appointment <em style={{ fontWeight: 300 }}>Book</em>
+            Online <em style={{ fontWeight: 300 }}>Appointment</em>
           </h1>
 
           {/* Gold divider */}
@@ -871,7 +875,7 @@ export default function BookingPageContent({ bgImage }: { bgImage?: string }) {
                     <Input id="name" required placeholder="Jane Smith"
                       value={name} onChange={setName} />
                   </div>
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+                  <div className="booking-email-phone" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
                     <div>
                       <FieldLabel htmlFor="email" required>Email Address</FieldLabel>
                       <Input id="email" type="email" required placeholder="jane@email.com"
@@ -1045,6 +1049,21 @@ export default function BookingPageContent({ bgImage }: { bgImage?: string }) {
       <style>{`
         @media (max-width: 540px) {
           .booking-grid-2 { grid-template-columns: 1fr !important; }
+        }
+        /* Mobile: collapse date/time pairs and email/phone to single column */
+        @media (max-width: 767px) {
+          .booking-datetime-grid { grid-template-columns: 1fr !important; gap: 12px !important; }
+          .booking-email-phone   { grid-template-columns: 1fr !important; gap: 12px !important; }
+        }
+        /* Tablet: ensure form doesn't overflow background art, centered */
+        @media (min-width: 768px) and (max-width: 1180px) {
+          .booking-form-wrap {
+            max-width: min(700px, calc(100vw - 80px)) !important;
+          }
+        }
+        /* Collapse date/time pairs on small tablets */
+        @media (min-width: 768px) and (max-width: 860px) {
+          .booking-datetime-grid { grid-template-columns: 1fr !important; gap: 12px !important; }
         }
       `}</style>
     </main>

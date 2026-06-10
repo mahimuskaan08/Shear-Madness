@@ -60,9 +60,9 @@ export default function ServicesSection() {
           position: "absolute", inset: 0, zIndex: 0, pointerEvents: "none",
           backgroundImage: "url('/services-koi-bg.png')",
           backgroundAttachment: "scroll",
-          backgroundSize: "cover",
+          backgroundSize: "contain",
           backgroundRepeat: "no-repeat",
-          backgroundPosition: "center center",
+          backgroundPosition: "center top",
           opacity: 0.72,
           mixBlendMode: "multiply",
         }}
@@ -169,13 +169,18 @@ export default function ServicesSection() {
       </div>
 
       <style>{`
-        @media (max-width: 900px) {
+        @media (max-width: 767px) {
           #services-grid { grid-template-columns: repeat(2, 1fr) !important; }
         }
         @media (max-width: 560px) {
           #services-grid { grid-template-columns: 1fr !important; }
         }
-
+        /* Keep 3-col on all tablet widths (768px–1180px) */
+        @media (min-width: 768px) and (max-width: 1180px) {
+          #services-grid { grid-template-columns: repeat(3, 1fr) !important; gap: 18px !important; }
+          /* Override aspect-ratio with a fixed height so the title/number never get clipped */
+          #services-grid > a > div { aspect-ratio: unset !important; height: 280px !important; }
+        }
       `}</style>
     </section>
   );

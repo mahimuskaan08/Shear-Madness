@@ -207,8 +207,10 @@ export default function GalleryPageContent({
         position: "relative",
         backgroundImage: `url('${bgImage ?? "/gallery-bg2.jpg"}')`,
         backgroundAttachment: "scroll",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
+        backgroundSize: "contain",
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "top center",
+        backgroundColor: "#FAF6EF",
       }}
     >
 
@@ -316,9 +318,10 @@ function CardGrid({
   items: GalleryItem[];
   onCardClick: (item: GalleryItem) => void;
 }) {
-  const [current,      setCurrent]      = useState(0);
-  const [paused,       setPaused]       = useState(false);
-  const [visibleCount, setVisibleCount] = useState(3);
+  const [current,       setCurrent]       = useState(0);
+  const [paused,        setPaused]        = useState(false);
+  const [manualPaused,  setManualPaused]  = useState(false);
+  const [visibleCount,  setVisibleCount]  = useState(3);
   const [containerW,   setContainerW]   = useState(0);
 
   const trackWrapRef = useRef<HTMLDivElement>(null);
@@ -346,12 +349,12 @@ function CardGrid({
   }, []);
 
   useEffect(() => {
-    if (paused || N <= visibleCount) return;
+    if (paused || manualPaused || N <= visibleCount) return;
     autoRef.current = setInterval(() => {
       setCurrent(c => (c >= maxIndex ? 0 : c + 1));
     }, 3000);
     return () => clearInterval(autoRef.current);
-  }, [paused, N, visibleCount, maxIndex]);
+  }, [paused, manualPaused, N, visibleCount, maxIndex]);
 
   const prev = useCallback(() => setCurrent(c => Math.max(0, c - 1)), []);
   const next = useCallback(() => setCurrent(c => Math.min(maxIndex, c + 1)), [maxIndex]);
@@ -373,7 +376,7 @@ function CardGrid({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -10 }}
       transition={{ duration: 0.45, ease: EASE }}
-      className="w-full overflow-x-hidden"
+      className="gallery-card-grid-pad w-full overflow-x-hidden"
       style={{ paddingTop: "clamp(1.5rem, 3vw, 2.5rem)", paddingLeft: "clamp(2rem, 8vw, 10rem)", paddingRight: "clamp(2rem, 8vw, 10rem)" }}
     >
       <div className="relative">
@@ -426,7 +429,7 @@ function CardGrid({
       </div>
 
       {maxIndex > 0 && (
-        <div className="flex justify-center gap-2 mt-4">
+        <div className="flex justify-center items-center gap-3 mt-4">
           {Array.from({ length: maxIndex + 1 }).map((_, i) => (
             <button
               key={i}
@@ -443,6 +446,31 @@ function CardGrid({
               }}
             />
           ))}
+
+          {/* Pause / Play button */}
+          <button
+            onClick={() => setManualPaused(p => !p)}
+            aria-label={manualPaused ? "Play" : "Pause"}
+            style={{
+              width: 26, height: 26, borderRadius: "50%",
+              border: "1px solid rgba(196,169,106,0.45)",
+              background: "rgba(253,250,246,0.90)",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              cursor: "pointer", flexShrink: 0,
+              boxShadow: "0 2px 8px rgba(58,56,50,0.08)",
+            }}
+          >
+            {manualPaused ? (
+              <svg width="9" height="10" viewBox="0 0 9 10" fill="none">
+                <path d="M1.5 1L7.5 5L1.5 9V1Z" fill="#8A6840" />
+              </svg>
+            ) : (
+              <svg width="9" height="10" viewBox="0 0 9 10" fill="none">
+                <rect x="1" y="1" width="2.5" height="8" rx="1" fill="#8A6840" />
+                <rect x="5.5" y="1" width="2.5" height="8" rx="1" fill="#8A6840" />
+              </svg>
+            )}
+          </button>
         </div>
       )}
 
