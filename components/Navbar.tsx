@@ -80,7 +80,7 @@ export default function Navbar() {
           background: scrolled ? "rgba(252,249,244,0.92)" : "transparent",
           backdropFilter: scrolled ? "blur(18px) saturate(1.4)" : "none",
           WebkitBackdropFilter: scrolled ? "blur(18px) saturate(1.4)" : "none",
-          borderBottom: scrolled ? "1px solid rgba(196,169,106,0.18)" : "none",
+          borderBottom: scrolled ? "1px solid rgba(196,169,106,0.18)" : "1px solid rgba(196,169,106,0)",
           boxShadow: scrolled ? "0 2px 32px rgba(58,56,50,0.07)" : "none",
         }}
       >
