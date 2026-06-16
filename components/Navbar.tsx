@@ -119,7 +119,7 @@ export default function Navbar() {
 
           {/* ── DESKTOP NAV — glass pill, truly centered ──────────────── */}
           <nav
-            className="hidden lg:flex items-center gap-5 xl:gap-6 absolute -translate-x-1/2"
+            className="hidden lg:flex items-center gap-5 xl:gap-8 absolute -translate-x-1/2 py-[5px] px-[10px] xl:px-6"
             style={{
               left: "50%",
               background: scrolled ? "transparent" : "rgba(255,255,255,0.14)",
@@ -128,7 +128,6 @@ export default function Navbar() {
               border: scrolled ? "1px solid transparent" : "1px solid rgba(255,255,255,0.38)",
               borderRadius: 100,
               boxShadow: scrolled ? "none" : "0 2px 18px rgba(0,0,0,0.07), inset 0 1px 0 rgba(255,255,255,0.55)",
-              padding: "5px 10px",
               transition: "background 0.5s ease, box-shadow 0.5s ease, border-color 0.5s ease",
             }}
           >
@@ -206,7 +205,7 @@ export default function Navbar() {
           </nav>
 
           {/* ── RIGHT BUTTONS: Contact + Book Now — absolute right edge ─ */}
-          <div className="hidden lg:flex items-center gap-2 absolute right-8 xl:right-10">
+          <div className="hidden lg:flex items-center gap-2 xl:gap-3 absolute right-8 xl:right-10">
             <NavPillButton href="/contact" label="Contact" />
             <NavPillButton href="/booking" label="Book Now" />
           </div>

@@ -259,12 +259,11 @@ img {
   }
 }
 
-/* ── CREDITS PAGE: 100% auto — full image width, no side cropping ────────────
-   background-size: 100% auto fills the full viewport width so the image
-   composition (cherry blossom branches) is never cropped on either side.
-   On all laptops/desktops the proportional height exceeds the viewport so
-   there is no bottom gap. On portrait iPads the div's own #FAF6EF fills
-   below the image and blends with the existing overlay seamlessly.
+/* ── CREDITS PAGE: cover fills full viewport on all non-mobile sizes ─────────
+   cover eliminates the bottom gap on every viewport ratio (portrait iPad,
+   landscape iPad, laptops, desktops). Slight edge-crop is imperceptible on a
+   decorative cherry-blossom background; centre-top positioning keeps the main
+   composition visible.
    Mobile (≤767px) untouched — inherits inline contain / inset:0.
    ─────────────────────────────────────────────────────────────────────────── */
 @media (min-width: 768px) {
@@ -272,7 +271,7 @@ img {
     bottom: 0 !important;
     height: 100% !important;
     aspect-ratio: unset !important;
-    background-size: 100% auto !important;
+    background-size: cover !important;
     background-position: center top !important;
   }
 }

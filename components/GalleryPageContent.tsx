@@ -225,7 +225,7 @@ export default function GalleryPageContent({
       <div className="relative z-10">
 
       {/* ── Header ── */}
-      <div className="flex flex-col items-center text-center px-6 pb-10 md:pb-12">
+      <div id="portfolio" className="flex flex-col items-center text-center px-6 pb-10 md:pb-12" style={{ scrollMarginTop: "calc(var(--navbar-h) + 16px)" }}>
         <motion.p
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -278,7 +278,7 @@ export default function GalleryPageContent({
       </div>
 
       {/* ── Showcase ── */}
-      <div id="portfolio" className="pb-14 md:pb-20 mt-2 md:mt-4">
+      <div className="pb-14 md:pb-20 mt-2 md:mt-4">
         <AnimatePresence mode="wait">
           {isVideos ? (
             <VideoSection key="videos" />
