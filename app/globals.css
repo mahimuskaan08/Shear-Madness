@@ -275,6 +275,22 @@ img {
   }
 }
 
+/* ── BOOKING PAGE (tablet/iPad + ~1024px laptop widths, 768–1366px) ──────────
+   height:100% above resolves against the live viewport for this fixed-position
+   layer (percentage height on position:fixed = tracks current viewport height).
+   On iPadOS Safari the viewport height changes when the address bar collapses
+   on first scroll, so this box resizes and background-size:cover instantly
+   rescales the image — visible as an expand/zoom. Locking height to 100svh
+   (the small/stable viewport height, before any chrome collapses) keeps the
+   box size constant through that change while keeping the exact same cover
+   sizing/position/aspect-ratio from the rule above. Desktop (>1366px) keeps
+   the original height:100% untouched; mobile (≤767px) is unaffected. */
+@media (min-width: 768px) and (max-width: 1366px) {
+  .booking-bg-fixed {
+    height: 100svh !important;
+  }
+}
+
 /* ── CREDITS PAGE: cover fills full viewport on all non-mobile sizes ─────────
    cover eliminates the bottom gap on every viewport ratio (portrait iPad,
    landscape iPad, laptops, desktops). Slight edge-crop is imperceptible on a
