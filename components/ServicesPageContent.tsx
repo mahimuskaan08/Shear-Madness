@@ -186,9 +186,10 @@ const PETAL_COLORS = [
 // STYLES
 // ─────────────────────────────────────────────────────────────────────────────
 const STYLES = `
-  /* Tablet (641–1024px): position:absolute prevents the fixed bg from
-     repainting mid-scroll when iPadOS Safari hides/shows the address bar. */
-  @media (min-width: 641px) and (max-width: 1024px) {
+  /* iPad/tablet: position:absolute prevents the fixed bg from repainting
+     mid-scroll when iPadOS Safari hides/shows the address bar.
+     Range covers all iPads portrait (768px) through iPad Pro 12.9" landscape (1366px). */
+  @media (min-width: 641px) and (max-width: 1366px) {
     .svc-bg-layer {
       position: absolute !important;
     }
