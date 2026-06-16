@@ -12,15 +12,11 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-// ─── Constants ────────────────────────────────────────────────────────────────
-
-define( 'SSI_OPTION_KEY', 'shear_site_images' );
+define( 'SSI_OPTION_KEY',   'shear_site_images' );
 define( 'SSI_REST_NAMESPACE', 'shear/v1' );
-define( 'SSI_REST_ROUTE', 'site-images' );
+define( 'SSI_REST_ROUTE',   'site-images' );
 define( 'SSI_NONCE_ACTION', 'ssi_save_images' );
-define( 'SSI_NONCE_NAME', 'ssi_nonce' );
-
-// ─── Field definitions ────────────────────────────────────────────────────────
+define( 'SSI_NONCE_NAME',   'ssi_nonce' );
 
 function ssi_get_single_fields() {
     return [
@@ -30,7 +26,7 @@ function ssi_get_single_fields() {
         'oscar_artist_image'       => 'Oscar Artist Image',
         'george_artist_image'      => 'George Artist Image',
         'booking_background_image' => 'Booking Background Image',
-        'join_background_image'    => 'Join Background Image',
+        'join_background_image'    => 'Join Us Background Image',
         'gallery_background_image' => 'Gallery Background Image',
         'contact_background_image' => 'Contact Background Image',
         'credits_background_image' => 'Credits Background Image',
@@ -44,8 +40,7 @@ function ssi_get_gallery_fields() {
     ];
 }
 
-// ─── Admin menu ───────────────────────────────────────────────────────────────
-
+/* ── Admin menu ─────────────────────────────────────────────────────────── */
 add_action( 'admin_menu', 'ssi_add_menu_page' );
 
 function ssi_add_menu_page() {
@@ -60,8 +55,7 @@ function ssi_add_menu_page() {
     );
 }
 
-// ─── Enqueue admin assets ─────────────────────────────────────────────────────
-
+/* ── Enqueue ────────────────────────────────────────────────────────────── */
 add_action( 'admin_enqueue_scripts', 'ssi_enqueue_assets' );
 
 function ssi_enqueue_assets( $hook ) {
@@ -69,30 +63,15 @@ function ssi_enqueue_assets( $hook ) {
         return;
     }
     wp_enqueue_media();
-    wp_enqueue_style(
-        'ssi-admin',
-        plugin_dir_url( __FILE__ ) . 'admin.css',
-        [],
-        '6.0.0'
-    );
-    wp_enqueue_script(
-        'ssi-admin',
-        plugin_dir_url( __FILE__ ) . 'admin.js',
-        [ 'jquery', 'media-upload' ],
-        '6.0.0',
-        true
-    );
 }
 
-// ─── Save handler ─────────────────────────────────────────────────────────────
-
+/* ── Save ───────────────────────────────────────────────────────────────── */
 add_action( 'admin_post_ssi_save', 'ssi_handle_save' );
 
 function ssi_handle_save() {
     if ( ! current_user_can( 'manage_options' ) ) {
         wp_die( 'Unauthorised', 403 );
     }
-
     check_admin_referer( SSI_NONCE_ACTION, SSI_NONCE_NAME );
 
     $stored = get_option( SSI_OPTION_KEY, [] );
@@ -111,8 +90,7 @@ function ssi_handle_save() {
 
     foreach ( ssi_get_gallery_fields() as $key => $label ) {
         if ( ! empty( $_POST[ $key ] ) && is_array( $_POST[ $key ] ) ) {
-            $stored[ $key ] = array_map( 'absint', $_POST[ $key ] );
-            $stored[ $key ] = array_values( array_filter( $stored[ $key ] ) );
+            $stored[ $key ] = array_values( array_filter( array_map( 'absint', $_POST[ $key ] ) ) );
         } else {
             $stored[ $key ] = [];
         }
@@ -124,8 +102,7 @@ function ssi_handle_save() {
     exit;
 }
 
-// ─── Admin page HTML ──────────────────────────────────────────────────────────
-
+/* ── Admin page ─────────────────────────────────────────────────────────── */
 function ssi_render_admin_page() {
     if ( ! current_user_can( 'manage_options' ) ) {
         wp_die( 'Unauthorised' );
@@ -135,7 +112,6 @@ function ssi_render_admin_page() {
     if ( ! is_array( $stored ) ) {
         $stored = [];
     }
-
     $saved = isset( $_GET['saved'] ) && $_GET['saved'] === '1';
     ?>
     <div class="wrap ssi-wrap">
@@ -241,7 +217,6 @@ function ssi_render_admin_page() {
 
     <script>
     (function($){
-        // Single image uploader
         $(document).on('click', '.ssi-upload-btn', function(){
             var field = $(this).data('field');
             var container = $('#ssi-field-' + field);
@@ -273,7 +248,6 @@ function ssi_render_admin_page() {
             $(this).hide();
         });
 
-        // Gallery uploader
         $(document).on('click', '.ssi-gallery-btn', function(){
             var field = $(this).data('field');
             var container = $('#ssi-gallery-' + field);
@@ -286,16 +260,15 @@ function ssi_render_admin_page() {
             frame.on('select', function(){
                 frame.state().get('selection').each(function(attachment){
                     var id = attachment.toJSON().id;
-                    // avoid duplicates
                     if ( container.find('.ssi-gallery-ids input[value="' + id + '"]').length ) return;
                     container.find('.ssi-gallery-ids').append('<input type="hidden" name="' + field + '[]" value="' + id + '">');
                     var a = attachment.toJSON();
                     var thumb = a.sizes && a.sizes.thumbnail ? a.sizes.thumbnail.url : a.url;
                     container.find('.ssi-gallery-thumbs').append(
-                        '<div class="ssi-thumb-wrap" data-id="' + id + '">' +
-                        '<img src="' + thumb + '" alt="">' +
-                        '<button type="button" class="ssi-remove-thumb" title="Remove">&times;</button>' +
-                        '</div>'
+                        '<div class="ssi-thumb-wrap" data-id="' + id + '">'
+                        + '<img src="' + thumb + '" alt="">'
+                        + '<button type="button" class="ssi-remove-thumb" title="Remove">&times;</button>'
+                        + '</div>'
                     );
                 });
             });
@@ -321,20 +294,15 @@ function ssi_render_admin_page() {
     <?php
 }
 
-// ─── REST API ─────────────────────────────────────────────────────────────────
-
+/* ── REST endpoint ──────────────────────────────────────────────────────── */
 add_action( 'rest_api_init', 'ssi_register_rest_route' );
 
 function ssi_register_rest_route() {
-    register_rest_route(
-        SSI_REST_NAMESPACE,
-        '/' . SSI_REST_ROUTE,
-        [
-            'methods'             => WP_REST_Server::READABLE,
-            'callback'            => 'ssi_rest_response',
-            'permission_callback' => '__return_true',
-        ]
-    );
+    register_rest_route( SSI_REST_NAMESPACE, '/' . SSI_REST_ROUTE, [
+        'methods'             => WP_REST_Server::READABLE,
+        'callback'            => 'ssi_rest_response',
+        'permission_callback' => '__return_true',
+    ] );
 }
 
 function ssi_rest_response() {

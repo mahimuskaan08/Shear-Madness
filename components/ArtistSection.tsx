@@ -190,6 +190,7 @@ export default function ArtistSection({
   const inView2 = useInView(ref2, { once: true, margin: "-60px" });
 
   const isMobile = vw > 0 && vw < 768;
+  const isTablet = vw >= 768 && vw <= 1180;
 
   // Bio width mirrors portrait width formula at each breakpoint
   const bioWidth = vw >= 768 && vw <= 1180
@@ -209,7 +210,11 @@ export default function ArtistSection({
       style={{
         position: "relative",
         overflow: "hidden",
-        padding: "clamp(64px, 9vh, 112px) clamp(24px, 7vw, 96px) clamp(36px, 5vh, 60px)",
+        padding: isMobile
+          ? "clamp(64px, 9vh, 112px) clamp(24px, 7vw, 96px) clamp(36px, 5vh, 60px)"
+          : isTablet
+            ? "clamp(16px, 2.5vh, 28px) clamp(24px, 7vw, 96px) clamp(28px, 4vh, 48px)"
+            : "clamp(32px, 4vh, 56px) clamp(24px, 7vw, 96px) clamp(28px, 4vh, 48px)",
       }}
     >
       <style dangerouslySetInnerHTML={{ __html: BAMBOO_CSS }} />
@@ -250,7 +255,7 @@ export default function ArtistSection({
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.9, ease: EASE }}
-          style={{ marginBottom: "clamp(32px, 5vh, 52px)", textAlign: "center" }}
+          style={{ marginBottom: isMobile ? "clamp(32px, 5vh, 52px)" : "clamp(14px, 2vh, 24px)", textAlign: "center" }}
         >
           <p style={{
             fontFamily: "'Inter', sans-serif",
@@ -286,7 +291,7 @@ export default function ArtistSection({
           initial={{ opacity: 0, y: 16 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 1.0, ease: EASE, delay: 0.22 }}
-          style={{ textAlign: "center", marginBottom: "clamp(28px, 4.5vh, 52px)" }}
+          style={{ textAlign: "center", marginBottom: isMobile ? "clamp(28px, 4.5vh, 52px)" : "clamp(12px, 1.8vh, 20px)" }}
         >
           <blockquote style={{
             margin: "0 auto", maxWidth: 620,
