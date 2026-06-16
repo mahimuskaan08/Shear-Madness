@@ -36,7 +36,7 @@ function NavPillButton({ href, label }: { href: string; label: string }) {
         fontFamily: "'Neue World', Georgia, serif",
         fontWeight: 700,
         background: "linear-gradient(135deg, #C9A96E 0%, #B8935A 55%, #C4A96A 100%)",
-        padding: "9px 22px",
+        padding: "12px 22px",
         boxShadow: "0 4px 18px rgba(196,169,106,0.40), inset 0 1px 0 rgba(255,255,255,0.20)",
       }}
       onMouseEnter={(e) => {
@@ -119,7 +119,7 @@ export default function Navbar() {
 
           {/* ── DESKTOP NAV — glass pill, truly centered ──────────────── */}
           <nav
-            className="hidden lg:flex items-center gap-5 xl:gap-8 absolute -translate-x-1/2 py-[5px] px-[10px] xl:px-6"
+            className="hidden xl:flex items-center gap-5 xl:gap-8 absolute -translate-x-1/2 py-[10px] px-[10px] xl:px-6"
             style={{
               left: "50%",
               background: scrolled ? "transparent" : "rgba(255,255,255,0.14)",
@@ -205,7 +205,7 @@ export default function Navbar() {
           </nav>
 
           {/* ── RIGHT BUTTONS: Contact + Book Now — absolute right edge ─ */}
-          <div className="hidden lg:flex items-center gap-2 xl:gap-3 absolute right-8 xl:right-10">
+          <div className="hidden xl:flex items-center gap-2 xl:gap-3 absolute right-8 xl:right-10">
             <NavPillButton href="/contact" label="Contact" />
             <NavPillButton href="/booking" label="Book Now" />
           </div>
@@ -214,7 +214,7 @@ export default function Navbar() {
           <button
             onClick={() => setMenuOpen(!menuOpen)}
             aria-label="Toggle navigation"
-            className={`lg:hidden absolute right-4 z-[60] flex items-center justify-center w-11 h-11 ${menuOpen ? "opacity-0 pointer-events-none" : ""}`}
+            className={`xl:hidden absolute right-4 z-[60] flex items-center justify-center w-11 h-11 ${menuOpen ? "opacity-0 pointer-events-none" : ""}`}
           >
             <div className="flex flex-col justify-center gap-[5px] w-6 h-6 pointer-events-none">
               <motion.span animate={menuOpen ? { rotate: 45, y: 5 } : { rotate: 0, y: 0 }} transition={{ duration: 0.28 }} className="block h-px w-full bg-[#2C2A25]" />
