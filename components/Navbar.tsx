@@ -31,7 +31,7 @@ function NavPillButton({ href, label }: { href: string; label: string }) {
   return (
     <a
       href={href}
-      className="nav-pill-btn group relative inline-flex items-center justify-center rounded-full text-[9px] xl:text-[11.5px] tracking-[0.14em] xl:tracking-[0.16em] uppercase font-semibold text-white overflow-hidden transition-all duration-300 hover:-translate-y-0.5 py-[7px] px-[14px] xl:py-[12px] xl:px-[22px]"
+      className="nav-pill-btn group relative inline-flex items-center justify-center rounded-full text-[8px] xl:text-[11.5px] tracking-[0.12em] xl:tracking-[0.16em] uppercase font-semibold text-white overflow-hidden transition-all duration-300 hover:-translate-y-0.5 py-[5px] px-[10px] xl:py-[12px] xl:px-[22px]"
       style={{
         fontFamily: "'Neue World', Georgia, serif",
         fontWeight: 700,
@@ -83,7 +83,7 @@ export default function Navbar() {
           boxShadow: scrolled ? "0 2px 32px rgba(58,56,50,0.07)" : "none",
         }}
       >
-        <div className="w-full px-6 md:px-8 lg:px-10 flex items-center h-[66px] md:h-[80px] relative">
+        <div className="w-full px-6 md:px-8 lg:px-10 flex items-center h-[66px] md:h-[88px] relative">
 
           {/* ── LOGO — absolute left edge ─────────────────────────────── */}
           <motion.a
@@ -118,7 +118,7 @@ export default function Navbar() {
 
           {/* ── DESKTOP NAV — glass pill, truly centered ──────────────── */}
           <nav
-            className="hidden lg:flex items-center gap-5 xl:gap-8 absolute -translate-x-1/2 py-[20px] lg:px-10 xl:px-12"
+            className="hidden lg:flex items-center gap-5 xl:gap-8 absolute -translate-x-1/2 py-[28px] lg:px-14 xl:px-16"
             style={{
               left: "50%",
               background: scrolled ? "transparent" : "rgba(255,255,255,0.14)",
