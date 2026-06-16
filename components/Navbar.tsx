@@ -31,12 +31,12 @@ function NavPillButton({ href, label }: { href: string; label: string }) {
   return (
     <a
       href={href}
-      className="nav-pill-btn group relative inline-flex items-center justify-center rounded-full text-[11.5px] tracking-[0.16em] uppercase font-semibold text-white overflow-hidden transition-all duration-300 hover:-translate-y-0.5"
+      className="group relative inline-flex items-center justify-center rounded-full text-[11.5px] tracking-[0.16em] uppercase font-semibold text-white overflow-hidden transition-all duration-300 hover:-translate-y-0.5"
       style={{
         fontFamily: "'Neue World', Georgia, serif",
         fontWeight: 700,
         background: "linear-gradient(135deg, #C9A96E 0%, #B8935A 55%, #C4A96A 100%)",
-        padding: "12px 22px",
+        padding: "9px 22px",
         boxShadow: "0 4px 18px rgba(196,169,106,0.40), inset 0 1px 0 rgba(255,255,255,0.20)",
       }}
       onMouseEnter={(e) => {
@@ -80,16 +80,16 @@ export default function Navbar() {
           background: scrolled ? "rgba(252,249,244,0.92)" : "transparent",
           backdropFilter: scrolled ? "blur(18px) saturate(1.4)" : "none",
           WebkitBackdropFilter: scrolled ? "blur(18px) saturate(1.4)" : "none",
-          borderBottom: scrolled ? "1px solid rgba(196,169,106,0.18)" : "1px solid rgba(196,169,106,0)",
+          borderBottom: scrolled ? "1px solid rgba(196,169,106,0.18)" : "none",
           boxShadow: scrolled ? "0 2px 32px rgba(58,56,50,0.07)" : "none",
         }}
       >
-        <div className="w-full px-6 md:px-8 lg:px-10 flex items-center h-[66px] md:h-[72px] relative">
+        <div className="w-full px-6 md:px-10 flex items-center h-[66px] md:h-[72px] relative">
 
           {/* ── LOGO — absolute left edge ─────────────────────────────── */}
           <motion.a
             href="/"
-            className="absolute left-6 md:left-8 lg:left-10 z-10 flex items-center gap-3"
+            className="absolute left-6 md:left-10 z-10 flex items-center gap-3"
             animate={{ opacity: showBranding ? 1 : 0, pointerEvents: showBranding ? "auto" : "none" }}
             transition={{ duration: 0.4, ease: EASE }}
           >
@@ -98,28 +98,11 @@ export default function Navbar() {
               alt="Shear Madness"
               style={{ height: 38, width: "auto", objectFit: "contain" }}
             />
-            {/* Tagline hidden on tablet (md–lg), shown on desktop (lg+) */}
-            <span
-              className="hidden lg:flex flex-col justify-center"
-              style={{ borderLeft: "1px solid rgba(196,169,106,0.45)", paddingLeft: 10 }}
-            >
-              <span style={{
-                fontFamily: "Georgia, serif",
-                fontSize: "10px",
-                letterSpacing: "0.04em",
-                color: "rgba(58,56,50,0.85)",
-                fontStyle: "italic",
-                lineHeight: 1,
-                whiteSpace: "nowrap",
-              }}>
-                A Salon for Men &amp; Women
-              </span>
-            </span>
           </motion.a>
 
-          {/* ── DESKTOP NAV — glass pill, truly centered ──────────────── */}
+          {/* ── DESKTOP NAV — glass pill, truly centered ─────────────── */}
           <nav
-            className="hidden xl:flex items-center gap-5 xl:gap-8 absolute -translate-x-1/2 py-[10px] px-[10px] xl:px-6"
+            className="hidden md:flex items-center gap-4 lg:gap-6 absolute -translate-x-1/2"
             style={{
               left: "50%",
               background: scrolled ? "transparent" : "rgba(255,255,255,0.14)",
@@ -128,6 +111,7 @@ export default function Navbar() {
               border: scrolled ? "1px solid transparent" : "1px solid rgba(255,255,255,0.38)",
               borderRadius: 100,
               boxShadow: scrolled ? "none" : "0 2px 18px rgba(0,0,0,0.07), inset 0 1px 0 rgba(255,255,255,0.55)",
+              padding: "7px 16px",
               transition: "background 0.5s ease, box-shadow 0.5s ease, border-color 0.5s ease",
             }}
           >
@@ -141,7 +125,7 @@ export default function Navbar() {
                 >
                   <a
                     href={link.href}
-                    className="relative text-[#2C2A25] text-[8px] md:text-[9px] lg:text-[10px] xl:text-[11.5px] tracking-[0.08em] md:tracking-[0.10em] lg:tracking-[0.12em] xl:tracking-[0.14em] uppercase font-black transition-colors duration-300 hover:text-[#C4A96A] flex items-center gap-1 whitespace-nowrap"
+                    className="relative text-[#2C2A25] text-[10px] lg:text-[11.5px] tracking-[0.12em] lg:tracking-[0.14em] uppercase font-black transition-colors duration-300 hover:text-[#C4A96A] flex items-center gap-1 whitespace-nowrap"
                     style={{ fontFamily: "'Neue World', Georgia, serif", fontWeight: 900 }}
                   >
                     {link.label}
@@ -194,7 +178,7 @@ export default function Navbar() {
                 <a
                   key={link.label}
                   href={link.href}
-                  className="relative text-[#2C2A25] text-[8px] md:text-[9px] lg:text-[10px] xl:text-[11.5px] tracking-[0.08em] md:tracking-[0.10em] lg:tracking-[0.12em] xl:tracking-[0.14em] uppercase font-black transition-colors duration-300 hover:text-[#C4A96A] group whitespace-nowrap"
+                  className="relative text-[#2C2A25] text-[10px] lg:text-[11.5px] tracking-[0.12em] lg:tracking-[0.14em] uppercase font-black transition-colors duration-300 hover:text-[#C4A96A] group whitespace-nowrap"
                   style={{ fontFamily: "'Neue World', Georgia, serif", fontWeight: 900 }}
                 >
                   {link.label}
@@ -205,16 +189,16 @@ export default function Navbar() {
           </nav>
 
           {/* ── RIGHT BUTTONS: Contact + Book Now — absolute right edge ─ */}
-          <div className="hidden xl:flex items-center gap-2 xl:gap-3 absolute right-8 xl:right-10">
+          <div className="hidden lg:flex items-center gap-3 absolute right-6 lg:right-10">
             <NavPillButton href="/contact" label="Contact" />
             <NavPillButton href="/booking" label="Book Now" />
           </div>
 
-          {/* ── HAMBURGER (mobile + tablet, hidden on desktop) ───────── */}
+          {/* ── MOBILE HAMBURGER ──────────────────────────────────────── */}
           <button
             onClick={() => setMenuOpen(!menuOpen)}
             aria-label="Toggle navigation"
-            className={`xl:hidden absolute right-4 z-[60] flex items-center justify-center w-11 h-11 ${menuOpen ? "opacity-0 pointer-events-none" : ""}`}
+            className="md:hidden absolute right-4 z-[60] flex items-center justify-center w-11 h-11"
           >
             <div className="flex flex-col justify-center gap-[5px] w-6 h-6 pointer-events-none">
               <motion.span animate={menuOpen ? { rotate: 45, y: 5 } : { rotate: 0, y: 0 }} transition={{ duration: 0.28 }} className="block h-px w-full bg-[#2C2A25]" />
@@ -230,23 +214,12 @@ export default function Navbar() {
         initial={false}
         animate={menuOpen ? { opacity: 1, pointerEvents: "auto" as const } : { opacity: 0, pointerEvents: "none" as const }}
         transition={{ duration: 0.35 }}
-        className="fixed inset-0 z-[55] flex flex-col items-center overflow-y-auto"
+        className="fixed inset-0 z-[55] flex flex-col items-center justify-center"
         style={{ background: "rgba(250,246,239,0.97)", backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)" }}
       >
-        {/* ── Close (X) button ────────────────────────────────────────── */}
-        <button
-          onClick={() => setMenuOpen(false)}
-          aria-label="Close menu"
-          className="absolute top-5 right-5 z-[65] flex items-center justify-center w-11 h-11 rounded-full border border-[rgba(196,169,106,0.45)] bg-[rgba(253,250,244,0.85)] hover:bg-[rgba(196,169,106,0.12)] transition-colors duration-200"
-        >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2C2A25" strokeWidth="2" strokeLinecap="round">
-            <path d="M18 6L6 18M6 6l12 12" />
-          </svg>
-        </button>
-
         <div className="absolute top-24 left-1/2 -translate-x-1/2 w-12 h-px bg-[#C4A96A]/40" />
 
-        <div className="flex flex-col items-center gap-4 pt-20 pb-10">
+        <div className="flex flex-col items-center gap-7 mt-8">
           {navLinks.map((link, i) =>
             link.dropdown ? (
               <div key={link.label} className="flex flex-col items-center gap-3">
