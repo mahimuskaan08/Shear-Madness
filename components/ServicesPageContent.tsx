@@ -186,16 +186,6 @@ const PETAL_COLORS = [
 // STYLES
 // ─────────────────────────────────────────────────────────────────────────────
 const STYLES = `
-  /* iPad/tablet: lock the bg layer to the small viewport height (address bar visible)
-     so it cannot resize when iPadOS Safari collapses the address bar on first scroll.
-     position:fixed is kept — only height is stabilised via 100svh. */
-  @media (min-width: 641px) and (max-width: 1366px) {
-    .svc-bg-layer {
-      bottom: auto !important;
-      min-height: 100svh !important;
-    }
-  }
-
   /* Tablet (641–1024px): bigger, more legible headings */
   @media (min-width: 641px) and (max-width: 1024px) {
     .svc-hero-eyebrow  { font-size: 0.78rem !important; letter-spacing: 0.36em !important; }
