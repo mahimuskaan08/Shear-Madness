@@ -106,7 +106,7 @@ const HERO_FADE = `
   }
 }
 
-/* ── TABLET (768–1024px): full-viewport hero, contain so full image visible ── */
+/* ── TABLET (768–1024px): size section to image ratio so contain has no bars ── */
 @media (min-width: 768px) and (max-width: 1024px) {
   .hero-bg-img {
     object-fit: contain !important;
@@ -116,9 +116,9 @@ const HERO_FADE = `
     background: #ede8e3 !important;
   }
   .hero-section {
-    height: 100svh !important;
-    min-height: 680px !important;
-    aspect-ratio: unset !important;
+    height: auto !important;
+    min-height: 0 !important;
+    aspect-ratio: 2528 / 1522 !important;
   }
   .hero-content-wrap {
     margin-top: 4% !important;

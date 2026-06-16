@@ -146,11 +146,11 @@ img {
    ─────────────────────────────────────────────────────────────────────────── */
 @media (min-width: 768px) and (max-width: 1180px) {
 
-  /* ── HERO ── full-viewport, full image visible with contain + cream fill */
+  /* ── HERO ── size section to image ratio so contain has no cream bars ── */
   .hero-section {
-    height: 100svh !important;
-    min-height: 680px !important;
-    aspect-ratio: unset !important;
+    height: auto !important;
+    min-height: 0 !important;
+    aspect-ratio: 2528 / 1522 !important;
   }
   .hero-bg-img {
     object-fit: contain !important;
@@ -225,6 +225,64 @@ img {
   h1, h2, h3, h4, p, li {
     overflow-wrap: break-word;
     word-break: break-word;
+  }
+}
+
+/* ── SERVICES PAGE: cover fills the full viewport on all non-mobile sizes ────
+   services-bg.png is a scattered decorative image (birds, koi, scissors) —
+   unlike the hero's composed scene, slight edge-cropping is imperceptible.
+   cover = no side bars, no bottom gap, full viewport coverage on every device.
+   Mobile (≤767px) untouched — existing mobile block handles it separately.
+   ─────────────────────────────────────────────────────────────────────────── */
+@media (min-width: 768px) {
+  .svc-bg-layer {
+    bottom: 0 !important;
+    height: 100% !important;
+    aspect-ratio: unset !important;
+    background-size: cover !important;
+    background-position: center top !important;
+  }
+}
+
+/* ── BOOKING PAGE: cover fills the full viewport on all non-mobile sizes ─────
+   booking-bg.jpg is 1200×800 — a wide panoramic painting (birds, mountains,
+   cherry blossoms). cover eliminates all gaps with minimal edge-cropping.
+   Mobile (≤767px) untouched — inherits inline contain / inset:0.
+   ─────────────────────────────────────────────────────────────────────────── */
+@media (min-width: 768px) {
+  .booking-bg-fixed {
+    bottom: 0 !important;
+    height: 100% !important;
+    aspect-ratio: unset !important;
+    background-size: cover !important;
+    background-position: center top !important;
+  }
+}
+
+/* ── CREDITS PAGE: 100% auto — full image width, no side cropping ────────────
+   background-size: 100% auto fills the full viewport width so the image
+   composition (cherry blossom branches) is never cropped on either side.
+   On all laptops/desktops the proportional height exceeds the viewport so
+   there is no bottom gap. On portrait iPads the div's own #FAF6EF fills
+   below the image and blends with the existing overlay seamlessly.
+   Mobile (≤767px) untouched — inherits inline contain / inset:0.
+   ─────────────────────────────────────────────────────────────────────────── */
+@media (min-width: 768px) {
+  .credits-bg-fixed {
+    bottom: 0 !important;
+    height: 100% !important;
+    aspect-ratio: unset !important;
+    background-size: 100% auto !important;
+    background-position: center top !important;
+  }
+}
+
+/* ── DESKTOP (≥1181px): same aspect-ratio fix as tablet so no cream bars ──── */
+@media (min-width: 1181px) {
+  .hero-section {
+    height: auto !important;
+    min-height: 0 !important;
+    aspect-ratio: 2528 / 1522 !important;
   }
 }
 

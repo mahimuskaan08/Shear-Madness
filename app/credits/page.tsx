@@ -23,7 +23,7 @@ export default async function CreditsPage() {
         padding: "clamp(110px, 15vh, 150px) clamp(24px, 8vw, 96px) clamp(72px, 10vh, 100px)",
       }}>
         {/* Fixed background — viewport-locked so cover never zooms into a tall page */}
-        <div aria-hidden style={{
+        <div aria-hidden className="credits-bg-fixed" style={{
           position: "fixed", inset: 0, zIndex: 0, pointerEvents: "none",
           backgroundImage: `url('${creditsBg}')`,
           backgroundSize: "contain",

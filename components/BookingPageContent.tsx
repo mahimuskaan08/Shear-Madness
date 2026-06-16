@@ -745,7 +745,7 @@ export default function BookingPageContent({ bgImage }: { bgImage?: string }) {
       }}
     >
       {/* Fixed full background — no overlay so full image shows */}
-      <div aria-hidden style={{
+      <div aria-hidden className="booking-bg-fixed" style={{
         position: "fixed", inset: 0, zIndex: 0, pointerEvents: "none",
         backgroundImage: `url('${resolvedBg}')`,
         backgroundSize: "contain",
