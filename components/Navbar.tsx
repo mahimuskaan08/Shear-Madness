@@ -31,11 +31,12 @@ function NavPillButton({ href, label }: { href: string; label: string }) {
   return (
     <a
       href={href}
-      className="nav-pill-btn group relative inline-flex items-center justify-center rounded-full text-[8px] xl:text-[11.5px] tracking-[0.12em] xl:tracking-[0.16em] uppercase font-semibold text-white overflow-hidden transition-all duration-300 hover:-translate-y-0.5 py-[5px] px-[10px] xl:py-[12px] xl:px-[22px]"
+      className="nav-pill-btn group relative inline-flex items-center justify-center rounded-full text-[11.5px] tracking-[0.16em] uppercase font-semibold text-white overflow-hidden transition-all duration-300 hover:-translate-y-0.5"
       style={{
         fontFamily: "'Neue World', Georgia, serif",
         fontWeight: 700,
         background: "linear-gradient(135deg, #C9A96E 0%, #B8935A 55%, #C4A96A 100%)",
+        padding: "12px 22px",
         boxShadow: "0 4px 18px rgba(196,169,106,0.40), inset 0 1px 0 rgba(255,255,255,0.20)",
       }}
       onMouseEnter={(e) => {
@@ -83,7 +84,7 @@ export default function Navbar() {
           boxShadow: scrolled ? "0 2px 32px rgba(58,56,50,0.07)" : "none",
         }}
       >
-        <div className="w-full px-6 md:px-8 lg:px-10 flex items-center h-[66px] md:h-[88px] relative">
+        <div className="w-full px-6 md:px-8 lg:px-10 flex items-center h-[66px] md:h-[72px] relative">
 
           {/* ── LOGO — absolute left edge ─────────────────────────────── */}
           <motion.a
@@ -118,7 +119,7 @@ export default function Navbar() {
 
           {/* ── DESKTOP NAV — glass pill, truly centered ──────────────── */}
           <nav
-            className="hidden lg:flex items-center gap-5 xl:gap-8 absolute -translate-x-1/2 py-[36px] lg:px-[10px] xl:px-[22px]"
+            className="hidden xl:flex items-center gap-5 xl:gap-8 absolute -translate-x-1/2 py-[10px] px-[10px] xl:px-6"
             style={{
               left: "50%",
               background: scrolled ? "transparent" : "rgba(255,255,255,0.14)",
@@ -204,7 +205,7 @@ export default function Navbar() {
           </nav>
 
           {/* ── RIGHT BUTTONS: Contact + Book Now — absolute right edge ─ */}
-          <div className="hidden lg:flex items-center gap-2 xl:gap-3 absolute right-10 xl:right-14">
+          <div className="hidden xl:flex items-center gap-2 xl:gap-3 absolute right-8 xl:right-10">
             <NavPillButton href="/contact" label="Contact" />
             <NavPillButton href="/booking" label="Book Now" />
           </div>
@@ -213,7 +214,7 @@ export default function Navbar() {
           <button
             onClick={() => setMenuOpen(!menuOpen)}
             aria-label="Toggle navigation"
-            className={`lg:hidden absolute right-4 z-[60] flex items-center justify-center w-11 h-11 ${menuOpen ? "opacity-0 pointer-events-none" : ""}`}
+            className={`xl:hidden absolute right-4 z-[60] flex items-center justify-center w-11 h-11 ${menuOpen ? "opacity-0 pointer-events-none" : ""}`}
           >
             <div className="flex flex-col justify-center gap-[5px] w-6 h-6 pointer-events-none">
               <motion.span animate={menuOpen ? { rotate: 45, y: 5 } : { rotate: 0, y: 0 }} transition={{ duration: 0.28 }} className="block h-px w-full bg-[#2C2A25]" />
