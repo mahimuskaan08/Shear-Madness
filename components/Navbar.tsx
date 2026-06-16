@@ -84,7 +84,7 @@ export default function Navbar() {
           boxShadow: scrolled ? "0 2px 32px rgba(58,56,50,0.07)" : "none",
         }}
       >
-        <div className="w-full px-6 md:px-8 lg:px-10 flex items-center h-[66px] md:h-[72px] relative">
+        <div className="w-full px-6 md:px-8 lg:px-10 flex items-center h-[66px] md:h-[80px] relative">
 
           {/* ── LOGO — absolute left edge ─────────────────────────────── */}
           <motion.a
@@ -119,7 +119,7 @@ export default function Navbar() {
 
           {/* ── DESKTOP NAV — glass pill, truly centered ──────────────── */}
           <nav
-            className="hidden xl:flex items-center gap-5 xl:gap-8 absolute -translate-x-1/2 py-[10px] px-[10px] xl:px-6"
+            className="hidden xl:flex items-center gap-5 xl:gap-8 absolute -translate-x-1/2 py-[20px] px-6 xl:px-12"
             style={{
               left: "50%",
               background: scrolled ? "transparent" : "rgba(255,255,255,0.14)",
@@ -205,7 +205,7 @@ export default function Navbar() {
           </nav>
 
           {/* ── RIGHT BUTTONS: Contact + Book Now — absolute right edge ─ */}
-          <div className="hidden xl:flex items-center gap-2 xl:gap-3 absolute right-8 xl:right-10">
+          <div className="hidden xl:flex items-center gap-2 xl:gap-3 absolute right-10 xl:right-14">
             <NavPillButton href="/contact" label="Contact" />
             <NavPillButton href="/booking" label="Book Now" />
           </div>
