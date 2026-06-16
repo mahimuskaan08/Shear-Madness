@@ -261,7 +261,7 @@ export default function ArtistSection({
             fontFamily: "'Inter', sans-serif",
             fontSize: "0.62rem", fontWeight: 700,
             letterSpacing: "0.30em", textTransform: "uppercase",
-            color: "#7A5C10", marginBottom: 8,
+            color: "#7A5C10", marginBottom: 3,
           }}>
             Meet the Artists
           </p>
@@ -269,7 +269,7 @@ export default function ArtistSection({
             fontFamily: "'Cormorant Garamond', Georgia, serif",
             fontSize: "clamp(2.8rem, 6vw, 5.2rem)",
             fontWeight: 600, lineHeight: 1.0,
-            letterSpacing: "0.01em", color: "#556B2F", marginBottom: 14,
+            letterSpacing: "0.01em", color: "#556B2F", marginBottom: 6,
             display: "inline-block",
             background: "rgba(255,252,245,0.45)",
             backdropFilter: "blur(6px)",
