@@ -186,6 +186,14 @@ const PETAL_COLORS = [
 // STYLES
 // ─────────────────────────────────────────────────────────────────────────────
 const STYLES = `
+  /* Tablet (641–1024px): position:absolute prevents the fixed bg from
+     repainting mid-scroll when iPadOS Safari hides/shows the address bar. */
+  @media (min-width: 641px) and (max-width: 1024px) {
+    .svc-bg-layer {
+      position: absolute !important;
+    }
+  }
+
   /* Tablet (641–1024px): bigger, more legible headings */
   @media (min-width: 641px) and (max-width: 1024px) {
     .svc-hero-eyebrow  { font-size: 0.78rem !important; letter-spacing: 0.36em !important; }
