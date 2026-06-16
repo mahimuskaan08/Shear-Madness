@@ -71,7 +71,18 @@
       "PowerShell($nodePath = \"C:\\\\Users\\\\mahi0\\\\AppData\\\\Local\\\\node-portable\\\\node-v22.16.0-win-x64\"; $env:PATH = \"$nodePath;$env:APPDATA\\\\npm;$env:PATH\"; vercel --prod 2>&1)",
       "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/contact)",
       "PowerShell($nodePath = \"C:\\\\Users\\\\mahi0\\\\AppData\\\\Local\\\\node-portable\\\\node-v22.16.0-win-x64\"; $env:PATH = \"$nodePath;$env:APPDATA\\\\npm;$env:PATH\"; cd \"c:\\\\Shear\"; git push origin master; vercel --prod 2>&1)",
-      "Bash(git rm *)"
+      "Bash(git rm *)",
+      "Bash(ping -n 5 127.0.0.1)",
+      "Bash(curl -s -o nul -w \"%{http_code}\" http://localhost:3000)",
+      "PowerShell(Start-Process powershell -ArgumentList \"-NoExit\", \"-Command\", \"cd 'c:\\\\Shear'; npm run dev\" -WindowStyle Normal)",
+      "Bash(Start-Sleep -Seconds 5)",
+      "Bash(Get-Content \"C:\\\\Users\\\\mahi0\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Shear\\\\79d61e82-2683-4375-bb6b-f5f39de1b477\\\\tasks\\\\b8yf06wo0.output\" -Tail 20)",
+      "PowerShell(Get-ChildItem \"C:\\\\Program Files\\\\nodejs\\\\npm.cmd\" -ErrorAction SilentlyContinue; Get-ChildItem \"$env:APPDATA\\\\npm\\\\npm.cmd\" -ErrorAction SilentlyContinue; Get-ChildItem \"C:\\\\Users\\\\mahi0\\\\AppData\\\\Roaming\\\\nvm\" -ErrorAction SilentlyContinue | Select-Object -First 5)",
+      "Read(//c//**)",
+      "PowerShell(Test-Path \"C:\\\\Program Files\\\\nodejs\"; Test-Path \"C:\\\\nvm\"; Test-Path \"$env:LOCALAPPDATA\\\\nvm\"; Test-Path \"$env:APPDATA\\\\nvm\")",
+      "PowerShell([System.Environment]::GetEnvironmentVariable\\(\"PATH\", \"User\"\\) -split ';' | Where-Object { $_ -ne \"\" })",
+      "PowerShell([System.Environment]::GetEnvironmentVariable\\(\"PATH\", \"Machine\"\\) -split ';' | Where-Object { $_ -ne \"\" })",
+      "PowerShell(& \"C:\\\\Users\\\\mahi0\\\\AppData\\\\Roaming\\\\npm\\\\vercel.cmd\" --version 2>&1)"
     ]
   }
 }

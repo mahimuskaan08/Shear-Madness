@@ -118,7 +118,7 @@ export default function Navbar() {
 
           {/* ── DESKTOP NAV — glass pill, truly centered ──────────────── */}
           <nav
-            className="hidden lg:flex items-center gap-5 xl:gap-8 absolute -translate-x-1/2 py-[28px] lg:px-14 xl:px-16"
+            className="hidden lg:flex items-center gap-5 xl:gap-8 absolute -translate-x-1/2 py-[36px] lg:px-[10px] xl:px-[22px]"
             style={{
               left: "50%",
               background: scrolled ? "transparent" : "rgba(255,255,255,0.14)",
