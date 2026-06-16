@@ -478,7 +478,7 @@ function CategorySection({ cat }: { cat: CategoryData }) {
   const inView = useInView(ref, { once: true, margin: "-60px" });
 
   return (
-    <section ref={ref} id={cat.id} style={{ background: "transparent", padding:`${cat.id === "womens" ? "clamp(4px,0.45vh,6px)" : "clamp(7px,0.9vh,11px)"} clamp(24px,7vw,96px)`, position:"relative" }}>
+    <section ref={ref} id={cat.id} style={{ background: "transparent", padding:`${cat.id === "womens" ? "clamp(4px,0.45vh,6px)" : "clamp(7px,0.9vh,11px)"} clamp(24px,7vw,96px)`, position:"relative", scrollMarginTop:"calc(var(--navbar-h) + 16px)" }}>
 
 
       <div style={{ maxWidth:1280, margin:"0 auto", display:"flex", flexDirection:"column", gap:"clamp(4px,0.5vh,6px)" }}>

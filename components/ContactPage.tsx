@@ -274,6 +274,16 @@ export default function ContactPage({
             />
 
             <div style={{
+              background: "rgba(245,242,237,0.22)",
+              backdropFilter: "blur(4px)",
+              WebkitBackdropFilter: "blur(4px)",
+              borderRadius: 16,
+              padding: "clamp(28px, 4vw, 40px) clamp(24px, 4vw, 36px)",
+              boxShadow: "0 4px 32px rgba(0,0,0,0.08)",
+              border: "1px solid rgba(198,167,107,0.20)",
+              position: "relative", zIndex: 1,
+            }}>
+            <div style={{
               display: "flex", flexDirection: "column",
               gap: "clamp(26px, 3.2vh, 36px)",
               position: "relative", zIndex: 1,
@@ -350,6 +360,7 @@ export default function ContactPage({
                 </a>
               </motion.div>
 
+            </div>
             </div>
           </motion.div>
 
