@@ -15,6 +15,17 @@ const ALLOWED_SERVICES = new Set([
   "Brazilian Keratin Treatment", "Japanese Relaxer",
 ]);
 
+// ── Rate limiter (in-memory, per IP, 5 req / 60 s) ───────────────────────────
+const rlMap = new Map<string, { count: number; reset: number }>();
+function isRateLimited(ip: string): boolean {
+  const now = Date.now();
+  const entry = rlMap.get(ip);
+  if (!entry || now > entry.reset) { rlMap.set(ip, { count: 1, reset: now + 60_000 }); return false; }
+  if (entry.count >= 5) return true;
+  entry.count++;
+  return false;
+}
+
 // ── Helpers ───────────────────────────────────────────────────────────────────
 function strip(s: string): string {
   return s.replace(/<[^>]*>/g, "").trim();
@@ -44,6 +55,12 @@ export async function PATCH()  { return NextResponse.json({ error: "Method not a
 
 // ── POST /api/booking ─────────────────────────────────────────────────────────
 export async function POST(req: NextRequest) {
+  // Rate limit
+  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
+  if (isRateLimited(ip)) {
+    return NextResponse.json({ error: "Too many requests. Please try again later." }, { status: 429 });
+  }
+
   // Body size guard (16 KB is far more than enough)
   const contentLength = Number(req.headers.get("content-length") ?? 0);
   if (contentLength > 16_384) {
@@ -56,6 +73,7 @@ export async function POST(req: NextRequest) {
   const GF_PRIVATE_KEY = process.env.GF_PRIVATE_API_KEY   ?? "";
 
   if (!WP_BASE_URL || !GF_PUBLIC_KEY || !GF_PRIVATE_KEY) {
+    console.error("[booking] Missing env vars");
     return NextResponse.json(
       { error: "Server configuration error. Please call us to book your appointment." },
       { status: 500 },
@@ -142,8 +160,10 @@ export async function POST(req: NextRequest) {
       method:  "POST",
       headers: { "Content-Type": "application/json" },
       body:    JSON.stringify({ input_values }),
+      cache:   "no-store",
     });
   } catch {
+    console.error("[booking] Network error reaching GF API");
     return NextResponse.json(
       { error: "Could not reach the booking system. Please call us to book your appointment." },
       { status: 502 },
@@ -154,6 +174,7 @@ export async function POST(req: NextRequest) {
   try {
     gfData = await gfRes.json();
   } catch {
+    console.error("[booking] GF API returned non-JSON");
     return NextResponse.json(
       { error: "Unexpected response from booking system. Please call us to book." },
       { status: 502 },
@@ -168,12 +189,14 @@ export async function POST(req: NextRequest) {
   }
 
   if (gfStatus === 200 && gfResponse?.is_valid === false) {
+    console.error("[booking] GF validation failed:", gfResponse?.validation_messages);
     return NextResponse.json(
       { error: "Some fields could not be validated. Please review your details and try again." },
       { status: 422 },
     );
   }
 
+  console.error("[booking] Unexpected GF response:", gfRes.status, gfData);
   return NextResponse.json(
     { error: "Something went wrong. Please call us to book your appointment." },
     { status: 500 },

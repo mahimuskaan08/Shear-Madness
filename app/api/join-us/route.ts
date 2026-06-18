@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import crypto from "crypto";
 
 // ── Allowlist ─────────────────────────────────────────────────────────────────
 const ALLOWED_POSITIONS = new Set([
@@ -45,12 +44,10 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Request too large." }, { status: 413 });
   }
 
-  const WP_BASE_URL    = (process.env.WP_BASE_URL        ?? "").replace(/\/$/, "");
-  const GF_FORM_ID     = process.env.GF_JOIN_FORM_ID      ?? "4";
-  const GF_PUBLIC_KEY  = process.env.GF_PUBLIC_API_KEY    ?? "";
-  const GF_PRIVATE_KEY = process.env.GF_PRIVATE_API_KEY   ?? "";
+  const WP_BASE_URL = (process.env.WP_BASE_URL ?? "").replace(/\/$/, "");
+  const BOOKING_SECRET = process.env.SHEAR_BOOKING_SECRET ?? "";
 
-  if (!WP_BASE_URL || !GF_PUBLIC_KEY || !GF_PRIVATE_KEY) {
+  if (!WP_BASE_URL || !BOOKING_SECRET) {
     console.error("[join-us] Missing env vars");
     return NextResponse.json(
       { error: "Server configuration error. Please email us to apply." },
@@ -108,59 +105,51 @@ export async function POST(req: NextRequest) {
     input_7: position,
   };
 
-  // HMAC-SHA1 signing — identical to confirmed working format
-  const route     = `forms/${GF_FORM_ID}/submissions`;
-  const expires   = Math.floor(Date.now() / 1000) + 3600;
-  const signature = crypto
-    .createHmac("sha1", GF_PRIVATE_KEY)
-    .update(`${GF_PUBLIC_KEY}:POST:${route}:${expires}`)
-    .digest("base64");
+  // Submit via the internal WordPress booking bridge (GFAPI), not the external
+  // Gravity Forms REST API — that path is blocked by Cloudflare's bot challenge
+  // for server-to-server requests.
+  const bridgeUrl = `${WP_BASE_URL}/wp-json/shear/v1/apply`;
 
-  const params = new URLSearchParams({ api_key: GF_PUBLIC_KEY, signature, expires: String(expires) });
-  const gfUrl  = `${WP_BASE_URL}/gravityformsapi/${route}?${params}`;
-
-  let gfRes: Response;
+  let bridgeRes: Response;
   try {
-    gfRes = await fetch(gfUrl, {
+    bridgeRes = await fetch(bridgeUrl, {
       method:  "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", "X-Shear-Secret": BOOKING_SECRET },
       body:    JSON.stringify({ input_values }),
+      cache:   "no-store",
     });
   } catch {
-    console.error("[join-us] Network error reaching GF");
+    console.error("[join-us] Network error reaching booking bridge");
     return NextResponse.json(
       { error: "Could not reach the application system. Please email us to apply." },
       { status: 502 },
     );
   }
 
-  let gfData: Record<string, unknown>;
+  let bridgeData: Record<string, unknown>;
   try {
-    gfData = await gfRes.json();
+    bridgeData = await bridgeRes.json();
   } catch {
-    console.error("[join-us] GF returned non-JSON");
+    console.error("[join-us] Booking bridge returned non-JSON");
     return NextResponse.json(
       { error: "Unexpected response from application system. Please email us to apply." },
       { status: 502 },
     );
   }
 
-  const gfStatus   = typeof gfData?.status   === "number" ? gfData.status                                      : 0;
-  const gfResponse = typeof gfData?.response === "object" ? (gfData.response as Record<string, unknown>) : null;
-
-  if (gfStatus === 200 && gfResponse?.is_valid === true) {
+  if (bridgeRes.ok && bridgeData?.success === true) {
     return NextResponse.json({ success: true });
   }
 
-  if (gfStatus === 200 && gfResponse?.is_valid === false) {
-    console.error("[join-us] GF validation failed (status 200, is_valid false)");
+  if (bridgeRes.status === 422) {
+    console.error("[join-us] GF validation failed:", bridgeData?.validation_messages);
     return NextResponse.json(
       { error: "Some fields could not be validated. Please review your details and try again." },
       { status: 422 },
     );
   }
 
-  console.error("[join-us] Unexpected GF status:", gfStatus);
+  console.error("[join-us] Unexpected bridge response:", bridgeRes.status, bridgeData);
   return NextResponse.json(
     { error: "Something went wrong. Please email us to apply." },
     { status: 500 },
