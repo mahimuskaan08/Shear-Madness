@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import crypto from "crypto";
+
+export const runtime = "edge";
 
 // ── Allowlists ────────────────────────────────────────────────────────────────
 const ALLOWED_STYLISTS = new Set([
@@ -14,19 +15,6 @@ const ALLOWED_SERVICES = new Set([
   "Brazilian Keratin Treatment", "Japanese Relaxer",
 ]);
 
-// ── Rate limiter (in-memory, per IP, 5 req / 60 s) ───────────────────────────
-// Note: Vercel may run multiple function instances; this limits bursts
-// within one instance. Effective against naive bots; not a distributed solution.
-const rlMap = new Map<string, { count: number; reset: number }>();
-function isRateLimited(ip: string): boolean {
-  const now = Date.now();
-  const entry = rlMap.get(ip);
-  if (!entry || now > entry.reset) { rlMap.set(ip, { count: 1, reset: now + 60_000 }); return false; }
-  if (entry.count >= 5) return true;
-  entry.count++;
-  return false;
-}
-
 // ── Helpers ───────────────────────────────────────────────────────────────────
 function strip(s: string): string {
   return s.replace(/<[^>]*>/g, "").trim();
@@ -34,6 +22,19 @@ function strip(s: string): string {
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PHONE_RE = /^[\d\s\-()+.]{7,20}$/;
+
+async function hmacSha1Base64(key: string, message: string): Promise<string> {
+  const enc = new TextEncoder();
+  const cryptoKey = await crypto.subtle.importKey(
+    "raw",
+    enc.encode(key),
+    { name: "HMAC", hash: "SHA-1" },
+    false,
+    ["sign"],
+  );
+  const sig = await crypto.subtle.sign("HMAC", cryptoKey, enc.encode(message));
+  return btoa(String.fromCharCode(...new Uint8Array(sig)));
+}
 
 // ── 405 for every method except POST ─────────────────────────────────────────
 export async function GET()    { return NextResponse.json({ error: "Method not allowed." }, { status: 405 }); }
@@ -43,12 +44,6 @@ export async function PATCH()  { return NextResponse.json({ error: "Method not a
 
 // ── POST /api/booking ─────────────────────────────────────────────────────────
 export async function POST(req: NextRequest) {
-  // Rate limit
-  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
-  if (isRateLimited(ip)) {
-    return NextResponse.json({ error: "Too many requests. Please try again later." }, { status: 429 });
-  }
-
   // Body size guard (16 KB is far more than enough)
   const contentLength = Number(req.headers.get("content-length") ?? 0);
   if (contentLength > 16_384) {
@@ -61,7 +56,6 @@ export async function POST(req: NextRequest) {
   const GF_PRIVATE_KEY = process.env.GF_PRIVATE_API_KEY   ?? "";
 
   if (!WP_BASE_URL || !GF_PUBLIC_KEY || !GF_PRIVATE_KEY) {
-    console.error("[booking] Missing env vars");
     return NextResponse.json(
       { error: "Server configuration error. Please call us to book your appointment." },
       { status: 500 },
@@ -113,7 +107,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Please enter a valid phone number (digits, spaces, dashes, parentheses)." }, { status: 422 });
   }
 
-  // Allowlist validation — unknown values are dropped, not forwarded to GF
+  // Allowlist validation
   const safeStylest  = ALLOWED_STYLISTS.has(stylist) ? stylist : "No Preference";
   const safeServices = rawServices
     .map((s) => strip(String(s)))
@@ -134,13 +128,10 @@ export async function POST(req: NextRequest) {
     input_27: notes,
   };
 
-  // HMAC-SHA1 signing — identical to confirmed working format
+  // HMAC-SHA1 signing via Web Crypto (Edge-compatible)
   const route     = `forms/${GF_FORM_ID}/submissions`;
   const expires   = Math.floor(Date.now() / 1000) + 3600;
-  const signature = crypto
-    .createHmac("sha1", GF_PRIVATE_KEY)
-    .update(`${GF_PUBLIC_KEY}:POST:${route}:${expires}`)
-    .digest("base64");
+  const signature = await hmacSha1Base64(GF_PRIVATE_KEY, `${GF_PUBLIC_KEY}:POST:${route}:${expires}`);
 
   const params = new URLSearchParams({ api_key: GF_PUBLIC_KEY, signature, expires: String(expires) });
   const gfUrl  = `${WP_BASE_URL}/gravityformsapi/${route}?${params}`;
@@ -153,7 +144,6 @@ export async function POST(req: NextRequest) {
       body:    JSON.stringify({ input_values }),
     });
   } catch {
-    console.error("[booking] Network error reaching GF");
     return NextResponse.json(
       { error: "Could not reach the booking system. Please call us to book your appointment." },
       { status: 502 },
@@ -164,7 +154,6 @@ export async function POST(req: NextRequest) {
   try {
     gfData = await gfRes.json();
   } catch {
-    console.error("[booking] GF returned non-JSON");
     return NextResponse.json(
       { error: "Unexpected response from booking system. Please call us to book." },
       { status: 502 },
@@ -179,14 +168,12 @@ export async function POST(req: NextRequest) {
   }
 
   if (gfStatus === 200 && gfResponse?.is_valid === false) {
-    console.error("[booking] GF validation failed (status 200, is_valid false)");
     return NextResponse.json(
       { error: "Some fields could not be validated. Please review your details and try again." },
       { status: 422 },
     );
   }
 
-  console.error("[booking] Unexpected GF status:", gfStatus);
   return NextResponse.json(
     { error: "Something went wrong. Please call us to book your appointment." },
     { status: 500 },
