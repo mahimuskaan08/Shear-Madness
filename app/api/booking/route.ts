@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 
-export const runtime = "edge";
-
 // ── Allowlists ────────────────────────────────────────────────────────────────
 const ALLOWED_STYLISTS = new Set([
   "No Preference", "George Fraggos", "Oscar Victor",
@@ -34,19 +32,6 @@ function strip(s: string): string {
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PHONE_RE = /^[\d\s\-()+.]{7,20}$/;
 
-async function hmacSha1Base64(key: string, message: string): Promise<string> {
-  const enc = new TextEncoder();
-  const cryptoKey = await crypto.subtle.importKey(
-    "raw",
-    enc.encode(key),
-    { name: "HMAC", hash: "SHA-1" },
-    false,
-    ["sign"],
-  );
-  const sig = await crypto.subtle.sign("HMAC", cryptoKey, enc.encode(message));
-  return btoa(String.fromCharCode(...new Uint8Array(sig)));
-}
-
 // ── 405 for every method except POST ─────────────────────────────────────────
 export async function GET()    { return NextResponse.json({ error: "Method not allowed." }, { status: 405 }); }
 export async function PUT()    { return NextResponse.json({ error: "Method not allowed." }, { status: 405 }); }
@@ -67,12 +52,10 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Request too large." }, { status: 413 });
   }
 
-  const WP_BASE_URL    = (process.env.WP_BASE_URL        ?? "").replace(/\/$/, "");
-  const GF_FORM_ID     = process.env.GF_FORM_ID           ?? "2";
-  const GF_PUBLIC_KEY  = process.env.GF_PUBLIC_API_KEY    ?? "";
-  const GF_PRIVATE_KEY = process.env.GF_PRIVATE_API_KEY   ?? "";
+  const WP_BASE_URL    = (process.env.WP_BASE_URL ?? "").replace(/\/$/, "");
+  const BOOKING_SECRET = process.env.SHEAR_BOOKING_SECRET ?? "";
 
-  if (!WP_BASE_URL || !GF_PUBLIC_KEY || !GF_PRIVATE_KEY) {
+  if (!WP_BASE_URL || !BOOKING_SECRET) {
     console.error("[booking] Missing env vars");
     return NextResponse.json(
       { error: "Server configuration error. Please call us to book your appointment." },
@@ -146,57 +129,50 @@ export async function POST(req: NextRequest) {
     input_27: notes,
   };
 
-  // HMAC-SHA1 signing via Web Crypto (Edge-compatible)
-  const route     = `forms/${GF_FORM_ID}/submissions`;
-  const expires   = Math.floor(Date.now() / 1000) + 3600;
-  const signature = await hmacSha1Base64(GF_PRIVATE_KEY, `${GF_PUBLIC_KEY}:POST:${route}:${expires}`);
+  // Submit via the internal WordPress booking bridge (GFAPI), bypassing
+  // the external GF REST API which is blocked by Cloudflare bot challenge.
+  const bridgeUrl = `${WP_BASE_URL}/wp-json/shear/v1/booking`;
 
-  const params = new URLSearchParams({ api_key: GF_PUBLIC_KEY, signature, expires: String(expires) });
-  const gfUrl  = `${WP_BASE_URL}/gravityformsapi/${route}?${params}`;
-
-  let gfRes: Response;
+  let bridgeRes: Response;
   try {
-    gfRes = await fetch(gfUrl, {
+    bridgeRes = await fetch(bridgeUrl, {
       method:  "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", "X-Shear-Secret": BOOKING_SECRET },
       body:    JSON.stringify({ input_values }),
       cache:   "no-store",
     });
   } catch {
-    console.error("[booking] Network error reaching GF API");
+    console.error("[booking] Network error reaching booking bridge");
     return NextResponse.json(
       { error: "Could not reach the booking system. Please call us to book your appointment." },
       { status: 502 },
     );
   }
 
-  let gfData: Record<string, unknown>;
+  let bridgeData: Record<string, unknown>;
   try {
-    gfData = await gfRes.json();
+    bridgeData = await bridgeRes.json();
   } catch {
-    console.error("[booking] GF API returned non-JSON");
+    console.error("[booking] Booking bridge returned non-JSON");
     return NextResponse.json(
       { error: "Unexpected response from booking system. Please call us to book." },
       { status: 502 },
     );
   }
 
-  const gfStatus   = typeof gfData?.status   === "number" ? gfData.status                                      : 0;
-  const gfResponse = typeof gfData?.response === "object" ? (gfData.response as Record<string, unknown>) : null;
-
-  if (gfStatus === 200 && gfResponse?.is_valid === true) {
+  if (bridgeRes.ok && bridgeData?.success === true) {
     return NextResponse.json({ success: true });
   }
 
-  if (gfStatus === 200 && gfResponse?.is_valid === false) {
-    console.error("[booking] GF validation failed:", gfResponse?.validation_messages);
+  if (bridgeRes.status === 422) {
+    console.error("[booking] GF validation failed:", bridgeData?.validation_messages);
     return NextResponse.json(
       { error: "Some fields could not be validated. Please review your details and try again." },
       { status: 422 },
     );
   }
 
-  console.error("[booking] Unexpected GF response:", gfRes.status, gfData);
+  console.error("[booking] Unexpected bridge response:", bridgeRes.status, bridgeData);
   return NextResponse.json(
     { error: "Something went wrong. Please call us to book your appointment." },
     { status: 500 },
