@@ -58,10 +58,10 @@ const ABOUT_CSS = `
     #our-story { height: 100svh; }
   }
 
-  /* ── TABLET/iPad: full image visible with contain ─────────────────── */
+  /* ── TABLET/iPad: cover so no letterbox strips on sides ──────────── */
   @media (min-width: 641px) and (max-width: 1180px) {
     .about-bg-img {
-      object-fit: contain !important;
+      object-fit: cover !important;
       object-position: center top !important;
     }
     /* Hide the seam cover — it was burying the only visible part of the image */

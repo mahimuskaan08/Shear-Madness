@@ -122,9 +122,9 @@ const BAMBOO_CSS = `
   /* Background fix for tablets */
   @media (min-width: 641px) and (max-width: 1180px) {
     .artist-bg-fixed {
-      background-size: contain !important;
+      background-size: cover !important;
       background-repeat: no-repeat !important;
-      background-position: center top !important;
+      background-position: center center !important;
     }
     #experience { height: auto !important; min-height: 100svh !important; }
   }
@@ -222,11 +222,11 @@ export default function ArtistSection({
       {/* Background */}
       <div aria-hidden="true" className="artist-bg-fixed" style={{
         position: "absolute", inset: 0, zIndex: 0, pointerEvents: "none",
-        backgroundImage: `url('${artistBg ?? "/artist-bg.jpg"}')`,
+        backgroundImage: `url('${artistBg ?? "/artist-bg.png"}')`,
         backgroundAttachment: "scroll",
-        backgroundSize: "contain",
+        backgroundSize: "cover",
         backgroundRepeat: "no-repeat",
-        backgroundPosition: "center top",
+        backgroundPosition: "center center",
       }} />
 
       {/* Bamboo leaves */}
