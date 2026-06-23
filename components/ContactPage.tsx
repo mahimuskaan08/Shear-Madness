@@ -358,7 +358,7 @@ export default function ContactPage({
             }}>
               {MAP_BULLETS.map((bullet) => (
                 <li key={bullet} style={{
-                  display: "flex", alignItems: "flex-start", gap: 8,
+                  display: "flex", alignItems: "center", gap: 8,
                   fontFamily: "'Inter', sans-serif",
                   fontSize: "clamp(0.68rem, 0.9vw, 0.78rem)",
                   fontWeight: 500,
@@ -366,6 +366,7 @@ export default function ContactPage({
                   letterSpacing: "0.02em",
                   lineHeight: 1.45,
                   textShadow: "0 1px 3px rgba(0,0,0,0.35)",
+                  whiteSpace: "nowrap",
                 }}>
                   <span style={{ color: "#C6A76B", fontSize: "0.65rem", marginTop: "0.18em", flexShrink: 0 }}>◆</span>
                   {bullet}
