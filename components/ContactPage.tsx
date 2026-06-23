@@ -14,7 +14,7 @@ const DEFAULT_CONTACT_HOURS = [
 ];
 
 const MAP_BULLETS = [
-  "Just minutes from Hoboken Path Station",
+  "5 Mins walk from Hoboken Path Station",
   "Street parking available nearby",
 ];
 
