@@ -14,8 +14,8 @@ const DEFAULT_CONTACT_HOURS = [
 ];
 
 const MAP_BULLETS = [
-  "Just minutes from Hoboken PATH Station",
-  "Street parking available nearby",
+  "Just 5 min walk from Hoboken PATH Station",
+  "Street parking is available",
 ];
 
 const STYLES = `
@@ -350,6 +350,28 @@ export default function ContactPage({
                 title="Shear Madness location map"
               />
             </div>
+
+            {/* ── MAP BULLETS ─────────────────────────────────────── */}
+            <ul style={{
+              listStyle: "none", margin: "14px 0 0", padding: 0,
+              display: "flex", flexDirection: "column", gap: 8,
+            }}>
+              {MAP_BULLETS.map((bullet) => (
+                <li key={bullet} style={{
+                  display: "flex", alignItems: "flex-start", gap: 8,
+                  fontFamily: "'Inter', sans-serif",
+                  fontSize: "clamp(0.68rem, 0.9vw, 0.78rem)",
+                  fontWeight: 500,
+                  color: "rgba(255,255,255,0.90)",
+                  letterSpacing: "0.02em",
+                  lineHeight: 1.45,
+                  textShadow: "0 1px 3px rgba(0,0,0,0.35)",
+                }}>
+                  <span style={{ color: "#C6A76B", fontSize: "0.65rem", marginTop: "0.18em", flexShrink: 0 }}>◆</span>
+                  {bullet}
+                </li>
+              ))}
+            </ul>
           </motion.div>
 
         </div>
