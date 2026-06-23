@@ -54,10 +54,17 @@ const STYLES = `
   animation: koi-ripple 16s ease-out 2s infinite;
 }
 /* ── RESPONSIVE ─────────────────────────────────────────────────── */
-@media (max-width: 860px) {
-  #contact-grid { grid-template-columns: 1fr !important; }
-  /* Remove negative pull-up so stacked columns don't overlap */
-  #contact-grid > *:last-child { margin-top: 0 !important; }
+@media (min-width: 601px) and (max-width: 1100px) {
+  /* iPad: shrink info panel, grow map */
+  #contact-info-panel { max-width: 300px !important; }
+  #contact-info-panel .contact-hours-day  { font-size: 0.95rem !important; }
+  #contact-info-panel .contact-hours-time { font-size: 0.88rem !important; }
+  #contact-map { width: clamp(180px, 26vw, 300px) !important; }
+  /* iPad: keep full bg coverage, no cropping */
+  #contact-bg-img { object-position: center center !important; object-fit: cover !important; }
+}
+@media (max-width: 600px) {
+  #contact-grid { flex-direction: column !important; }
   /* Prevent hours row from overflowing on narrow screens */
   .contact-hours-row { flex-wrap: wrap !important; gap: 4px !important; }
   .contact-hours-time { font-size: 1rem !important; }
@@ -120,18 +127,38 @@ export default function ContactPage({
     >
       <style dangerouslySetInnerHTML={{ __html: STYLES }} />
 
+      {/* ── KOI — pinned to right side of section ───────────────────────────── */}
+      <img
+        src="/contact-koi.png"
+        alt=""
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          top: "50%",
+          right: "-4%",
+          transform: "translateY(-50%)",
+          width: "38%",
+          height: "auto",
+          opacity: 0.68,
+          filter: "brightness(1.06) contrast(0.90) saturate(0.90)",
+          WebkitMaskImage: "radial-gradient(ellipse 72% 68% at 50% 50%, black 25%, transparent 100%)",
+          maskImage: "radial-gradient(ellipse 72% 68% at 50% 50%, black 25%, transparent 100%)",
+          pointerEvents: "none",
+          zIndex: 0,
+        }}
+      />
+
       {/* ── WATER BACKGROUND ────────────────────────────────────────────────── */}
       <div aria-hidden="true" style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, zIndex: 0, pointerEvents: "none" }}>
         <img
-          src={bgImage ?? "/contact-water.jpg"}
+          id="contact-bg-img"
+          src={bgImage ?? "/contact-koi-bg.png"}
           alt=""
           style={{
             position: "absolute", top: 0, left: 0, right: 0, bottom: 0,
             width: "100%", height: "100%",
-            objectFit: "cover", objectPosition: "center",
-            filter: "grayscale(60%) brightness(1.05) saturate(0.5)",
-            opacity: 0.50,
-            mixBlendMode: "multiply",
+            objectFit: "cover", objectPosition: "15% center",
+            opacity: 0.90,
           }}
         />
       </div>
@@ -165,7 +192,7 @@ export default function ContactPage({
             fontFamily: "'Inter', sans-serif",
             fontSize: "0.62rem", fontWeight: 700,
             letterSpacing: "0.30em", textTransform: "uppercase",
-            color: "#7A5C10", marginBottom: 8,
+            color: "#FFFFFF", marginBottom: 8,
           }}>
             Find Us
           </p>
@@ -173,9 +200,9 @@ export default function ContactPage({
             fontFamily: "'Cormorant Garamond', Georgia, serif",
             fontSize: "clamp(2.8rem, 6vw, 5.4rem)",
             fontWeight: 600, lineHeight: 1.0,
-            letterSpacing: "0.01em", color: "#556B2F", marginBottom: 18,
+            letterSpacing: "0.01em", color: "#FFFFFF", marginBottom: 18,
           }}>
-            Location
+            Hours and Location
           </h2>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <div style={{ height: 1, width: 44, background: "linear-gradient(to right, transparent, rgba(198,167,107,0.65))" }} />
@@ -186,21 +213,126 @@ export default function ContactPage({
 
         {/* ── 2-COLUMN LAYOUT ──────────────────────────────────────────────────── */}
         <div id="contact-grid" style={{
-          display: "grid",
-          gridTemplateColumns: "8fr 420px",
-          gap: "clamp(72px, 9vw, 120px)",
+          display: "flex",
+          gap: "clamp(40px, 4vw, 64px)",
           alignItems: "start",
         }}>
 
-          {/* ── LEFT: MAP + BULLETS (no koi here) ─────────────────────────────── */}
+          {/* ── LEFT: KOI PANEL (Address / Hours / Contact) ──────────────────── */}
           <motion.div
             initial={{ opacity: 0, x: -28 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 1.1, ease: EASE, delay: 0.28 }}
+            id="contact-info-panel"
+            style={{
+              position: "relative",
+              flex: 1,
+              minWidth: 0,
+              maxWidth: 480,
+            }}
+          >
+
+            <div style={{
+              background: "rgba(255,255,255,0.38)",
+              backdropFilter: "blur(14px)",
+              WebkitBackdropFilter: "blur(14px)",
+              borderRadius: 16,
+              border: "1px solid rgba(255,255,255,0.45)",
+              padding: "clamp(28px, 4vw, 40px) clamp(24px, 4vw, 36px)",
+              position: "relative", zIndex: 1,
+            }}>
+              <div style={{
+                display: "flex", flexDirection: "column",
+                gap: "clamp(26px, 3.2vh, 36px)",
+                position: "relative", zIndex: 1,
+              }}>
+
+                <InfoBlock label="Address" inView={inView} delay={0.38}>
+                  <InfoLine primary>{displayAddr1}</InfoLine>
+                  <InfoLine>{displayCityStateZip}</InfoLine>
+                </InfoBlock>
+
+                <InfoBlock label="Hours" inView={inView} delay={0.50}>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 6, marginTop: 2 }}>
+                    {HOURS.map(({ days, time }) => (
+                      <div key={days} className="contact-hours-row" style={{ display: "flex", justifyContent: "space-between", gap: 16 }}>
+                        <span className="contact-hours-day" style={{
+                          fontFamily: "'Cormorant Garamond', Georgia, serif",
+                          fontSize: "clamp(1.2rem, 1.6vw, 1.45rem)",
+                          fontWeight: 800, color: "#000000",
+                          letterSpacing: "0.01em", whiteSpace: "nowrap",
+                        }}>
+                          {days}
+                        </span>
+                        <span className="contact-hours-time" style={{
+                          fontFamily: "'Cormorant Garamond', Georgia, serif",
+                          fontSize: "clamp(1.1rem, 1.5vw, 1.3rem)",
+                          fontWeight: 800,
+                          color: time === "Closed" ? "rgba(0,0,0,0.45)" : "#000000",
+                          letterSpacing: "0.01em", textAlign: "right", whiteSpace: "nowrap",
+                        }}>
+                          {time}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </InfoBlock>
+
+                <InfoBlock label="Contact" inView={inView} delay={0.62}>
+                  <InfoLine primary href={`mailto:${displayEmail}`}>{displayEmail}</InfoLine>
+                  <InfoLine href={telHref}>{displayPhone}</InfoLine>
+                </InfoBlock>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={inView ? { opacity: 1, y: 0 } : {}}
+                  transition={{ duration: 0.85, ease: EASE, delay: 0.76 }}
+                >
+                  <a
+                    href={displayMapsUrl}
+                    style={{
+                      display: "inline-flex", alignItems: "center", gap: 10,
+                      fontFamily: "'Inter', sans-serif",
+                      fontSize: "12px", fontWeight: 600,
+                      letterSpacing: "0.16em", textTransform: "uppercase",
+                      color: "#FFFFFF",
+                      background: "linear-gradient(135deg, #C9A96E 0%, #B8935A 55%, #C4A96A 100%)",
+                      padding: "10px 26px", borderRadius: 9999,
+                      boxShadow: "0 4px 18px rgba(196,169,106,0.45), inset 0 1px 0 rgba(255,255,255,0.20)",
+                      transition: "all 0.40s ease",
+                      textDecoration: "none", cursor: "pointer",
+                    }}
+                    onMouseEnter={e => {
+                      const el = e.currentTarget as HTMLAnchorElement;
+                      el.style.boxShadow = "0 8px 24px rgba(196,169,106,0.60), inset 0 1px 0 rgba(255,255,255,0.22)";
+                      el.style.transform = "translateY(-2px)";
+                    }}
+                    onMouseLeave={e => {
+                      const el = e.currentTarget as HTMLAnchorElement;
+                      el.style.boxShadow = "0 4px 18px rgba(196,169,106,0.45), inset 0 1px 0 rgba(255,255,255,0.20)";
+                      el.style.transform = "translateY(0)";
+                    }}
+                  >
+                    Get Directions
+                    <span style={{ fontSize: "0.85rem" }}>→</span>
+                  </a>
+                </motion.div>
+
+              </div>
+            </div>
+          </motion.div>
+
+          {/* ── RIGHT: SMALL MAP ──────────────────────────────────────────────── */}
+          <motion.div
+            initial={{ opacity: 0, x: 28 }}
+            animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 1.1, ease: EASE, delay: 0.15 }}
+            id="contact-map"
+            style={{ width: "clamp(130px, 16vw, 220px)", flexShrink: 0 }}
           >
             <div style={{
               borderRadius: 20, overflow: "hidden",
-              aspectRatio: "4/1.98", position: "relative",
+              aspectRatio: "1/1", position: "relative",
               boxShadow: "0 12px 48px rgba(26,18,8,0.14), 0 2px 8px rgba(26,18,8,0.08)",
               border: "1px solid rgba(198,167,107,0.18)",
             }}>
@@ -217,150 +349,6 @@ export default function ContactPage({
                 referrerPolicy="no-referrer-when-downgrade"
                 title="Shear Madness location map"
               />
-            </div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.85, ease: EASE, delay: 0.5 }}
-              style={{ marginTop: 20, display: "flex", flexDirection: "column", gap: 9 }}
-            >
-              {MAP_BULLETS.map((bullet, i) => (
-                <div key={i} style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                  <div style={{ width: 7, height: 7, borderRadius: "50%", background: "#C6A76B", flexShrink: 0, opacity: 0.90 }} />
-                  <p style={{
-                    fontFamily: "'Cormorant Garamond', Georgia, serif",
-                    fontSize: "clamp(1.15rem, 1.7vw, 1.4rem)",
-                    fontWeight: 700, color: "#111111", letterSpacing: "0.01em",
-                  }}>
-                    {bullet}
-                  </p>
-                </div>
-              ))}
-            </motion.div>
-          </motion.div>
-
-          {/* ── RIGHT: KOI PANEL ──────────────────────────────────────────────── */}
-          <motion.div
-            initial={{ opacity: 0, x: 28 }}
-            animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 1.1, ease: EASE, delay: 0.28 }}
-            style={{
-              marginTop: "-96px",
-              position: "relative",
-            }}
-          >
-
-            {/* Koi image — centered, fades at all edges, doesn't fill full section */}
-            <img
-              src="/contact-koi.png"
-              alt=""
-              aria-hidden="true"
-              style={{
-                position: "absolute",
-                top: "50%",
-                left: "50%",
-                transform: "translate(-50%, -50%)",
-                width: "106%",
-                height: "auto",
-                opacity: 0.50,
-                filter: "grayscale(50%) brightness(1.06) contrast(0.88) saturate(0.75)",
-                mixBlendMode: "multiply",
-                WebkitMaskImage: "radial-gradient(ellipse 72% 68% at 50% 50%, black 25%, transparent 100%)",
-                maskImage: "radial-gradient(ellipse 72% 68% at 50% 50%, black 25%, transparent 100%)",
-                pointerEvents: "none",
-                zIndex: 0,
-              }}
-            />
-
-            <div style={{
-              background: "rgba(245,242,237,0.22)",
-              backdropFilter: "blur(4px)",
-              WebkitBackdropFilter: "blur(4px)",
-              borderRadius: 16,
-              padding: "clamp(28px, 4vw, 40px) clamp(24px, 4vw, 36px)",
-              boxShadow: "0 4px 32px rgba(0,0,0,0.08)",
-              border: "1px solid rgba(198,167,107,0.20)",
-              position: "relative", zIndex: 1,
-            }}>
-            <div style={{
-              display: "flex", flexDirection: "column",
-              gap: "clamp(26px, 3.2vh, 36px)",
-              position: "relative", zIndex: 1,
-            }}>
-
-              <InfoBlock label="Address" inView={inView} delay={0.38}>
-                <InfoLine primary>{displayAddr1}</InfoLine>
-                <InfoLine>{displayCityStateZip}</InfoLine>
-              </InfoBlock>
-
-              <InfoBlock label="Hours" inView={inView} delay={0.50}>
-                <div style={{ display: "flex", flexDirection: "column", gap: 6, marginTop: 2 }}>
-                  {HOURS.map(({ days, time }) => (
-                    <div key={days} className="contact-hours-row" style={{ display: "flex", justifyContent: "space-between", gap: 16 }}>
-                      <span className="contact-hours-day" style={{
-                        fontFamily: "'Cormorant Garamond', Georgia, serif",
-                        fontSize: "clamp(1.2rem, 1.6vw, 1.45rem)",
-                        fontWeight: 800, color: "#000000",
-                        letterSpacing: "0.01em", whiteSpace: "nowrap",
-                      }}>
-                        {days}
-                      </span>
-                      <span className="contact-hours-time" style={{
-                        fontFamily: "'Cormorant Garamond', Georgia, serif",
-                        fontSize: "clamp(1.1rem, 1.5vw, 1.3rem)",
-                        fontWeight: 800,
-                        color: time === "Closed" ? "rgba(0,0,0,0.45)" : "#000000",
-                        letterSpacing: "0.01em", textAlign: "right", whiteSpace: "nowrap",
-                      }}>
-                        {time}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </InfoBlock>
-
-              <InfoBlock label="Contact" inView={inView} delay={0.62}>
-                <InfoLine primary href={`mailto:${displayEmail}`}>{displayEmail}</InfoLine>
-                <InfoLine href={telHref}>{displayPhone}</InfoLine>
-              </InfoBlock>
-
-              <motion.div
-                initial={{ opacity: 0, y: 12 }}
-                animate={inView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.85, ease: EASE, delay: 0.76 }}
-              >
-                <a
-                  href={displayMapsUrl}
-                  style={{
-                    display: "inline-flex", alignItems: "center", gap: 10,
-                    fontFamily: "'Inter', sans-serif",
-                    fontSize: "12px", fontWeight: 600,
-                    letterSpacing: "0.16em", textTransform: "uppercase",
-                    color: "#FFFFFF",
-                    background: "linear-gradient(135deg, #C9A96E 0%, #B8935A 55%, #C4A96A 100%)",
-                    padding: "10px 26px", borderRadius: 9999,
-                    boxShadow: "0 4px 18px rgba(196,169,106,0.45), inset 0 1px 0 rgba(255,255,255,0.20)",
-                    transition: "all 0.40s ease",
-                    textDecoration: "none", cursor: "pointer",
-                  }}
-                  onMouseEnter={e => {
-                    const el = e.currentTarget as HTMLAnchorElement;
-                    el.style.boxShadow = "0 8px 24px rgba(196,169,106,0.60), inset 0 1px 0 rgba(255,255,255,0.22)";
-                    el.style.transform = "translateY(-2px)";
-                  }}
-                  onMouseLeave={e => {
-                    const el = e.currentTarget as HTMLAnchorElement;
-                    el.style.boxShadow = "0 4px 18px rgba(196,169,106,0.45), inset 0 1px 0 rgba(255,255,255,0.20)";
-                    el.style.transform = "translateY(0)";
-                  }}
-                >
-                  Get Directions
-                  <span style={{ fontSize: "0.85rem" }}>→</span>
-                </a>
-              </motion.div>
-
-            </div>
             </div>
           </motion.div>
 
