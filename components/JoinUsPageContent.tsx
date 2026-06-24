@@ -46,6 +46,14 @@ const STYLES = `
     }
   }
 
+  /* ── MOBILE BG SWAP ─────────────────────────────────── */
+  .joi-bg-desktop { display: block; }
+  .joi-bg-mobile  { display: none;  }
+  @media (max-width: 640px) {
+    .joi-bg-desktop { display: none;  }
+    .joi-bg-mobile  { display: block; }
+  }
+
   /* ── INPUTS ─────────────────────────────────────────── */
   .joi-field {
     display: block;
@@ -315,9 +323,16 @@ export default function JoinUsPageContent({ bgImage }: { bgImage?: string }) {
           position: "absolute", top: 0, left: 0, right: 0, bottom: 0, zIndex: 0, pointerEvents: "none",
         }}>
           <img
+            className="joi-bg-desktop"
             src={bgImage ?? "/join-bg.jpg"}
             alt=""
-            style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", display: "block" }}
+            style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center" }}
+          />
+          <img
+            className="joi-bg-mobile"
+            src="/join-bg-mobile.png"
+            alt=""
+            style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center top" }}
           />
           {/* Light wash so text stays legible over the pale painting */}
           <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(253,250,246,0.45)" }} />

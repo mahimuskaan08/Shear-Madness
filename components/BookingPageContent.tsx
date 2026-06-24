@@ -1066,6 +1066,13 @@ export default function BookingPageContent({ bgImage }: { bgImage?: string }) {
 
       {/* Responsive grid collapse */}
       <style>{`
+        @media (max-width: 640px) {
+          .booking-bg-fixed {
+            background-image: url('/booking-bg-mobile.png') !important;
+            background-size: cover !important;
+            background-position: center center !important;
+          }
+        }
         @media (max-width: 540px) {
           .booking-grid-2 { grid-template-columns: 1fr !important; }
         }

@@ -337,6 +337,15 @@ const STYLES = `
     align-self: center;
   }
 
+  /* ── MOBILE BACKGROUND OVERRIDE ────────────────────── */
+  @media (max-width: 640px) {
+    .svc-bg-layer {
+      background-image: url('/services-mobile.png') !important;
+      background-size: cover !important;
+      background-position: center center !important;
+    }
+  }
+
   /* ── HERO PETAL KEYFRAMES ───────────────────────────── */
   ${PETALS.map(({ id, rot, drift }) => `
   @keyframes svc-petal-${id} {
