@@ -41,6 +41,13 @@ export default async function CreditsPage() {
           @media (min-width: 600px) and (max-width: 1199px) {
             .credits-box { background: rgba(245,242,237,0.005); }
           }
+          @media (max-width: 640px) {
+            .credits-bg-fixed {
+              background-image: url('/credits-bg-mobile.png') !important;
+              background-size: cover !important;
+              background-position: center center !important;
+            }
+          }
         `}</style>
         <div className="credits-box" style={{
           maxWidth: 760, margin: "0 auto", position: "relative", zIndex: 1,

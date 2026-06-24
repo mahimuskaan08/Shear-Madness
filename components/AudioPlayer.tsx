@@ -1,10 +1,16 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 
 export default function AudioPlayer() {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [playing, setPlaying] = useState(false);
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    audio.play().then(() => setPlaying(true)).catch(() => {});
+  }, []);
 
   function toggle() {
     const audio = audioRef.current;
@@ -19,7 +25,7 @@ export default function AudioPlayer() {
 
   return (
     <>
-      <audio ref={audioRef} src="/bg-audio.mp4" loop preload="none" />
+      <audio ref={audioRef} src="/bg-audio.mp4" loop preload="auto" />
       <button
         onClick={toggle}
         aria-label={playing ? "Pause background music" : "Play background music"}
