@@ -90,20 +90,22 @@ const HERO_FADE = `
   .sm-letter-large { margin-right: -2px; }
 }
 @media (max-width: 767px) {
-  .hero-bg-img {
-    object-fit: contain !important;
-    object-position: center top !important;
+  .hero-bg-desktop { display: none !important; }
+  .hero-bg-mobile-only {
+    object-fit: cover !important;
+    object-position: center center !important;
   }
   .hero-bg-layer {
     background: #ede8e3 !important;
   }
   .hero-section {
-    height: auto !important;
-    /* 280px floor so content is never cramped on narrow phones (320-375px);
-       aspect-ratio kicks in on wider viewports (≥466px) and overrides min-height */
-    min-height: 280px !important;
-    aspect-ratio: 2528 / 1522;
+    height: 100svh !important;
+    min-height: 580px !important;
+    aspect-ratio: unset !important;
   }
+}
+@media (min-width: 768px) {
+  .hero-bg-mobile-only { display: none !important; }
 }
 
 /* ── TABLET (768–1024px): size section to image ratio so contain has no bars ── */
@@ -177,6 +179,7 @@ export default function HeroSection({ bgImage }: { bgImage?: string }) {
 
       {/* ── LAYER 1: BACKGROUND IMAGE ────────────────────────────────────── */}
       <motion.div style={{ scale: bgScale, background: "#EDE8E3" }} className="absolute inset-0 w-full h-full hero-bg-layer">
+        {/* Desktop / tablet image */}
         <Image
           src={bgImage ?? "/hero-bg.png"}
           alt=""
@@ -184,8 +187,19 @@ export default function HeroSection({ bgImage }: { bgImage?: string }) {
           fill
           priority
           sizes="100vw"
-          className="hero-bg-img"
+          className="hero-bg-img hero-bg-desktop"
           style={{ objectFit: "contain", objectPosition: "center top" }}
+        />
+        {/* Mobile-only image */}
+        <Image
+          src="/hero-bg-mobile.png"
+          alt=""
+          aria-hidden="true"
+          fill
+          priority
+          sizes="100vw"
+          className="hero-bg-img hero-bg-mobile-only"
+          style={{ objectFit: "cover", objectPosition: "center center" }}
         />
       </motion.div>
 

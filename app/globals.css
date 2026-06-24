@@ -341,19 +341,27 @@ img {
 
   /* ── Gallery page background wrapper ── */
   .gallery-bg-section {
-    background-size: contain !important;
-    background-position: top center !important;
+    background-image: url('/gallery-bg-mobile.png') !important;
+    background-size: cover !important;
+    background-position: center top !important;
     background-repeat: no-repeat !important;
     background-color: #FAF6EF !important;
-    /* scroll (not fixed) is the safe choice on iOS Safari */
     background-attachment: scroll !important;
   }
 
   /* ── Services section (home page) koi/watercolor layer ── */
   .services-fixed-bg {
-    background-size: contain !important;
-    background-position: top center !important;
+    background-image: url('/services-koi-bg-mobile.png') !important;
+    background-size: cover !important;
+    background-position: center top !important;
     background-repeat: no-repeat !important;
+  }
+
+  /* ── Artist section background ── */
+  .artist-bg-fixed {
+    background-image: url('/artist-bg-mobile.png') !important;
+    background-size: cover !important;
+    background-position: center center !important;
   }
 
   /* ── Services page fixed background layer ──
