@@ -67,8 +67,34 @@ const STYLES = `
   #contact-grid { flex-direction: column !important; }
   /* Prevent hours row from overflowing on narrow screens */
   .contact-hours-row { flex-wrap: wrap !important; gap: 4px !important; }
-  .contact-hours-time { font-size: 1rem !important; }
-  .contact-hours-day  { font-size: 1rem !important; }
+  .contact-hours-time { font-size: 1.35rem !important; }
+  .contact-hours-day  { font-size: 1.35rem !important; }
+}
+/* ── Mobile background image swap ── */
+.contact-bg-mobile { display: none; }
+@media (max-width: 767px) {
+  #contact-bg-img     { display: none !important; }
+  .contact-bg-mobile  { display: block !important; }
+  /* Remove box, white text */
+  #contact-info-panel > div {
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  #contact-info-panel p,
+  #contact-info-panel span,
+  #contact-info-panel a {
+    color: #ffffff !important;
+  }
+  /* Larger text on mobile */
+  .contact-info-line { font-size: 1.7rem !important; }
+  .contact-section-divider {
+    background: rgba(255,255,255,0.30) !important;
+  }
 }
 `;
 
@@ -150,6 +176,7 @@ export default function ContactPage({
 
       {/* ── WATER BACKGROUND ────────────────────────────────────────────────── */}
       <div aria-hidden="true" style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, zIndex: 0, pointerEvents: "none" }}>
+        {/* Desktop / tablet background */}
         <img
           id="contact-bg-img"
           src={bgImage ?? "/contact-koi-bg.png"}
@@ -158,6 +185,18 @@ export default function ContactPage({
             position: "absolute", top: 0, left: 0, right: 0, bottom: 0,
             width: "100%", height: "100%",
             objectFit: "cover", objectPosition: "15% center",
+            opacity: 0.90,
+          }}
+        />
+        {/* Mobile-only background */}
+        <img
+          className="contact-bg-mobile"
+          src="/contact-koi-bg-mobile.png"
+          alt=""
+          style={{
+            position: "absolute", top: 0, left: 0, right: 0, bottom: 0,
+            width: "100%", height: "100%",
+            objectFit: "cover", objectPosition: "center center",
             opacity: 0.90,
           }}
         />
@@ -258,18 +297,29 @@ export default function ContactPage({
                       <div key={days} className="contact-hours-row" style={{ display: "flex", justifyContent: "space-between", gap: 16 }}>
                         <span className="contact-hours-day" style={{
                           fontFamily: "'Cormorant Garamond', Georgia, serif",
-                          fontSize: "clamp(1.2rem, 1.6vw, 1.45rem)",
-                          fontWeight: 800, color: "#000000",
-                          letterSpacing: "0.01em", whiteSpace: "nowrap",
+                          fontSize: time === "Closed" ? "clamp(1.45rem, 1.9vw, 1.7rem)" : "clamp(1.2rem, 1.6vw, 1.45rem)",
+                          fontWeight: time === "Closed" ? 900 : 800,
+                          color: "#000000",
+                          letterSpacing: time === "Closed" ? "0.08em" : "0.01em",
+                          textTransform: time === "Closed" ? "uppercase" : undefined,
+                          whiteSpace: "nowrap",
                         }}>
                           {days}
                         </span>
                         <span className="contact-hours-time" style={{
                           fontFamily: "'Cormorant Garamond', Georgia, serif",
-                          fontSize: "clamp(1.1rem, 1.5vw, 1.3rem)",
-                          fontWeight: 800,
-                          color: time === "Closed" ? "rgba(0,0,0,0.45)" : "#000000",
-                          letterSpacing: "0.01em", textAlign: "right", whiteSpace: "nowrap",
+                          fontSize: time === "Closed" ? "clamp(1.35rem, 1.8vw, 1.6rem)" : "clamp(1.1rem, 1.5vw, 1.3rem)",
+                          fontWeight: time === "Closed" ? 900 : 800,
+                          color: time === "Closed" ? "rgba(0,0,0,0.55)" : "#000000",
+                          letterSpacing: time === "Closed" ? "0.12em" : "0.01em",
+                          textTransform: time === "Closed" ? "uppercase" : undefined,
+                          textAlign: "right", whiteSpace: "nowrap",
+                          background: "rgba(0,0,0,0.08)",
+                          backdropFilter: "blur(6px)",
+                          WebkitBackdropFilter: "blur(6px)",
+                          border: "1px solid rgba(0,0,0,0.10)",
+                          borderRadius: 6,
+                          padding: "2px 10px",
                         }}>
                           {time}
                         </span>
@@ -402,7 +452,7 @@ function InfoBlock({
       }}>
         {label}
       </p>
-      <div style={{ height: 1, background: "rgba(26,18,8,0.12)", marginBottom: 11 }} />
+      <div className="contact-section-divider" style={{ height: 1, background: "rgba(26,18,8,0.12)", marginBottom: 11 }} />
       {children}
     </motion.div>
   );
@@ -418,7 +468,7 @@ function InfoLine({ children, primary, href }: { children: React.ReactNode; prim
   };
   if (href) {
     return (
-      <a href={href} style={{ ...style, display: "block", textDecoration: "none", transition: "color 0.2s" }}
+      <a href={href} className="contact-info-line" style={{ ...style, display: "block", textDecoration: "none", transition: "color 0.2s" }}
         onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = "#C4A96A"; }}
         onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = primary ? "#0A0A0A" : "rgba(10,10,10,0.78)"; }}
       >
@@ -426,5 +476,5 @@ function InfoLine({ children, primary, href }: { children: React.ReactNode; prim
       </a>
     );
   }
-  return <p style={style}>{children}</p>;
+  return <p className="contact-info-line" style={style}>{children}</p>;
 }

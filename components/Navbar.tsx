@@ -214,8 +214,8 @@ export default function Navbar() {
         initial={false}
         animate={menuOpen ? { opacity: 1, pointerEvents: "auto" as const } : { opacity: 0, pointerEvents: "none" as const }}
         transition={{ duration: 0.35 }}
-        className="fixed inset-0 z-[55] flex flex-col items-center justify-center"
-        style={{ background: "rgba(250,246,239,0.97)", backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)" }}
+        className="fixed inset-0 z-[55] flex flex-col items-center justify-center overflow-y-auto"
+        style={{ background: "rgba(250,246,239,0.97)", backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)", paddingTop: 80, paddingBottom: 24 }}
       >
         <div className="absolute top-24 left-1/2 -translate-x-1/2 w-12 h-px bg-[#C4A96A]/40" />
 

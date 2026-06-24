@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import AudioPlayer from "@/components/AudioPlayer";
 
 const BASE_URL = "https://shearmadnesshoboken.com";
 
@@ -77,7 +78,10 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="antialiased">{children}</body>
+      <body className="antialiased">
+        {children}
+        <AudioPlayer />
+      </body>
     </html>
   );
 }
