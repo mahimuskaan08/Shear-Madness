@@ -82,6 +82,24 @@ img {
   display: block;
 }
 
+/* ── LOADING STATE ────────────────────────────────────────────────────────────
+   Applied by LoadingScreen on mount, removed when progress reaches 100%.
+   Pausing CSS animations site-wide lets the hero-fade-in and petal animations
+   start fresh the moment the loader exits, producing a clean entrance.
+   The loader's own petals are exempt via the higher-specificity rule below.
+   ─────────────────────────────────────────────────────────────────────────── */
+body.shear-loading {
+  overflow: hidden;
+}
+body.shear-loading * {
+  animation-play-state: paused !important;
+}
+/* Exempt the loader itself so its petals and animations keep running */
+body.shear-loading .shear-loader,
+body.shear-loading .shear-loader * {
+  animation-play-state: running !important;
+}
+
 /* Selection color */
 ::selection {
   background: rgba(196, 169, 106, 0.25);

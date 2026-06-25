@@ -272,11 +272,6 @@ export default function ContactPage({
           >
 
             <div style={{
-              background: "rgba(255,255,255,0.38)",
-              backdropFilter: "blur(14px)",
-              WebkitBackdropFilter: "blur(14px)",
-              borderRadius: 16,
-              border: "1px solid rgba(255,255,255,0.45)",
               padding: "clamp(28px, 4vw, 40px) clamp(24px, 4vw, 36px)",
               position: "relative", zIndex: 1,
             }}>

@@ -45,14 +45,20 @@ const ABOUT_PETAL_COLORS = [
 const ABOUT_CSS = `
   /* ── MOBILE: swap to mobile-specific background image ───────────────── */
   .about-bg-mobile-wrapper { display: none; }
+  .about-bg-tablet-wrapper { display: none; }
   @media (max-width: 640px) {
     .about-bg-wrapper { display: none !important; }
+    .about-bg-tablet-wrapper { display: none !important; }
     .about-bg-mobile-wrapper { display: block !important; }
     #our-story {
       background: #EDE5D8 !important;
       min-height: unset !important;
       height: auto !important;
     }
+  }
+  @media (min-width: 641px) and (max-width: 1180px) {
+    .about-bg-wrapper { display: none !important; }
+    .about-bg-tablet-wrapper { display: block !important; }
   }
 
   /* ── DESKTOP: fixed viewport height so 2-col layout fills screen ────── */
@@ -133,7 +139,18 @@ export default function AboutSection({
           style={{ objectFit: "cover", objectPosition: "center top" }}
         />
       </div>
-      {/* Desktop / tablet background (hidden on ≤640px) */}
+      {/* Tablet-only background (641px–1180px) */}
+      <div aria-hidden="true" className="about-bg-tablet-wrapper" style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, zIndex: 0 }}>
+        <Image
+          src="/about-bg-tablet.png"
+          alt=""
+          fill
+          sizes="100vw"
+          className="about-bg-img"
+          style={{ objectFit: "cover", objectPosition: "center top" }}
+        />
+      </div>
+      {/* Desktop background (hidden on ≤1180px) */}
       <div aria-hidden="true" className="about-bg-wrapper" style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, zIndex: 0 }}>
         <Image
           src={bgImage ?? "/about-bg.png"}
