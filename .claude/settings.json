@@ -117,7 +117,14 @@
       "Bash(rm app/api/gf-check/route.ts)",
       "Bash(rmdir app/api/gf-check)",
       "Bash(curl -s -i -X POST \"https://cms.shearmadnesshoboken.com/wp-json/shear/v1/booking\" -H \"Content-Type: application/json\" -d '{\"input_values\":{}}')",
-      "Bash(git stash *)"
+      "Bash(git stash *)",
+      "Bash(git restore *)",
+      "Read(//e/shear_mahi_wp/public/**)",
+      "Bash(findstr :3007)",
+      "Bash(tasklist /FI \"PID eq 22748\")",
+      "Bash(kill 22748)",
+      "PowerShell(Stop-Process -Id 22748 -Force)",
+      "Bash(grep \":0$\")"
     ]
   }
 }

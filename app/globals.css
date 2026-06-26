@@ -39,6 +39,8 @@
 html {
   scroll-behavior: smooth;
   overflow-x: hidden;
+  /* Matches footer so iOS elastic overscroll bounce shows dark instead of white */
+  background-color: #1E1C18;
 }
 
 body {
@@ -47,7 +49,9 @@ body {
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  overflow-x: hidden;
+  /* overflow-x:hidden on body creates phantom scroll height on iOS Safari;
+     the html rule above handles horizontal clip instead */
+  overflow-x: clip;
 }
 
 .font-serif {
@@ -80,6 +84,24 @@ body {
 /* Smooth image loading */
 img {
   display: block;
+}
+
+/* ── LOADING STATE ────────────────────────────────────────────────────────────
+   Applied by LoadingScreen on mount, removed when progress reaches 100%.
+   Pausing CSS animations site-wide lets the hero-fade-in and petal animations
+   start fresh the moment the loader exits, producing a clean entrance.
+   The loader's own petals are exempt via the higher-specificity rule below.
+   ─────────────────────────────────────────────────────────────────────────── */
+body.shear-loading {
+  overflow: hidden;
+}
+body.shear-loading * {
+  animation-play-state: paused !important;
+}
+/* Exempt the loader itself so its petals and animations keep running */
+body.shear-loading .shear-loader,
+body.shear-loading .shear-loader * {
+  animation-play-state: running !important;
 }
 
 /* Selection color */
