@@ -76,8 +76,7 @@ export default function RootLayout({
           as="image"
           href="/hero-logo.webp"
           type="image/webp"
-          // @ts-expect-error fetchpriority is a valid HTML attr, not yet in React types
-          fetchpriority="high"
+          fetchPriority="high"
         />
         {/* PNG fallback preload for legacy browsers (rare, but safe) */}
         <link rel="preload" as="image" href="/hero-logo.png" type="image/png" />
@@ -92,7 +91,7 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="antialiased">
+      <body className="antialiased" suppressHydrationWarning>
         {/*
           Inline script runs synchronously before any paint — sets overflow:hidden
           and adds shear-loading so CSS animations are paused from frame 0.

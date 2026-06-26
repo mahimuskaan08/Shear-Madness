@@ -87,15 +87,15 @@ export default function LoadingScreen() {
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
-    // Remove the static pre-hydration loader — React loader takes over from here
     document.getElementById("shear-instant-loader")?.remove();
-
-    // Lock scroll and pause CSS animations site-wide while loading
-    // (inline script in layout.tsx already applied these; re-applying is safe)
     document.documentElement.style.overflow = "hidden";
     document.body.classList.add("shear-loading");
 
+    let cancelled = false;
+    const vidHandlers: Array<[HTMLVideoElement, () => void]> = [];
+
     function bump(amount: number) {
+      if (cancelled) return;
       progressRef.current = Math.min(98, progressRef.current + amount);
       setProgress(Math.round(progressRef.current));
     }
@@ -112,7 +112,7 @@ export default function LoadingScreen() {
         new Promise<void>(res => {
           const img = new window.Image();
           img.onload  = () => { bump(perImg); res(); };
-          img.onerror = () => { bump(perImg); res(); }; // never block on 404
+          img.onerror = () => { bump(perImg); res(); };
           img.src = src;
         })
       );
@@ -128,8 +128,12 @@ export default function LoadingScreen() {
           const perV = 10 / vids.length;
           const finish = () => { bump(perV); if (++done === vids.length) res(); };
           vids.forEach(v => {
-            if (v.readyState >= 3) finish();
-            else v.addEventListener("canplay", finish, { once: true });
+            if (v.readyState >= 3) {
+              finish();
+            } else {
+              v.addEventListener("canplay", finish, { once: true });
+              vidHandlers.push([v, finish]);
+            }
           });
           // Hard timeout for very slow connections
           setTimeout(() => { if (done < vids.length) res(); }, 4000);
@@ -142,6 +146,7 @@ export default function LoadingScreen() {
 
     // Simulation fill — nudges the bar forward on slow connections
     intervalRef.current = setInterval(() => {
+      if (cancelled) return;
       if (progressRef.current < 82) {
         progressRef.current += 0.35;
         setProgress(Math.round(progressRef.current));
@@ -149,7 +154,7 @@ export default function LoadingScreen() {
     }, 60);
 
     Promise.all(tasks).then(() => {
-      if (doneRef.current) return;
+      if (doneRef.current || cancelled) return;
       doneRef.current = true;
       if (intervalRef.current) clearInterval(intervalRef.current);
 
@@ -160,11 +165,13 @@ export default function LoadingScreen() {
       // entrance animation begins playing underneath the fade-out overlay.
       document.body.classList.remove("shear-loading");
 
-      setTimeout(() => setIsExiting(true), 300);
+      setTimeout(() => { if (!cancelled) setIsExiting(true); }, 300);
     });
 
     return () => {
+      cancelled = true;
       if (intervalRef.current) clearInterval(intervalRef.current);
+      vidHandlers.forEach(([v, h]) => v.removeEventListener("canplay", h));
       document.documentElement.style.overflow = "";
       document.body.classList.remove("shear-loading");
     };

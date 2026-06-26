@@ -53,6 +53,15 @@ const STYLES = `
   top: 48%; left: 52%;
   animation: koi-ripple 16s ease-out 2s infinite;
 }
+/* ── Per-block transparent pill ─────────────────────────────────── */
+.contact-info-block-box {
+  background: rgba(0,0,0,0.22);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-radius: 14px;
+  padding: clamp(14px, 2.2vw, 20px) clamp(16px, 2.5vw, 24px);
+  border: 1px solid rgba(255,255,255,0.13);
+}
 /* ── RESPONSIVE ─────────────────────────────────────────────────── */
 @media (min-width: 601px) and (max-width: 1100px) {
   /* iPad: shrink info panel, grow map */
@@ -75,25 +84,14 @@ const STYLES = `
 @media (max-width: 767px) {
   #contact-bg-img     { display: none !important; }
   .contact-bg-mobile  { display: block !important; }
-  /* Remove box, white text */
-  #contact-info-panel > div {
-    background: transparent !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-    border: none !important;
-    box-shadow: none !important;
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-  }
-  #contact-info-panel p,
-  #contact-info-panel span,
-  #contact-info-panel a {
-    color: #ffffff !important;
+  .contact-info-block-box {
+    background: rgba(0,0,0,0.30) !important;
+    border-color: rgba(255,255,255,0.16) !important;
   }
   /* Larger text on mobile */
   .contact-info-line { font-size: 1.7rem !important; }
   .contact-section-divider {
-    background: rgba(255,255,255,0.30) !important;
+    background: rgba(255,255,255,0.25) !important;
   }
 }
 `;
@@ -272,14 +270,10 @@ export default function ContactPage({
           >
 
             <div style={{
-              padding: "clamp(28px, 4vw, 40px) clamp(24px, 4vw, 36px)",
+              display: "flex", flexDirection: "column",
+              gap: "clamp(14px, 2vh, 20px)",
               position: "relative", zIndex: 1,
             }}>
-              <div style={{
-                display: "flex", flexDirection: "column",
-                gap: "clamp(26px, 3.2vh, 36px)",
-                position: "relative", zIndex: 1,
-              }}>
 
                 <InfoBlock label="Address" inView={inView} delay={0.38}>
                   <InfoLine primary>{displayAddr1}</InfoLine>
@@ -294,7 +288,7 @@ export default function ContactPage({
                           fontFamily: "'Cormorant Garamond', Georgia, serif",
                           fontSize: time === "Closed" ? "clamp(1.45rem, 1.9vw, 1.7rem)" : "clamp(1.2rem, 1.6vw, 1.45rem)",
                           fontWeight: time === "Closed" ? 900 : 800,
-                          color: "#000000",
+                          color: "#FFFFFF",
                           letterSpacing: time === "Closed" ? "0.08em" : "0.01em",
                           textTransform: time === "Closed" ? "uppercase" : undefined,
                           whiteSpace: "nowrap",
@@ -305,14 +299,14 @@ export default function ContactPage({
                           fontFamily: "'Cormorant Garamond', Georgia, serif",
                           fontSize: time === "Closed" ? "clamp(1.35rem, 1.8vw, 1.6rem)" : "clamp(1.1rem, 1.5vw, 1.3rem)",
                           fontWeight: time === "Closed" ? 900 : 800,
-                          color: time === "Closed" ? "rgba(0,0,0,0.55)" : "#000000",
+                          color: time === "Closed" ? "rgba(255,255,255,0.55)" : "#FFFFFF",
                           letterSpacing: time === "Closed" ? "0.12em" : "0.01em",
                           textTransform: time === "Closed" ? "uppercase" : undefined,
                           textAlign: "right", whiteSpace: "nowrap",
-                          background: "rgba(0,0,0,0.08)",
+                          background: "rgba(255,255,255,0.14)",
                           backdropFilter: "blur(6px)",
                           WebkitBackdropFilter: "blur(6px)",
-                          border: "1px solid rgba(0,0,0,0.10)",
+                          border: "1px solid rgba(255,255,255,0.18)",
                           borderRadius: 6,
                           padding: "2px 10px",
                         }}>
@@ -363,7 +357,6 @@ export default function ContactPage({
                   </a>
                 </motion.div>
 
-              </div>
             </div>
           </motion.div>
 
@@ -415,16 +408,17 @@ function InfoBlock({
       initial={{ opacity: 0, y: 14 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1], delay }}
+      className="contact-info-block-box"
     >
       <p style={{
         fontFamily: "'Inter', sans-serif",
         fontSize: "0.65rem", fontWeight: 700,
         letterSpacing: "0.32em", textTransform: "uppercase",
-        color: "#7A5C10", marginBottom: 10,
+        color: "#D4AE6A", marginBottom: 10,
       }}>
         {label}
       </p>
-      <div className="contact-section-divider" style={{ height: 1, background: "rgba(26,18,8,0.12)", marginBottom: 11 }} />
+      <div className="contact-section-divider" style={{ height: 1, background: "rgba(255,255,255,0.22)", marginBottom: 11 }} />
       {children}
     </motion.div>
   );
@@ -435,14 +429,14 @@ function InfoLine({ children, primary, href }: { children: React.ReactNode; prim
     fontFamily: "'Cormorant Garamond', Georgia, serif",
     fontSize: "clamp(1.45rem, 2vw, 1.8rem)",
     fontWeight: 400, lineHeight: 1.55,
-    color: primary ? "#0A0A0A" : "rgba(10,10,10,0.78)",
+    color: primary ? "#FFFFFF" : "rgba(255,255,255,0.82)",
     letterSpacing: "0.01em",
   };
   if (href) {
     return (
       <a href={href} className="contact-info-line" style={{ ...style, display: "block", textDecoration: "none", transition: "color 0.2s" }}
         onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = "#C4A96A"; }}
-        onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = primary ? "#0A0A0A" : "rgba(10,10,10,0.78)"; }}
+        onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = primary ? "#FFFFFF" : "rgba(255,255,255,0.82)"; }}
       >
         {children}
       </a>

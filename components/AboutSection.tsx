@@ -66,10 +66,10 @@ const ABOUT_CSS = `
     #our-story { height: 100svh; }
   }
 
-  /* ── TABLET/iPad: cover so no letterbox strips on sides ──────────── */
+  /* ── TABLET/iPad: contain so full image is visible without cropping ─ */
   @media (min-width: 641px) and (max-width: 1180px) {
     .about-bg-img {
-      object-fit: cover !important;
+      object-fit: contain !important;
       object-position: center top !important;
     }
     /* Hide the seam cover — it was burying the only visible part of the image */
@@ -78,6 +78,33 @@ const ABOUT_CSS = `
       height: auto !important;
       min-height: 100svh !important;
     }
+  }
+
+  /* ── TABLET: transparent pill tight around each text line ───────────── */
+  @media (min-width: 641px) and (max-width: 1180px) {
+    .about-label-text {
+      display: inline;
+      background: rgba(0,0,0,0.30);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 6px;
+      padding: 2px 10px;
+      color: #D4AE6A !important;
+      box-decoration-break: clone;
+      -webkit-box-decoration-break: clone;
+    }
+    .about-heading-text {
+      display: inline;
+      background: rgba(0,0,0,0.30);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 8px;
+      padding: 3px 12px;
+      color: #FFFFFF !important;
+      box-decoration-break: clone;
+      -webkit-box-decoration-break: clone;
+    }
+    .about-heading-text span { color: #FFFFFF !important; }
   }
 
   /* ── PREMIUM SCROLLBAR ───────────────────────────────────────────────── */
@@ -147,7 +174,7 @@ export default function AboutSection({
           fill
           sizes="100vw"
           className="about-bg-img"
-          style={{ objectFit: "cover", objectPosition: "center top" }}
+          style={{ objectFit: "contain", objectPosition: "center top" }}
         />
       </div>
       {/* Desktop background (hidden on ≤1180px) */}
@@ -232,7 +259,7 @@ export default function AboutSection({
                 marginBottom: 8,
               }}
             >
-              Our Story
+              <span className="about-label-text">Our Story</span>
             </p>
             <h2
               style={{
@@ -244,9 +271,11 @@ export default function AboutSection({
                 color: "#556B2F",
               }}
             >
-              About{" "}
-              <span style={{ fontStyle: "italic", fontWeight: 700 }}>
-                Shear Madness
+              <span className="about-heading-text">
+                About{" "}
+                <span style={{ fontStyle: "italic", fontWeight: 700 }}>
+                  Shear Madness
+                </span>
               </span>
             </h2>
             <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 10 }}>

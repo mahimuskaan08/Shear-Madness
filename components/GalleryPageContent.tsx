@@ -333,6 +333,22 @@ function CardGrid({
   const cardW    = containerW > 0 ? (containerW - GAP * (visibleCount - 1)) / visibleCount : 0;
   const maxIndex = Math.max(0, N - visibleCount);
 
+  if (N === 0) {
+    return (
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.4, ease: EASE }}
+        className="flex flex-col items-center justify-center py-28 text-center"
+      >
+        <p className="font-sans text-[#3A3832]/40 text-sm tracking-[0.12em] uppercase">
+          No images in this category yet
+        </p>
+      </motion.div>
+    );
+  }
+
   useEffect(() => {
     const el = trackWrapRef.current;
     if (!el) return;

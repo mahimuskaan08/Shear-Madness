@@ -83,7 +83,7 @@ const contactDetails = [
         <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
       </svg>
     ),
-    action: { label: "Follow Us", href: "https://www.instagram.com" },
+    action: { label: "Follow Us", href: "https://www.instagram.com/shearmadnesshoboken?igsh=MWppNndlMGVxNjczOQ==" },
   },
 ];
 
@@ -230,9 +230,9 @@ function ContactHero() {
           className="flex flex-col sm:flex-row items-center justify-center gap-4"
         >
           {/* Book Now */}
-          <a
+          <motion.a
             href="/booking"
-            className="group relative inline-flex items-center justify-center rounded-full font-sans text-[11px] tracking-[0.22em] uppercase font-medium text-white transition-all duration-400 hover:-translate-y-0.5 overflow-hidden"
+            className="group relative inline-flex items-center justify-center rounded-full font-sans text-[11px] tracking-[0.22em] uppercase font-medium text-white hover:-translate-y-0.5 overflow-hidden"
             style={{
               padding: "14px 38px",
               background:
@@ -240,14 +240,8 @@ function ContactHero() {
               boxShadow:
                 "0 5px 26px rgba(196,169,106,0.50), inset 0 1px 0 rgba(255,255,255,0.2)",
             }}
-            onMouseEnter={(e) => {
-              (e.currentTarget as HTMLAnchorElement).style.boxShadow =
-                "0 9px 34px rgba(196,169,106,0.65), inset 0 1px 0 rgba(255,255,255,0.22)";
-            }}
-            onMouseLeave={(e) => {
-              (e.currentTarget as HTMLAnchorElement).style.boxShadow =
-                "0 5px 26px rgba(196,169,106,0.50), inset 0 1px 0 rgba(255,255,255,0.2)";
-            }}
+            whileHover={{ boxShadow: "0 9px 34px rgba(196,169,106,0.65), inset 0 1px 0 rgba(255,255,255,0.22)" }}
+            transition={{ duration: 0.3 }}
           >
             <span
               className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"
@@ -257,12 +251,12 @@ function ContactHero() {
               }}
             />
             <span className="relative z-10">Book Now</span>
-          </a>
+          </motion.a>
 
           {/* Call Us */}
-          <a
+          <motion.a
             href="tel:+12012222102"
-            className="group relative inline-flex items-center justify-center gap-2 rounded-full font-sans text-[11px] tracking-[0.22em] uppercase font-medium text-[#2C2A25] transition-all duration-400 hover:-translate-y-0.5 overflow-hidden"
+            className="group relative inline-flex items-center justify-center gap-2 rounded-full font-sans text-[11px] tracking-[0.22em] uppercase font-medium text-[#2C2A25] hover:-translate-y-0.5 overflow-hidden"
             style={{
               padding: "14px 38px",
               background: "rgba(253,250,246,0.55)",
@@ -270,17 +264,8 @@ function ContactHero() {
               WebkitBackdropFilter: "blur(10px)",
               border: "1.5px solid rgba(58,56,50,0.22)",
             }}
-            onMouseEnter={(e) => {
-              (e.currentTarget as HTMLAnchorElement).style.borderColor =
-                "rgba(196,169,106,0.55)";
-              (e.currentTarget as HTMLAnchorElement).style.boxShadow =
-                "0 6px 24px rgba(196,169,106,0.16)";
-            }}
-            onMouseLeave={(e) => {
-              (e.currentTarget as HTMLAnchorElement).style.borderColor =
-                "rgba(58,56,50,0.22)";
-              (e.currentTarget as HTMLAnchorElement).style.boxShadow = "none";
-            }}
+            whileHover={{ borderColor: "rgba(196,169,106,0.55)", boxShadow: "0 6px 24px rgba(196,169,106,0.16)" }}
+            transition={{ duration: 0.3 }}
           >
             <svg
               width="13"
@@ -294,7 +279,7 @@ function ContactHero() {
               <path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.4 21 3 13.6 3 4.5c0-.6.4-1 1-1H8c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z" />
             </svg>
             <span className="relative z-10">Call Us</span>
-          </a>
+          </motion.a>
         </motion.div>
       </div>
     </section>
@@ -364,24 +349,14 @@ function ContactInfoMap() {
                 initial={{ opacity: 0, x: -20 }}
                 animate={isInView ? { opacity: 1, x: 0 } : {}}
                 transition={{ duration: 0.8, ease: EASE, delay: 0.2 + i * 0.1 }}
-                className="group flex gap-5 p-6 rounded-sm transition-all duration-400 hover:-translate-y-px"
+                className="group flex gap-5 p-6 rounded-sm hover:-translate-y-px"
                 style={{
                   background: "rgba(253,250,246,0.95)",
                   border: "1px solid rgba(196,169,106,0.14)",
                   boxShadow: "0 2px 18px rgba(58,56,50,0.05)",
                 }}
-                onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLDivElement).style.boxShadow =
-                    "0 8px 36px rgba(196,169,106,0.12)";
-                  (e.currentTarget as HTMLDivElement).style.borderColor =
-                    "rgba(196,169,106,0.30)";
-                }}
-                onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLDivElement).style.boxShadow =
-                    "0 2px 18px rgba(58,56,50,0.05)";
-                  (e.currentTarget as HTMLDivElement).style.borderColor =
-                    "rgba(196,169,106,0.14)";
-                }}
+                whileHover={{ boxShadow: "0 8px 36px rgba(196,169,106,0.12)", borderColor: "rgba(196,169,106,0.30)" }}
+                transition={{ duration: 0.3 }}
               >
                 <div className="flex-shrink-0 mt-0.5 text-[#C4A96A]">
                   {item.icon}
@@ -654,25 +629,19 @@ function SocialSection() {
           </div>
 
           {/* Follow button */}
-          <a
-            href="https://www.instagram.com"
+          <motion.a
+            href="https://www.instagram.com/shearmadnesshoboken?igsh=MWppNndlMGVxNjczOQ=="
             target="_blank"
             rel="noopener noreferrer"
-            className="group relative inline-flex items-center gap-3 rounded-full font-sans text-[11px] tracking-[0.2em] uppercase font-medium text-white transition-all duration-400 hover:-translate-y-0.5 overflow-hidden"
+            className="group relative inline-flex items-center gap-3 rounded-full font-sans text-[11px] tracking-[0.2em] uppercase font-medium text-white hover:-translate-y-0.5 overflow-hidden"
             style={{
               padding: "13px 36px",
               background:
                 "linear-gradient(135deg, #C9A96E 0%, #B8935A 55%, #C4A96A 100%)",
               boxShadow: "0 5px 22px rgba(196,169,106,0.45)",
             }}
-            onMouseEnter={(e) => {
-              (e.currentTarget as HTMLAnchorElement).style.boxShadow =
-                "0 9px 30px rgba(196,169,106,0.62)";
-            }}
-            onMouseLeave={(e) => {
-              (e.currentTarget as HTMLAnchorElement).style.boxShadow =
-                "0 5px 22px rgba(196,169,106,0.45)";
-            }}
+            whileHover={{ boxShadow: "0 9px 30px rgba(196,169,106,0.62)" }}
+            transition={{ duration: 0.3 }}
           >
             <span
               className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"
@@ -695,7 +664,7 @@ function SocialSection() {
               <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
             </svg>
             <span className="relative z-10">Follow on Instagram</span>
-          </a>
+          </motion.a>
         </motion.div>
       </div>
     </section>
@@ -823,9 +792,9 @@ function ContactBookingCTA() {
           className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-14"
         >
           {/* Book Now */}
-          <a
+          <motion.a
             href="/booking"
-            className="group relative inline-flex items-center justify-center gap-2.5 rounded-full font-sans text-[11px] tracking-[0.2em] uppercase font-medium text-white transition-all duration-400 hover:-translate-y-0.5 overflow-hidden"
+            className="group relative inline-flex items-center justify-center gap-2.5 rounded-full font-sans text-[11px] tracking-[0.2em] uppercase font-medium text-white hover:-translate-y-0.5 overflow-hidden"
             style={{
               padding: "15px 36px",
               background:
@@ -833,14 +802,8 @@ function ContactBookingCTA() {
               boxShadow:
                 "0 5px 24px rgba(196,169,106,0.48), inset 0 1px 0 rgba(255,255,255,0.18)",
             }}
-            onMouseEnter={(e) => {
-              (e.currentTarget as HTMLAnchorElement).style.boxShadow =
-                "0 9px 32px rgba(196,169,106,0.62), inset 0 1px 0 rgba(255,255,255,0.22)";
-            }}
-            onMouseLeave={(e) => {
-              (e.currentTarget as HTMLAnchorElement).style.boxShadow =
-                "0 5px 24px rgba(196,169,106,0.48), inset 0 1px 0 rgba(255,255,255,0.18)";
-            }}
+            whileHover={{ boxShadow: "0 9px 32px rgba(196,169,106,0.62), inset 0 1px 0 rgba(255,255,255,0.22)" }}
+            transition={{ duration: 0.3 }}
           >
             <span
               className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"
@@ -862,27 +825,20 @@ function ContactBookingCTA() {
               <path d="M16 2v4 M8 2v4 M3 10h18" />
             </svg>
             <span className="relative z-10">Book Now</span>
-          </a>
+          </motion.a>
 
           {/* Call Us */}
-          <a
+          <motion.a
             href="tel:+12012222102"
-            className="inline-flex items-center justify-center gap-2.5 rounded-full font-sans text-[11px] tracking-[0.2em] uppercase font-medium text-[#2C2A25] transition-all duration-400 hover:-translate-y-0.5"
+            className="inline-flex items-center justify-center gap-2.5 rounded-full font-sans text-[11px] tracking-[0.2em] uppercase font-medium hover:-translate-y-0.5"
             style={{
               padding: "15px 36px",
               border: "1px solid rgba(58,56,50,0.25)",
               background: "transparent",
+              color: "#2C2A25",
             }}
-            onMouseEnter={(e) => {
-              (e.currentTarget as HTMLAnchorElement).style.borderColor =
-                "rgba(196,169,106,0.55)";
-              (e.currentTarget as HTMLAnchorElement).style.color = "#C4A96A";
-            }}
-            onMouseLeave={(e) => {
-              (e.currentTarget as HTMLAnchorElement).style.borderColor =
-                "rgba(58,56,50,0.25)";
-              (e.currentTarget as HTMLAnchorElement).style.color = "#2C2A25";
-            }}
+            whileHover={{ borderColor: "rgba(196,169,106,0.55)", color: "#C4A96A" }}
+            transition={{ duration: 0.3 }}
           >
             <svg
               width="14"
@@ -895,7 +851,7 @@ function ContactBookingCTA() {
               <path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.4 21 3 13.6 3 4.5c0-.6.4-1 1-1H8c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z" />
             </svg>
             Call Us
-          </a>
+          </motion.a>
         </motion.div>
 
         {/* Trust signals */}
