@@ -46,9 +46,22 @@ const STYLES = `
     }
   }
 
-  /* ── MOBILE BG SWAP ─────────────────────────────────── */
+  /* ── BG SWAP BY BREAKPOINT ──────────────────────────── */
   .joi-bg-desktop { display: block; }
+  .joi-bg-tablet  { display: none;  }
   .joi-bg-mobile  { display: none;  }
+  @media (min-width: 641px) and (max-width: 1180px) {
+    .joi-bg-desktop { display: none; }
+    .joi-bg-tablet  { display: none; }
+    .joi-page {
+      background-image: url('/join-bg-tablet.png');
+      background-attachment: fixed;
+      background-size: 100% auto;
+      background-repeat: no-repeat;
+      background-position: center top;
+      background-color: #F9F5EF;
+    }
+  }
   @media (max-width: 640px) {
     .joi-bg-desktop { display: none;  }
     .joi-bg-mobile  { display: block; }
@@ -329,6 +342,12 @@ export default function JoinUsPageContent({ bgImage }: { bgImage?: string }) {
             style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center" }}
           />
           <img
+            className="joi-bg-tablet"
+            src="/join-bg-tablet.png"
+            alt=""
+            style={{ width: "100%", height: "100%", objectFit: "contain", objectPosition: "center top" }}
+          />
+          <img
             className="joi-bg-mobile"
             src="/join-bg-mobile.png"
             alt=""
@@ -342,12 +361,7 @@ export default function JoinUsPageContent({ bgImage }: { bgImage?: string }) {
 
           {/* ── LEFT: TEXT ──────────────────────────────────────────────── */}
           <div style={{
-            background: "rgba(245,242,237,0.01)",
-            backdropFilter: "blur(6px)",
-            WebkitBackdropFilter: "blur(6px)",
-            borderRadius: 16,
             padding: "clamp(32px, 5vw, 60px) clamp(24px, 5vw, 56px)",
-            boxShadow: "0 4px 32px rgba(0,0,0,0.04)",
           }}>
 
             <motion.p

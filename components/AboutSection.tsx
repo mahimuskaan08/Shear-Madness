@@ -80,32 +80,6 @@ const ABOUT_CSS = `
     }
   }
 
-  /* ── TABLET: transparent pill tight around each text line ───────────── */
-  @media (min-width: 641px) and (max-width: 1180px) {
-    .about-label-text {
-      display: inline;
-      background: rgba(0,0,0,0.30);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-radius: 6px;
-      padding: 2px 10px;
-      color: #D4AE6A !important;
-      box-decoration-break: clone;
-      -webkit-box-decoration-break: clone;
-    }
-    .about-heading-text {
-      display: inline;
-      background: rgba(0,0,0,0.30);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-radius: 8px;
-      padding: 3px 12px;
-      color: #FFFFFF !important;
-      box-decoration-break: clone;
-      -webkit-box-decoration-break: clone;
-    }
-    .about-heading-text span { color: #FFFFFF !important; }
-  }
 
   /* ── PREMIUM SCROLLBAR ───────────────────────────────────────────────── */
   .dict-scroll { scrollbar-width: thin; scrollbar-color: rgba(198,167,107,0.45) transparent; }

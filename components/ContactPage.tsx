@@ -53,22 +53,23 @@ const STYLES = `
   top: 48%; left: 52%;
   animation: koi-ripple 16s ease-out 2s infinite;
 }
-/* ── Per-block transparent pill ─────────────────────────────────── */
+/* ── Per-block ───────────────────────────────────────────────────── */
 .contact-info-block-box {
-  background: rgba(0,0,0,0.22);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  background: none;
   border-radius: 14px;
   padding: clamp(14px, 2.2vw, 20px) clamp(16px, 2.5vw, 24px);
-  border: 1px solid rgba(255,255,255,0.13);
+  border: none;
 }
 /* ── RESPONSIVE ─────────────────────────────────────────────────── */
 @media (min-width: 601px) and (max-width: 1100px) {
-  /* iPad: shrink info panel, grow map */
-  #contact-info-panel { max-width: 300px !important; }
-  #contact-info-panel .contact-hours-day  { font-size: 0.95rem !important; }
-  #contact-info-panel .contact-hours-time { font-size: 0.88rem !important; }
-  #contact-map { width: clamp(180px, 26vw, 300px) !important; }
+  /* iPad: stack map below info panel */
+  #contact-grid { flex-direction: column !important; }
+  #contact-info-panel { max-width: 100% !important; }
+  #contact-map {
+    width: 200px !important;
+    margin-top: 32px;
+  }
+  #contact-map > div { aspect-ratio: 1/1 !important; }
   /* iPad: keep full bg coverage, no cropping */
   #contact-bg-img { object-position: center center !important; object-fit: cover !important; }
 }
@@ -85,8 +86,8 @@ const STYLES = `
   #contact-bg-img     { display: none !important; }
   .contact-bg-mobile  { display: block !important; }
   .contact-info-block-box {
-    background: rgba(0,0,0,0.30) !important;
-    border-color: rgba(255,255,255,0.16) !important;
+    background: none !important;
+    border: none !important;
   }
   /* Larger text on mobile */
   .contact-info-line { font-size: 1.7rem !important; }
@@ -303,10 +304,8 @@ export default function ContactPage({
                           letterSpacing: time === "Closed" ? "0.12em" : "0.01em",
                           textTransform: time === "Closed" ? "uppercase" : undefined,
                           textAlign: "right", whiteSpace: "nowrap",
-                          background: "rgba(255,255,255,0.14)",
-                          backdropFilter: "blur(6px)",
-                          WebkitBackdropFilter: "blur(6px)",
-                          border: "1px solid rgba(255,255,255,0.18)",
+                          background: "rgba(255,255,255,0.10)",
+                          border: "1px solid rgba(255,255,255,0.15)",
                           borderRadius: 6,
                           padding: "2px 10px",
                         }}>

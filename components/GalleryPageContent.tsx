@@ -206,7 +206,7 @@ export default function GalleryPageContent({
       style={{
         position: "relative",
         backgroundImage: `url('${bgImage ?? "/gallery-bg2.jpg"}')`,
-        backgroundAttachment: "scroll",
+        backgroundAttachment: "fixed",
         backgroundSize: "contain",
         backgroundRepeat: "no-repeat",
         backgroundPosition: "top center",
