@@ -47,7 +47,7 @@ export default function ServicesSection() {
         width: "100%",
         minHeight: "110vh",
         background: "#ECEAE7",
-        padding: "clamp(80px, 10vh, 120px) clamp(24px, 6vw, 80px) clamp(100px, 14vh, 160px)",
+        padding: "clamp(36px, 5vh, 60px) clamp(24px, 6vw, 80px) clamp(100px, 14vh, 160px)",
         position: "relative",
         overflow: "clip",
       }}

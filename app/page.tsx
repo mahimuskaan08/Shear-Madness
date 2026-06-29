@@ -12,12 +12,12 @@ import { getSiteImages } from "@/lib/site-images";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Shear Madness Hoboken | Premium Hair Salon for Men & Women",
+  title: "Shear Madness Hoboken | Hair Salon for Men & Women",
   description:
     "Shear Madness Hoboken is a premium hair salon for men and women in Hoboken, NJ, offering haircuts, styling, color, treatments, bridal services, and online appointment booking.",
   alternates: { canonical: "/" },
   openGraph: {
-    title: "Shear Madness Hoboken | Premium Hair Salon for Men & Women",
+    title: "Shear Madness Hoboken | Hair Salon for Men & Women",
     description:
       "Shear Madness Hoboken is a premium hair salon for men and women in Hoboken, NJ, offering haircuts, styling, color, treatments, bridal services, and online appointment booking.",
     url: "/",
