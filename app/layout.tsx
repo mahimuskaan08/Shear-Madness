@@ -6,7 +6,7 @@ const BASE_URL = "https://shearmadnesshoboken.com";
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
-  title: "Shear Madness Hoboken | Premium Hair Salon for Men & Women",
+  title: "Shear Madness Hoboken | Hair Salon for Men & Women",
   description:
     "Shear Madness Hoboken is a premium hair salon for men and women in Hoboken, NJ, offering haircuts, styling, color, treatments, bridal services, and online appointment booking.",
   keywords: [
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: BASE_URL,
     siteName: "Shear Madness Hoboken",
-    title: "Shear Madness Hoboken | Premium Hair Salon for Men & Women",
+    title: "Shear Madness Hoboken | Hair Salon for Men & Women",
     description:
       "Shear Madness Hoboken is a premium hair salon for men and women in Hoboken, NJ, offering haircuts, styling, color, treatments, bridal services, and online appointment booking.",
     images: [
@@ -52,7 +52,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Shear Madness Hoboken | Premium Hair Salon for Men & Women",
+    title: "Shear Madness Hoboken | Hair Salon for Men & Women",
     description:
       "Shear Madness Hoboken is a premium hair salon for men and women in Hoboken, NJ, offering haircuts, styling, color, treatments, bridal services, and online appointment booking.",
     images: ["/og-image.jpg"],
