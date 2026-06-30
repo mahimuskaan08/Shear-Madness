@@ -124,7 +124,9 @@
       "Bash(tasklist /FI \"PID eq 22748\")",
       "Bash(kill 22748)",
       "PowerShell(Stop-Process -Id 22748 -Force)",
-      "Bash(grep \":0$\")"
+      "Bash(grep \":0$\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3002/)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/)"
     ]
   }
 }
