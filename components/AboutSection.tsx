@@ -137,7 +137,7 @@ export default function AboutSection({
           fill
           sizes="100vw"
           className="about-bg-img"
-          style={{ objectFit: "cover", objectPosition: "center top" }}
+          style={{ objectFit: "contain", objectPosition: "center top" }}
         />
       </div>
       {/* Tablet-only background (641px–1180px) */}
