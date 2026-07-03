@@ -355,7 +355,7 @@ function ContactInfoMap() {
                   border: "1px solid rgba(196,169,106,0.14)",
                   boxShadow: "0 2px 18px rgba(58,56,50,0.05)",
                 }}
-                whileHover={{ boxShadow: "0 8px 36px rgba(196,169,106,0.12)", borderColor: "rgba(196,169,106,0.30)" }}
+                whileHover={{ boxShadow: "0 8px 36px rgba(196,169,106,0.12)", borderColor: "rgba(196,169,106,0.30)", transition: { duration: 0.3 } }}
               >
                 <div className="flex-shrink-0 mt-0.5 text-[#C4A96A]">
                   {item.icon}

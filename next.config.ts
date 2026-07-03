@@ -38,6 +38,12 @@ const nextConfig: NextConfig = {
         hostname: "cms.shearmadnesshoboken.com",
         pathname: "/wp-content/uploads/**",
       },
+      // Supabase Storage — images uploaded via the admin CMS
+      {
+        protocol: "https",
+        hostname: "*.supabase.co",
+        pathname: "/storage/v1/object/public/**",
+      },
     ],
   },
   async redirects() {
