@@ -232,7 +232,7 @@ function MemberDialog({
 interface SortableMemberCardProps {
   member: TeamMember
   onEdit: (member: TeamMember) => void
-  onDelete: (id: string) => void
+  onDelete: () => void
   isDeleting: boolean
   isEditing: boolean
   editDialog: React.ReactNode
@@ -282,7 +282,7 @@ function SortableMemberCard({
           {editDialog}
           <ConfirmDelete
             itemName={member.name}
-            onConfirm={() => onDelete(member.id)}
+            onConfirm={onDelete}
             disabled={isDeleting}
           />
         </div>
@@ -383,11 +383,17 @@ export default function TeamPage() {
   })
 
   const deleteMutation = useMutation({
-    mutationFn: async (id: string) => {
+    mutationFn: async (member: TeamMember) => {
+      if (member.image_path) {
+        const { error: storageErr } = await supabase.storage
+          .from("team-photos")
+          .remove([member.image_path])
+        if (storageErr) console.warn("Storage delete warning:", storageErr.message)
+      }
       const { error } = await supabase
         .from("team_members")
         .delete()
-        .eq("id", id)
+        .eq("id", member.id)
       if (error) throw error
     },
     onSuccess: () => {
@@ -494,7 +500,7 @@ export default function TeamPage() {
                   key={member.id}
                   member={member}
                   onEdit={() => {}}
-                  onDelete={(id) => deleteMutation.mutate(id)}
+                  onDelete={() => deleteMutation.mutate(member)}
                   isDeleting={deleteMutation.isPending}
                   isEditing={updateMutation.isPending}
                   editDialog={

@@ -9,9 +9,9 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   return (
-    <div className="flex h-screen bg-zinc-950 text-white overflow-hidden">
+    <div className="flex h-screen bg-gray-50 text-gray-900 overflow-hidden">
       {/* Desktop sidebar */}
-      <div className="hidden lg:flex w-64 shrink-0 flex-col">
+      <div className="hidden lg:flex w-72 shrink-0 flex-col">
         <AdminSidebar />
       </div>
 
@@ -19,10 +19,10 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
       {sidebarOpen && (
         <div className="fixed inset-0 z-50 lg:hidden">
           <div
-            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            className="absolute inset-0 bg-black/40 backdrop-blur-sm"
             onClick={() => setSidebarOpen(false)}
           />
-          <div className="relative w-72 h-full">
+          <div className="relative w-80 h-full">
             <AdminSidebar onClose={() => setSidebarOpen(false)} />
           </div>
         </div>
@@ -31,12 +31,12 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
       {/* Main content area */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         {/* Top bar */}
-        <header className="h-16 border-b border-zinc-800 bg-zinc-900/50 backdrop-blur-sm flex items-center px-4 lg:px-6 shrink-0">
+        <header className="h-20 border-b border-gray-200 bg-white flex items-center px-4 lg:px-8 shrink-0 shadow-sm">
           <button
             onClick={() => setSidebarOpen(true)}
-            className="lg:hidden p-2 -ml-2 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors mr-2"
+            className="lg:hidden p-2 -ml-2 rounded-lg text-gray-500 hover:text-gray-900 hover:bg-gray-100 transition-colors mr-2"
           >
-            <Menu className="h-5 w-5" />
+            <Menu className="h-6 w-6" />
           </button>
           <div className="flex-1" />
           <div className="flex items-center gap-2">
@@ -44,7 +44,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
               href="/"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-xs text-zinc-500 hover:text-amber-400 transition-colors px-3 py-1.5 rounded-md hover:bg-zinc-800"
+              className="text-sm font-medium text-gray-500 hover:text-amber-600 transition-colors px-4 py-2 rounded-lg hover:bg-amber-50 border border-gray-200 hover:border-amber-200"
             >
               View Website ↗
             </a>
@@ -53,18 +53,18 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
 
         {/* Page content */}
         <main className="flex-1 overflow-y-auto">
-          <div className="max-w-5xl mx-auto px-4 lg:px-6 py-8">{children}</div>
+          <div className="max-w-5xl mx-auto px-6 lg:px-10 py-10">{children}</div>
         </main>
       </div>
 
       <Toaster
         position="top-right"
-        theme="dark"
+        theme="light"
         toastOptions={{
           style: {
-            background: "#18181b",
-            border: "1px solid #3f3f46",
-            color: "#f4f4f5",
+            background: "#ffffff",
+            border: "1px solid #e5e7eb",
+            color: "#111827",
           },
         }}
       />

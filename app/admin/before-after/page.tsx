@@ -128,7 +128,7 @@ function BeforeAfterDialog({
           .select("display_order")
           .order("display_order", { ascending: false })
           .limit(1)
-          .single()
+          .maybeSingle()
 
         const { error } = await supabase
           .from("before_after_gallery")
@@ -301,9 +301,30 @@ export default function BeforeAfterPage() {
     },
   })
 
-  const sensors = useSensors(useSensor(PointerSensor))
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } })
+  )
 
-  const handleDragEnd = async (event: DragEndEvent) => {
+  const reorderMutation = useMutation({
+    mutationFn: async (reordered: BeforeAfter[]) => {
+      const results = await Promise.all(
+        reordered.map((item, idx) =>
+          supabase
+            .from("before_after_gallery")
+            .update({ display_order: idx })
+            .eq("id", item.id)
+        )
+      )
+      const failed = results.find((r) => r.error)
+      if (failed?.error) throw failed.error
+    },
+    onError: () => {
+      queryClient.invalidateQueries({ queryKey: ["before-after"] })
+      toast.error("Failed to save order")
+    },
+  })
+
+  const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event
     if (!over || active.id === over.id || !items) return
 
@@ -312,15 +333,7 @@ export default function BeforeAfterPage() {
     const reordered = arrayMove(items, oldIndex, newIndex)
 
     queryClient.setQueryData<BeforeAfter[]>(["before-after"], reordered)
-
-    await Promise.all(
-      reordered.map((item, idx) =>
-        supabase
-          .from("before_after_gallery")
-          .update({ display_order: idx })
-          .eq("id", item.id)
-      )
-    )
+    reorderMutation.mutate(reordered)
   }
 
   const deleteMutation = useMutation({

@@ -55,22 +55,22 @@ export function AdminSidebar({ onClose }: AdminSidebarProps) {
   }
 
   return (
-    <div className="flex flex-col h-full bg-zinc-900 border-r border-zinc-800">
+    <div className="flex flex-col h-full bg-white border-r border-gray-200">
       {/* Logo */}
-      <div className="flex items-center justify-between px-4 h-16 border-b border-zinc-800 shrink-0">
-        <div className="flex items-center gap-2.5">
-          <div className="h-7 w-7 rounded-lg bg-amber-500 flex items-center justify-center">
-            <Scissors className="h-4 w-4 text-zinc-950" />
+      <div className="flex items-center justify-between px-5 h-20 border-b border-gray-200 shrink-0">
+        <div className="flex items-center gap-3">
+          <div className="h-9 w-9 rounded-xl bg-amber-500 flex items-center justify-center shadow-sm">
+            <Scissors className="h-5 w-5 text-white" />
           </div>
           <div>
-            <p className="text-sm font-semibold text-white leading-none">Shear Madness</p>
-            <p className="text-xs text-zinc-500 leading-none mt-0.5">Admin Portal</p>
+            <p className="text-base font-bold text-gray-900 leading-none">Shear Madness</p>
+            <p className="text-sm text-gray-500 leading-none mt-1">Admin Portal</p>
           </div>
         </div>
         {onClose && (
           <button
             onClick={onClose}
-            className="lg:hidden p-1 rounded-md text-zinc-400 hover:text-white hover:bg-zinc-800"
+            className="lg:hidden p-1.5 rounded-lg text-gray-400 hover:text-gray-700 hover:bg-gray-100"
           >
             <X className="h-5 w-5" />
           </button>
@@ -78,7 +78,7 @@ export function AdminSidebar({ onClose }: AdminSidebarProps) {
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 overflow-y-auto py-3 px-3 space-y-0.5">
+      <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-2">
         {navItems.map(({ href, label, icon: Icon }) => {
           const isActive = pathname === href
           return (
@@ -87,27 +87,27 @@ export function AdminSidebar({ onClose }: AdminSidebarProps) {
               href={href}
               onClick={onClose}
               className={cn(
-                "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
+                "flex items-center gap-3 px-4 py-3 rounded-xl text-base font-medium transition-colors",
                 isActive
-                  ? "bg-amber-500/15 text-amber-400 border border-amber-500/20"
-                  : "text-zinc-400 hover:bg-zinc-800 hover:text-zinc-100"
+                  ? "bg-amber-50 text-amber-600 border border-amber-200 shadow-sm"
+                  : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
               )}
             >
-              <Icon className={cn("h-4 w-4 shrink-0", isActive && "text-amber-400")} />
+              <Icon className={cn("h-5 w-5 shrink-0", isActive ? "text-amber-500" : "text-gray-400")} />
               <span className="flex-1">{label}</span>
-              {isActive && <ChevronRight className="h-3 w-3 text-amber-400/60" />}
+              {isActive && <ChevronRight className="h-4 w-4 text-amber-400" />}
             </Link>
           )
         })}
       </nav>
 
       {/* Footer */}
-      <div className="border-t border-zinc-800 p-3">
+      <div className="border-t border-gray-200 p-3">
         <button
           onClick={handleLogout}
-          className="flex w-full items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-zinc-400 hover:bg-red-500/10 hover:text-red-400 transition-colors"
+          className="flex w-full items-center gap-3 px-4 py-3 rounded-xl text-base font-medium text-gray-600 hover:bg-red-50 hover:text-red-500 transition-colors"
         >
-          <LogOut className="h-4 w-4 shrink-0" />
+          <LogOut className="h-5 w-5 shrink-0" />
           Sign Out
         </button>
       </div>

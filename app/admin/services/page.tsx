@@ -377,19 +377,21 @@ function CategoryPanel({ category }: CategoryPanelProps) {
   return (
     <div className="rounded-xl border border-zinc-800 bg-zinc-900 overflow-hidden">
       {/* Table header */}
-      <div className="grid grid-cols-[1.5rem_1fr_auto_auto_auto_auto] items-center gap-3 px-4 py-2.5 border-b border-zinc-800 bg-zinc-800/40">
-        <span />
-        <span className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">
-          Service
-        </span>
-        <span className="text-xs font-semibold text-zinc-400 uppercase tracking-wider text-right w-24">
-          Price
-        </span>
-        <span className="text-xs font-semibold text-zinc-400 uppercase tracking-wider w-16 text-center">
-          Visible
-        </span>
-        <span className="w-8" />
-        <span className="w-8" />
+      <div className="flex items-center gap-3 px-4 py-2.5 border-b border-zinc-800 bg-zinc-800/40">
+        <span className="h-5 w-5 shrink-0" />
+        <div className="flex items-center gap-3 flex-1 min-w-0">
+          <span className="flex-1 text-xs font-semibold text-zinc-400 uppercase tracking-wider">
+            Service
+          </span>
+          <span className="text-xs font-semibold text-zinc-400 uppercase tracking-wider text-right w-24">
+            Price
+          </span>
+          <span className="text-xs font-semibold text-zinc-400 uppercase tracking-wider w-16 text-center">
+            Visible
+          </span>
+          <span className="w-8 shrink-0" />
+          <span className="w-8 shrink-0" />
+        </div>
       </div>
 
       {/* Rows */}
@@ -419,81 +421,83 @@ function CategoryPanel({ category }: CategoryPanelProps) {
               <SortableItem
                 key={service.id}
                 id={service.id}
-                className="grid grid-cols-[1.5rem_1fr_auto_auto_auto_auto] items-center gap-3 px-4 py-3 border-b border-zinc-800/60 last:border-b-0 hover:bg-zinc-800/30 transition-colors"
+                className="border-b border-zinc-800/60 last:border-b-0 hover:bg-zinc-800/30 transition-colors"
               >
-                {/* Name */}
-                <div className="flex items-center gap-2 min-w-0">
-                  <span className="text-sm font-medium text-white truncate">
-                    {service.name}
-                  </span>
-                  {!service.is_visible && (
-                    <Badge
-                      variant="outline"
-                      className="text-xs border-zinc-700 text-zinc-500 shrink-0"
-                    >
-                      Hidden
-                    </Badge>
-                  )}
-                </div>
-
-                {/* Price */}
-                <div className="text-sm font-mono text-amber-400 text-right w-24 truncate">
-                  {service.price}
-                </div>
-
-                {/* Visibility toggle */}
-                <div className="w-16 flex justify-center">
-                  <button
-                    type="button"
-                    className="text-zinc-500 hover:text-zinc-300 transition-colors"
-                    onClick={() =>
-                      toggleVisibilityMutation.mutate({
-                        id: service.id,
-                        is_visible: !service.is_visible,
-                      })
-                    }
-                    aria-label={
-                      service.is_visible ? "Hide service" : "Show service"
-                    }
-                  >
-                    {service.is_visible ? (
-                      <Eye className="h-4 w-4 text-emerald-400" />
-                    ) : (
-                      <EyeOff className="h-4 w-4" />
+                <div className="flex items-center gap-3 px-4 py-3">
+                  {/* Name */}
+                  <div className="flex-1 flex items-center gap-2 min-w-0">
+                    <span className="text-sm font-medium text-white truncate">
+                      {service.name}
+                    </span>
+                    {!service.is_visible && (
+                      <Badge
+                        variant="outline"
+                        className="text-xs border-zinc-700 text-zinc-500 shrink-0"
+                      >
+                        Hidden
+                      </Badge>
                     )}
-                  </button>
-                </div>
+                  </div>
 
-                {/* Edit */}
-                <ServiceDialog
-                  title="Edit Service"
-                  initialValues={{
-                    name: service.name,
-                    price: service.price,
-                    category: service.category,
-                    is_visible: service.is_visible,
-                  }}
-                  onSave={async (values) => {
-                    await updateMutation.mutateAsync({ id: service.id, values })
-                  }}
-                  isSaving={updateMutation.isPending}
-                  trigger={
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-8 w-8 text-zinc-500 hover:text-white hover:bg-zinc-800"
+                  {/* Price */}
+                  <div className="text-sm font-mono text-amber-400 text-right w-24 truncate">
+                    {service.price}
+                  </div>
+
+                  {/* Visibility toggle */}
+                  <div className="w-16 flex justify-center">
+                    <button
+                      type="button"
+                      className="text-zinc-500 hover:text-zinc-300 transition-colors"
+                      onClick={() =>
+                        toggleVisibilityMutation.mutate({
+                          id: service.id,
+                          is_visible: !service.is_visible,
+                        })
+                      }
+                      aria-label={
+                        service.is_visible ? "Hide service" : "Show service"
+                      }
                     >
-                      <Pencil className="h-3.5 w-3.5" />
-                    </Button>
-                  }
-                />
+                      {service.is_visible ? (
+                        <Eye className="h-4 w-4 text-emerald-400" />
+                      ) : (
+                        <EyeOff className="h-4 w-4" />
+                      )}
+                    </button>
+                  </div>
 
-                {/* Delete */}
-                <ConfirmDelete
-                  itemName={service.name}
-                  onConfirm={() => deleteMutation.mutate(service.id)}
-                  disabled={deleteMutation.isPending}
-                />
+                  {/* Edit */}
+                  <ServiceDialog
+                    title="Edit Service"
+                    initialValues={{
+                      name: service.name,
+                      price: service.price,
+                      category: service.category,
+                      is_visible: service.is_visible,
+                    }}
+                    onSave={async (values) => {
+                      await updateMutation.mutateAsync({ id: service.id, values })
+                    }}
+                    isSaving={updateMutation.isPending}
+                    trigger={
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8 text-zinc-500 hover:text-white hover:bg-zinc-800"
+                      >
+                        <Pencil className="h-3.5 w-3.5" />
+                      </Button>
+                    }
+                  />
+
+                  {/* Delete */}
+                  <ConfirmDelete
+                    itemName={service.name}
+                    onConfirm={() => deleteMutation.mutate(service.id)}
+                    disabled={deleteMutation.isPending}
+                  />
+                </div>
               </SortableItem>
             ))}
           </SortableContext>

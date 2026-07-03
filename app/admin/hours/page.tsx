@@ -81,8 +81,8 @@ export default function HoursPage() {
         hours.map((h) => ({
           id: h.id,
           day: h.day,
-          open_time: h.open_time ?? "09:00",
-          close_time: h.close_time ?? "18:00",
+          open_time: h.open_time || "09:00",
+          close_time: h.close_time || "18:00",
           is_closed: h.is_closed,
           display_order: h.display_order,
         }))
@@ -134,28 +134,30 @@ export default function HoursPage() {
       />
 
       {isLoading ? (
-        <div className="space-y-3">
+        <div className="space-y-4">
           {Array.from({ length: 7 }).map((_, i) => (
-            <Skeleton key={i} className="h-20 w-full rounded-xl bg-zinc-800" />
+            <Skeleton key={i} className="h-24 w-full rounded-2xl" />
           ))}
         </div>
       ) : (
-        <div className="space-y-3">
+        <div className="space-y-4">
           {orderedDrafts.map((draft) => (
             <div
               key={draft.day}
-              className="bg-zinc-900 border border-zinc-800 rounded-xl px-5 py-4"
+              className={`bg-white border rounded-2xl px-6 py-5 shadow-sm transition-colors ${
+                draft.is_closed ? "border-red-200 bg-red-50/30" : "border-gray-200"
+              }`}
             >
-              <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-                {/* Day name + closed toggle */}
-                <div className="flex items-center justify-between sm:justify-start gap-4 sm:w-52 shrink-0">
+              <div className="flex flex-col sm:flex-row sm:items-center gap-5">
+                {/* Day name + toggle */}
+                <div className="flex items-center justify-between sm:justify-start gap-5 sm:w-56 shrink-0">
                   <div className="flex items-center gap-2.5">
-                    <Clock className="h-4 w-4 text-zinc-500 shrink-0" />
-                    <span className="font-medium text-white text-sm">
+                    <Clock className="h-5 w-5 text-gray-400 shrink-0" />
+                    <span className="font-bold text-gray-900 text-base">
                       {DAY_LABELS[draft.day]}
                     </span>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2.5">
                     <Switch
                       id={`closed-${draft.day}`}
                       checked={draft.is_closed}
@@ -165,8 +167,8 @@ export default function HoursPage() {
                     />
                     <Label
                       htmlFor={`closed-${draft.day}`}
-                      className={`text-xs cursor-pointer ${
-                        draft.is_closed ? "text-red-400" : "text-zinc-400"
+                      className={`text-sm font-semibold cursor-pointer ${
+                        draft.is_closed ? "text-red-500" : "text-emerald-600"
                       }`}
                     >
                       {draft.is_closed ? "Closed" : "Open"}
@@ -175,11 +177,11 @@ export default function HoursPage() {
                 </div>
 
                 {/* Time inputs */}
-                <div className="flex items-center gap-3 flex-1">
-                  <div className="flex items-center gap-2 flex-1">
+                <div className="flex items-center gap-4 flex-1">
+                  <div className="flex items-center gap-3 flex-1">
                     <Label
                       htmlFor={`open-${draft.day}`}
-                      className="text-xs text-zinc-500 shrink-0 w-10"
+                      className="text-sm font-medium text-gray-500 shrink-0 w-14"
                     >
                       Opens
                     </Label>
@@ -191,14 +193,14 @@ export default function HoursPage() {
                         updateDraft(draft.day, { open_time: e.target.value })
                       }
                       disabled={draft.is_closed}
-                      className="flex-1 min-w-0 disabled:opacity-40"
+                      className="flex-1 min-w-0 disabled:opacity-40 text-base font-medium bg-gray-50 border-gray-200 rounded-xl h-11"
                     />
                   </div>
-                  <span className="text-zinc-600 text-sm shrink-0">–</span>
-                  <div className="flex items-center gap-2 flex-1">
+                  <span className="text-gray-300 text-lg shrink-0">–</span>
+                  <div className="flex items-center gap-3 flex-1">
                     <Label
                       htmlFor={`close-${draft.day}`}
-                      className="text-xs text-zinc-500 shrink-0 w-10"
+                      className="text-sm font-medium text-gray-500 shrink-0 w-14"
                     >
                       Closes
                     </Label>
@@ -210,7 +212,7 @@ export default function HoursPage() {
                         updateDraft(draft.day, { close_time: e.target.value })
                       }
                       disabled={draft.is_closed}
-                      className="flex-1 min-w-0 disabled:opacity-40"
+                      className="flex-1 min-w-0 disabled:opacity-40 text-base font-medium bg-gray-50 border-gray-200 rounded-xl h-11"
                     />
                   </div>
                 </div>
@@ -218,13 +220,14 @@ export default function HoursPage() {
             </div>
           ))}
 
-          <div className="pt-4 flex justify-end">
+          <div className="pt-6 flex justify-end">
             <Button
               onClick={handleSave}
               disabled={saveMutation.isPending}
               size="lg"
+              className="bg-amber-500 hover:bg-amber-400 text-white px-8 h-12 text-base font-semibold rounded-xl"
             >
-              <Save className="h-4 w-4" />
+              <Save className="h-5 w-5" />
               {saveMutation.isPending ? "Saving…" : "Save Changes"}
             </Button>
           </div>

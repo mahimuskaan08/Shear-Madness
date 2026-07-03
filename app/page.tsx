@@ -4,10 +4,11 @@ import HeroSection from "@/components/HeroSection";
 import AboutSection from "@/components/AboutSection";
 import ServicesSection from "@/components/ServicesSection";
 import ArtistSection from "@/components/ArtistSection";
+import TestimonialsSection from "@/components/TestimonialsSection";
 import ContactSection from "@/components/ContactPage";
 import Footer from "@/components/Footer";
 import CustomCursor from "@/components/CustomCursor";
-import { getSiteImages } from "@/lib/site-images";
+import { getSiteData, buildFooterHours } from "@/lib/site-data";
 
 export const dynamic = "force-dynamic";
 
@@ -52,7 +53,9 @@ const jsonLd = {
 };
 
 export default async function Home() {
-  const imgs = await getSiteImages();
+  const data = await getSiteData();
+  const contact = data.contact;
+  const footerHours = buildFooterHours(data.hours);
 
   return (
     <main className="min-h-screen">
@@ -62,27 +65,21 @@ export default async function Home() {
       />
       <CustomCursor />
       <Navbar />
-      <HeroSection bgImage={imgs.hero_background_image ?? undefined} />
-      <AboutSection
-        bgImage={imgs.about_background_image ?? undefined}
-        carouselImages={imgs.about_us_images.length > 0 ? imgs.about_us_images : undefined}
-      />
+      <HeroSection />
+      <AboutSection />
       <ServicesSection />
-      <ArtistSection
-        artistBg={imgs.artist_background_image ?? undefined}
-        oscarImage={imgs.oscar_artist_image ?? undefined}
-        georgeImage={imgs.george_artist_image ?? undefined}
-      />
-      <ContactSection bgImage={imgs.contact_background_image ?? undefined} />
+      <ArtistSection />
+      <TestimonialsSection testimonials={data.testimonials} />
+      <ContactSection />
       <Footer
-        phone={imgs.site_phone || undefined}
-        email={imgs.site_email || undefined}
-        addressLine1={imgs.site_address_line_1 || undefined}
-        cityStateZip={imgs.site_city_state_zip || undefined}
-        hoursTueThu={imgs.hours_tue_thu || undefined}
-        hoursFri={imgs.hours_fri || undefined}
-        hoursSat={imgs.hours_sat || undefined}
-        hoursSunMon={imgs.hours_sun_mon || undefined}
+        phone={contact?.phone || undefined}
+        email={contact?.email || undefined}
+        addressLine1={contact?.address_line_1 || undefined}
+        cityStateZip={contact?.city_state_zip || undefined}
+        hoursTueThu={footerHours.hoursTueThu}
+        hoursFri={footerHours.hoursFri}
+        hoursSat={footerHours.hoursSat}
+        hoursSunMon={footerHours.hoursSunMon}
       />
     </main>
   );

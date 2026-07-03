@@ -113,11 +113,11 @@ export function ImageUploader({
   return (
     <div className={cn("space-y-3", className)}>
       {preview ? (
-        <div className="relative group rounded-xl overflow-hidden border border-zinc-700 bg-zinc-800">
+        <div className="relative group rounded-xl overflow-hidden">
           <img
             src={preview}
             alt="Preview"
-            className="w-full object-cover max-h-64"
+            className="w-full h-auto block"
           />
           <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100">
             <Button
@@ -144,8 +144,8 @@ export function ImageUploader({
             )}
           </div>
           {isUploading && (
-            <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center gap-3">
-              <Loader2 className="h-8 w-8 animate-spin text-amber-400" />
+            <div className="absolute inset-0 bg-white/70 flex flex-col items-center justify-center gap-3">
+              <Loader2 className="h-8 w-8 animate-spin text-amber-500" />
               <div className="w-48">
                 <Progress value={progress} />
               </div>
@@ -157,9 +157,9 @@ export function ImageUploader({
           role="button"
           tabIndex={0}
           className={cn(
-            "relative flex flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed border-zinc-700 bg-zinc-800/30 p-8 text-center cursor-pointer transition-colors",
-            "hover:border-amber-400/50 hover:bg-zinc-800/50",
-            isDragging && "border-amber-400 bg-amber-400/5",
+            "relative flex flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed border-gray-300 bg-gray-50 p-8 text-center cursor-pointer transition-colors",
+            "hover:border-amber-400 hover:bg-amber-50/50",
+            isDragging && "border-amber-400 bg-amber-50",
             isUploading && "pointer-events-none"
           )}
           onDragOver={(e) => { e.preventDefault(); setIsDragging(true) }}
@@ -170,23 +170,23 @@ export function ImageUploader({
         >
           {isUploading ? (
             <>
-              <Loader2 className="h-10 w-10 animate-spin text-amber-400" />
+              <Loader2 className="h-10 w-10 animate-spin text-amber-500" />
               <div className="w-48">
                 <Progress value={progress} />
               </div>
-              <p className="text-sm text-zinc-400">Uploading…</p>
+              <p className="text-sm text-gray-500">Uploading…</p>
             </>
           ) : (
             <>
-              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-zinc-800 border border-zinc-700">
-                <ImageIcon className="h-7 w-7 text-zinc-400" />
+              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white border border-gray-200 shadow-sm">
+                <ImageIcon className="h-7 w-7 text-gray-400" />
               </div>
               <div>
-                <p className="text-sm font-medium text-zinc-200">
+                <p className="text-sm font-medium text-gray-700">
                   Drop image here or{" "}
-                  <span className="text-amber-400 underline underline-offset-2">browse</span>
+                  <span className="text-amber-500 underline underline-offset-2">browse</span>
                 </p>
-                <p className="text-xs text-zinc-500 mt-1">
+                <p className="text-xs text-gray-400 mt-1">
                   JPG, PNG, WebP · Max {maxSizeMB}MB
                   {aspectHint && ` · ${aspectHint}`}
                 </p>

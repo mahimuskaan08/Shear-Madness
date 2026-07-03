@@ -28,22 +28,25 @@ export default function LoginPage() {
 
   const onSubmit = async (data: LoginFormData) => {
     setIsLoading(true)
-    const supabase = createSupabaseClient()
+    try {
+      const supabase = createSupabaseClient()
 
-    const { error } = await supabase.auth.signInWithPassword({
-      email: data.email,
-      password: data.password,
-    })
+      const { error } = await supabase.auth.signInWithPassword({
+        email: data.email,
+        password: data.password,
+      })
 
-    if (error) {
-      toast.error("Incorrect email or password. Please try again.")
+      if (error) {
+        toast.error("Incorrect email or password. Please try again.")
+        return
+      }
+
+      toast.success("Welcome back!")
+      router.push("/admin/dashboard")
+      router.refresh()
+    } finally {
       setIsLoading(false)
-      return
     }
-
-    toast.success("Welcome back!")
-    router.push("/admin/dashboard")
-    router.refresh()
   }
 
   return (

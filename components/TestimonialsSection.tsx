@@ -2,112 +2,113 @@
 
 import { motion } from "framer-motion";
 import { useRef, useState } from "react";
+import type { SiteTestimonial } from "@/lib/site-data";
 
-const testimonials = [
+const FALLBACK_TESTIMONIALS: SiteTestimonial[] = [
   {
-    name: "Verified Reviewer",
-    location: "Hoboken, NJ",
+    id: "1",
+    customer_name: "Verified Reviewer",
+    customer_photo_url: null,
+    review: "I love this place. Right when you walk in, you are always greeted by David, who is super friendly and welcoming. Victor is the absolute best. He takes his time and is meticulous with his cuts/styling. I trust his judgement so much, that during every cut, I am often saying \"oh just do what you think will look best!\" and he's always right. I highly recommend you give this place a try :)",
     rating: 5,
-    text: "I love this place. Right when you walk in, you are always greeted by David, who is super friendly and welcoming. Victor is the absolute best. He takes his time and is meticulous with his cuts/styling. I trust his judgement so much, that during every cut, I am often saying \"oh just do what you think will look best!\" and he's always right. I highly recommend you give this place a try :)",
-    service: "Haircut",
   },
   {
-    name: "Michelle Ferran",
-    location: "Hoboken, NJ",
+    id: "2",
+    customer_name: "Michelle Ferran",
+    customer_photo_url: null,
+    review: "OMG I had my first haircut from Victor — what an amazing experience!!! Not only did I get a fabulous haircut, Victor took the time to talk me through my new style. He showed me how to style it with his hair products.",
     rating: 5,
-    text: "OMG I had my first haircut from Victor — what an amazing experience!!! Not only did I get a fabulous haircut, Victor took the time to talk me through my new style. He showed me how to style it with his hair products.",
-    service: "Haircut",
   },
   {
-    name: "Bradley Paszkiewicz",
-    location: "Hoboken, NJ",
+    id: "3",
+    customer_name: "Bradley Paszkiewicz",
+    customer_photo_url: null,
+    review: "Honestly the best haircut I have ever gotten. Victor has an absolutely amazing personality that makes the whole experience fun, plus super experienced. He explains everything he is doing/about to do and why.",
     rating: 5,
-    text: "Honestly the best haircut I have ever gotten. Victor has an absolutely amazing personality that makes the whole experience fun, plus super experienced. He explains everything he is doing/about to do and why.",
-    service: "Haircut",
   },
   {
-    name: "Ángeles González",
-    location: "Hoboken, NJ",
+    id: "4",
+    customer_name: "Ángeles González",
+    customer_photo_url: null,
+    review: "Today my boyfriend went to this place to get his hair cut. He received what we believe is the best haircut he's ever had, so I had to come here to say THANK YOU.",
     rating: 5,
-    text: "Today my boyfriend went to this place to get his hair cut. He received what we believe is the best haircut he's ever had, so I had to come here to say THANK YOU.",
-    service: "Men's Haircut",
   },
   {
-    name: "Henna Vora",
-    location: "Hoboken, NJ",
+    id: "5",
+    customer_name: "Henna Vora",
+    customer_photo_url: null,
+    review: "I love my husband's haircut and styling. Victor is professional and excellent at his job. Brilliant skill set to handle my husband's hair volumes. Big thank you.",
     rating: 5,
-    text: "I love my husband's haircut and styling. Victor is professional and excellent at his job. Brilliant skill set to handle my husband's hair volumes. Big thank you.",
-    service: "Haircut & Styling",
   },
   {
-    name: "Gregory G.",
-    location: "Hoboken, NJ",
+    id: "6",
+    customer_name: "Gregory G.",
+    customer_photo_url: null,
+    review: "The 2 owner operators are always on-site, so the well run, full service shop is always fully stocked, staffed, and maintained. David and Viktor space appointments that they can actually honor — so on-time clients are generally treated to an on-time appointment.",
     rating: 5,
-    text: "The 2 owner operators are always on-site, so the well run, full service shop is always fully stocked, staffed, and maintained. David and Viktor space appointments that they can actually honor — so on-time clients are generally treated to an on-time appointment.",
-    service: "Full Service",
   },
   {
-    name: "Saarth Shah",
-    location: "Hoboken, NJ",
+    id: "7",
+    customer_name: "Saarth Shah",
+    customer_photo_url: null,
+    review: "Best haircut place in town. Victor is amazing at knowing the hair style you want and has some great suggestions. David is very nice and friendly.",
     rating: 5,
-    text: "Best haircut place in town. Victor is amazing at knowing the hair style you want and has some great suggestions. David is very nice and friendly.",
-    service: "Haircut",
   },
   {
-    name: "G Bha",
-    location: "Hoboken, NJ",
+    id: "8",
+    customer_name: "G Bha",
+    customer_photo_url: null,
+    review: "Love the edgy cuts Victor does! He always takes the time to make sure it's cut and styled well. I've tried different hair salons both in Hoboken and New York City but Shear Madness is a cut above all of them!",
     rating: 5,
-    text: "Love the edgy cuts Victor does! He always takes the time to make sure it's cut and styled well. I've tried different hair salons both in Hoboken and New York City but Shear Madness is a cut above all of them!",
-    service: "Haircut & Styling",
   },
   {
-    name: "Jaime Zimmel",
-    location: "Hoboken, NJ",
+    id: "9",
+    customer_name: "Jaime Zimmel",
+    customer_photo_url: null,
+    review: "David and Victor are always on-site, and always very accommodating and professional. The site is always well maintained and clean. They always make the experience very warm and welcoming.",
     rating: 5,
-    text: "David and Victor are always on-site, and always very accommodating and professional. The site is always well maintained and clean. They always make the experience very warm and welcoming.",
-    service: "Full Service",
   },
   {
-    name: "Jesse Luo",
-    location: "Hoboken, NJ",
+    id: "10",
+    customer_name: "Jesse Luo",
+    customer_photo_url: null,
+    review: "Met with Victor, he was very patient with me in building up a better haircut than my usual, and explained all his recommendations in detail. Highly recommended and worth a trip.",
     rating: 5,
-    text: "Met with Victor, he was very patient with me in building up a better haircut than my usual, and explained all his recommendations in detail. Highly recommended and worth a trip.",
-    service: "Haircut",
   },
   {
-    name: "Metalcrazier W",
-    location: "Hoboken, NJ",
+    id: "11",
+    customer_name: "Metalcrazier W",
+    customer_photo_url: null,
+    review: "Victor saved my hair from a bad haircut. Both David and Victor are super friendly. Definitely will return.",
     rating: 5,
-    text: "Victor saved my hair from a bad haircut. Both David and Victor are super friendly. Definitely will return.",
-    service: "Haircut",
   },
   {
-    name: "Andrew Lazirko",
-    location: "Hoboken, NJ",
+    id: "12",
+    customer_name: "Andrew Lazirko",
+    customer_photo_url: null,
+    review: "My first haircut at a new salon in 28 years. Absolute legends in here. 10/10 would recommend to everyone. Class act establishment. My new spot for sure.",
     rating: 5,
-    text: "My first haircut at a new salon in 28 years. Absolute legends in here. 10/10 would recommend to everyone. Class act establishment. My new spot for sure.",
-    service: "Men's Haircut",
   },
   {
-    name: "Erdal Turnacioglu",
-    location: "New York / New Jersey",
+    id: "13",
+    customer_name: "Erdal Turnacioglu",
+    customer_photo_url: null,
+    review: "I've been going to Victor for over 15 years now, no matter where I've lived and worked in New York or New Jersey. He's the best! Highly recommend!",
     rating: 5,
-    text: "I've been going to Victor for over 15 years now, no matter where I've lived and worked in New York or New Jersey. He's the best! Highly recommend!",
-    service: "Haircut",
   },
   {
-    name: "Brad Mundt",
-    location: "Hoboken, NJ",
+    id: "14",
+    customer_name: "Brad Mundt",
+    customer_photo_url: null,
+    review: "Excellent cut by Victor. I appreciate his explanations as to why he is doing certain things and his overall skill level.",
     rating: 5,
-    text: "Excellent cut by Victor. I appreciate his explanations as to why he is doing certain things and his overall skill level.",
-    service: "Haircut",
   },
   {
-    name: "Georgiy Yudintsev",
-    location: "Hoboken, NJ",
+    id: "15",
+    customer_name: "Georgiy Yudintsev",
+    customer_photo_url: null,
+    review: "Excellent haircut, a little pricey but it was very well done. Very chill and easy going staff too!",
     rating: 5,
-    text: "Excellent haircut, a little pricey but it was very well done. Very chill and easy going staff too!",
-    service: "Haircut",
   },
 ];
 
@@ -122,7 +123,8 @@ function StarIcon() {
   );
 }
 
-export default function TestimonialsSection() {
+export default function TestimonialsSection({ testimonials: dbTestimonials }: { testimonials?: SiteTestimonial[] }) {
+  const testimonials = (dbTestimonials && dbTestimonials.length > 0) ? dbTestimonials : FALLBACK_TESTIMONIALS;
   const ref = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
 
@@ -168,28 +170,32 @@ export default function TestimonialsSection() {
                 <StarIcon key={i} />
               ))}
             </div>
+            {testimonials[active].customer_photo_url && (
+              <img
+                src={testimonials[active].customer_photo_url!}
+                alt={testimonials[active].customer_name}
+                className="w-14 h-14 rounded-full object-cover mx-auto mb-4 border-2 border-[#C4A96A]/30"
+              />
+            )}
             <p
               className="font-serif text-[#3A3832] italic leading-[1.7] mb-8"
               style={{ fontSize: "clamp(1.05rem, 2.5vw, 1.35rem)", fontWeight: 400, color: "#111111", lineHeight: 1.75 }}
             >
-              &ldquo;{testimonials[active].text}&rdquo;
+              &ldquo;{testimonials[active].review}&rdquo;
             </p>
             <div>
               <p className="font-sans text-[#3A3832] font-medium text-sm tracking-wider">
-                {testimonials[active].name}
-              </p>
-              <p className="font-sans text-[#8FA68C] text-xs tracking-[0.15em] uppercase mt-1">
-                {testimonials[active].service} · {testimonials[active].location}
+                {testimonials[active].customer_name}
               </p>
             </div>
           </motion.div>
         </div>
 
-        {/* Testimonial selector dots + mini cards */}
+        {/* Testimonial selector mini cards */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 max-w-6xl mx-auto">
           {testimonials.map((t, i) => (
             <button
-              key={t.name}
+              key={t.id}
               onClick={() => setActive(i)}
               className={`text-left p-5 border transition-all duration-400 rounded-sm cursor-pointer ${
                 active === i
@@ -202,11 +208,8 @@ export default function TestimonialsSection() {
                   <StarIcon key={si} />
                 ))}
               </div>
-              <p className="font-sans text-[#3A3832] text-xs font-medium mb-0.5">
-                {t.name}
-              </p>
-              <p className="font-sans text-[#8FA68C] text-[10px] tracking-wider uppercase">
-                {t.service}
+              <p className="font-sans text-[#3A3832] text-xs font-medium">
+                {t.customer_name}
               </p>
             </button>
           ))}

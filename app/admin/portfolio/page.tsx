@@ -124,7 +124,11 @@ function UploadDialog({
   }
 
   function handleOpenChange(next: boolean) {
-    if (!next) resetForm()
+    if (next) {
+      setCategory(defaultCategory)
+    } else {
+      resetForm()
+    }
     onOpenChange(next)
   }
 

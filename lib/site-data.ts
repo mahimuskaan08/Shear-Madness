@@ -162,14 +162,28 @@ export async function getSiteData(): Promise<SiteData> {
 }
 
 // Convenience helpers used by individual pages
-export async function getBackground(section: string): Promise<string | null> {
+export async function getBackground(
+  section: string,
+  device: "desktop" | "tablet" | "mobile" = "desktop"
+): Promise<string | null> {
   const supabase = getPublicClient()
+  const key = device === "desktop" ? section : `${section}_${device}`
   const { data } = await supabase
     .from("backgrounds")
     .select("image_url")
-    .eq("section", section)
-    .single()
-  return (data as { image_url: string | null } | null)?.image_url ?? null
+    .eq("section", key)
+    .maybeSingle()
+  if (data?.image_url) return (data as { image_url: string | null }).image_url
+  // Fall back to the base section key if no device-specific image exists
+  if (device !== "desktop") {
+    const { data: fallback } = await supabase
+      .from("backgrounds")
+      .select("image_url")
+      .eq("section", section)
+      .maybeSingle()
+    return (fallback as { image_url: string | null } | null)?.image_url ?? null
+  }
+  return null
 }
 
 export async function getPortfolioByCategory(category: "women" | "men" | "both") {
@@ -180,6 +194,28 @@ export async function getPortfolioByCategory(category: "women" | "men" | "both")
     .eq("category", category)
     .order("display_order")
   return (data as SitePortfolioImage[]) ?? []
+}
+
+export function buildFooterHours(hours: SiteHours[]): {
+  hoursTueThu: string
+  hoursFri:    string
+  hoursSat:    string
+  hoursSunMon: string
+} {
+  const byDay: Record<string, SiteHours> = {}
+  for (const h of hours) byDay[h.day] = h
+
+  function fmt(h?: SiteHours): string {
+    if (!h || h.is_closed || !h.open_time || !h.close_time) return "Closed"
+    return `${h.open_time} – ${h.close_time}`
+  }
+
+  return {
+    hoursTueThu: fmt(byDay.tuesday),
+    hoursFri:    fmt(byDay.friday),
+    hoursSat:    fmt(byDay.saturday),
+    hoursSunMon: fmt(byDay.sunday),
+  }
 }
 
 export async function getHoursForToday(): Promise<{

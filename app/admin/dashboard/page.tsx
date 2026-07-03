@@ -44,88 +44,88 @@ const sections = [
     label: "Backgrounds",
     description: "Update website background images",
     icon: Image,
-    color: "from-violet-500/20 to-violet-500/5 border-violet-500/20",
-    iconColor: "text-violet-400",
+    bg: "bg-violet-600",
+    iconBg: "bg-violet-500",
   },
   {
     href: "/admin/portfolio",
     label: "Portfolio",
     description: "Manage gallery photos",
     icon: Grid3X3,
-    color: "from-blue-500/20 to-blue-500/5 border-blue-500/20",
-    iconColor: "text-blue-400",
+    bg: "bg-blue-600",
+    iconBg: "bg-blue-500",
   },
   {
     href: "/admin/services",
     label: "Services",
     description: "Edit service menu & prices",
     icon: Scissors,
-    color: "from-amber-500/20 to-amber-500/5 border-amber-500/20",
-    iconColor: "text-amber-400",
+    bg: "bg-amber-500",
+    iconBg: "bg-amber-400",
   },
   {
     href: "/admin/team",
     label: "Team Members",
     description: "Manage your staff profiles",
     icon: Users,
-    color: "from-emerald-500/20 to-emerald-500/5 border-emerald-500/20",
-    iconColor: "text-emerald-400",
+    bg: "bg-emerald-600",
+    iconBg: "bg-emerald-500",
   },
   {
     href: "/admin/testimonials",
     label: "Testimonials",
     description: "Manage customer reviews",
     icon: Star,
-    color: "from-yellow-500/20 to-yellow-500/5 border-yellow-500/20",
-    iconColor: "text-yellow-400",
+    bg: "bg-yellow-500",
+    iconBg: "bg-yellow-400",
   },
   {
     href: "/admin/before-after",
     label: "Before & After",
     description: "Showcase transformation photos",
     icon: ArrowLeftRight,
-    color: "from-pink-500/20 to-pink-500/5 border-pink-500/20",
-    iconColor: "text-pink-400",
+    bg: "bg-pink-600",
+    iconBg: "bg-pink-500",
   },
   {
     href: "/admin/faq",
     label: "FAQ",
     description: "Edit frequently asked questions",
     icon: HelpCircle,
-    color: "from-cyan-500/20 to-cyan-500/5 border-cyan-500/20",
-    iconColor: "text-cyan-400",
+    bg: "bg-cyan-600",
+    iconBg: "bg-cyan-500",
   },
   {
     href: "/admin/hours",
     label: "Opening Hours",
     description: "Set your weekly schedule",
     icon: Clock,
-    color: "from-orange-500/20 to-orange-500/5 border-orange-500/20",
-    iconColor: "text-orange-400",
+    bg: "bg-orange-500",
+    iconBg: "bg-orange-400",
   },
   {
     href: "/admin/holidays",
     label: "Holiday Hours",
     description: "Set special holiday closures",
     icon: CalendarX2,
-    color: "from-red-500/20 to-red-500/5 border-red-500/20",
-    iconColor: "text-red-400",
+    bg: "bg-red-600",
+    iconBg: "bg-red-500",
   },
   {
     href: "/admin/contact",
     label: "Contact Info",
     description: "Update phone, email & address",
     icon: Phone,
-    color: "from-teal-500/20 to-teal-500/5 border-teal-500/20",
-    iconColor: "text-teal-400",
+    bg: "bg-teal-600",
+    iconBg: "bg-teal-500",
   },
   {
     href: "/admin/social",
     label: "Social Media",
     description: "Manage Instagram, Facebook & TikTok",
     icon: Share2,
-    color: "from-fuchsia-500/20 to-fuchsia-500/5 border-fuchsia-500/20",
-    iconColor: "text-fuchsia-400",
+    bg: "bg-fuchsia-600",
+    iconBg: "bg-fuchsia-500",
   },
 ]
 
@@ -135,57 +135,57 @@ export default async function DashboardPage() {
   return (
     <div>
       {/* Welcome */}
-      <div className="mb-8">
-        <h1 className="text-2xl font-semibold text-white">Good day! 👋</h1>
-        <p className="text-zinc-400 mt-1 text-sm">
+      <div className="mb-10">
+        <h1 className="text-4xl font-bold text-gray-900">Good day! 👋</h1>
+        <p className="text-gray-500 mt-2 text-lg">
           Welcome to your website manager. Everything you need is right here.
         </p>
       </div>
 
       {/* Stats row */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-10">
         {[
           { label: "Services", value: stats.services, icon: Scissors },
           { label: "Gallery Photos", value: stats.portfolio, icon: Grid3X3 },
           { label: "Team Members", value: stats.team, icon: Users },
           { label: "Testimonials", value: stats.testimonials, icon: Star },
         ].map(({ label, value, icon: Icon }) => (
-          <div key={label} className="bg-zinc-900 border border-zinc-800 rounded-xl p-4">
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-xs font-medium text-zinc-400 uppercase tracking-wider">
+          <div key={label} className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
+            <div className="flex items-center justify-between mb-4">
+              <span className="text-sm font-semibold text-gray-500 uppercase tracking-wider">
                 {label}
               </span>
-              <Icon className="h-4 w-4 text-zinc-600" />
+              <Icon className="h-5 w-5 text-gray-300" />
             </div>
-            <div className="text-3xl font-bold text-white">{value}</div>
+            <div className="text-4xl font-bold text-gray-900">{value}</div>
           </div>
         ))}
       </div>
 
       {stats.lastUpdated && (
-        <div className="flex items-center gap-2 text-xs text-zinc-500 mb-6">
-          <TrendingUp className="h-3.5 w-3.5" />
+        <div className="flex items-center gap-2 text-sm text-gray-400 mb-8">
+          <TrendingUp className="h-4 w-4" />
           Website last updated {formatDate(stats.lastUpdated)}
         </div>
       )}
 
       {/* Section cards */}
-      <h2 className="text-sm font-semibold text-zinc-400 uppercase tracking-wider mb-4">
+      <h2 className="text-base font-bold text-gray-400 uppercase tracking-wider mb-5">
         Manage Your Website
       </h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-        {sections.map(({ href, label, description, icon: Icon, color, iconColor }) => (
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {sections.map(({ href, label, description, icon: Icon, bg, iconBg }) => (
           <Link
             key={href}
             href={href}
-            className={`group relative bg-gradient-to-br ${color} border rounded-xl p-5 hover:scale-[1.01] transition-all duration-200 hover:shadow-lg hover:shadow-black/30`}
+            className={`group relative ${bg} rounded-2xl p-6 hover:scale-[1.02] transition-all duration-200 hover:shadow-xl`}
           >
-            <div className={`inline-flex h-10 w-10 items-center justify-center rounded-xl bg-zinc-900 border border-zinc-800 mb-3 ${iconColor}`}>
-              <Icon className="h-5 w-5" />
+            <div className={`inline-flex h-12 w-12 items-center justify-center rounded-xl ${iconBg} mb-4 text-white/90`}>
+              <Icon className="h-6 w-6" />
             </div>
-            <h3 className="font-semibold text-white text-sm mb-0.5">{label}</h3>
-            <p className="text-xs text-zinc-400">{description}</p>
-            <div className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-600 group-hover:text-zinc-400 transition-colors">
+            <h3 className="font-bold text-white text-base mb-1">{label}</h3>
+            <p className="text-sm text-white/70">{description}</p>
+            <div className="absolute right-5 top-1/2 -translate-y-1/2 text-white/40 group-hover:text-white/80 transition-colors text-lg">
               →
             </div>
           </Link>

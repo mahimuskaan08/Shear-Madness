@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useCallback, useRef } from "react";
-import type { CmsGalleryImage } from "@/lib/site-images";
+import type { SitePortfolioImage, SiteTestimonial } from "@/lib/site-data";
 import Image from "next/image";
 
 /* ─────────────────────────────────────────────
@@ -27,77 +27,27 @@ type VideoItem = {
   title: string;
 };
 
-/* ─────────────────────────────────────────────
-   Data — swap image paths for real assets when ready
-───────────────────────────────────────────── */
-const GALLERY_ITEMS: GalleryItem[] = [
-  // Men
-  { id: 1,  previewImage: "/gallery/m1-preview.jpeg",  backImage: "/gallery/m2-preview.jpg",   fullImage: "/gallery/m1-full.jpeg",  alt: "Men Style 1",  category: "Men" },
-  { id: 2,  previewImage: "/gallery/m2-preview.jpg",   backImage: "/gallery/m3-preview.jpeg",  fullImage: "/gallery/m2-full.jpg",   alt: "Men Style 2",  category: "Men" },
-  { id: 3,  previewImage: "/gallery/m3-preview.jpeg",  backImage: "/gallery/m4-preview.jpg",   fullImage: "/gallery/m3-full.jpeg",  alt: "Men Style 3",  category: "Men" },
-  { id: 4,  previewImage: "/gallery/m4-preview.jpg",   backImage: "/gallery/m5-preview.jpeg",  fullImage: "/gallery/m4-full.jpg",   alt: "Men Style 4",  category: "Men" },
-  { id: 5,  previewImage: "/gallery/m5-preview.jpeg",  backImage: "/gallery/m6-preview.jpeg",  fullImage: "/gallery/m5-full.jpeg",  alt: "Men Style 5",  category: "Men" },
-  { id: 6,  previewImage: "/gallery/m6-preview.jpeg",  backImage: "/gallery/m7-preview.jpeg",  fullImage: "/gallery/m6-full.jpeg",  alt: "Men Style 6",  category: "Men" },
-  { id: 31, previewImage: "/gallery/m7-preview.jpeg",  backImage: "/gallery/m8-preview.jpeg",  fullImage: "/gallery/m7-full.jpeg",  alt: "Men Style 7",  category: "Men" },
-  { id: 32, previewImage: "/gallery/m8-preview.jpeg",  backImage: "/gallery/m9-preview.jpeg",  fullImage: "/gallery/m8-full.jpeg",  alt: "Men Style 8",  category: "Men" },
-  { id: 33, previewImage: "/gallery/m9-preview.jpeg",  backImage: "/gallery/m10-preview.jpeg", fullImage: "/gallery/m9-full.jpeg",  alt: "Men Style 9",  category: "Men" },
-  { id: 34, previewImage: "/gallery/m10-preview.jpeg", backImage: "/gallery/m11-preview.jpeg", fullImage: "/gallery/m10-full.jpeg", alt: "Men Style 10", category: "Men" },
-  { id: 35, previewImage: "/gallery/m11-preview.jpeg", backImage: "/gallery/m12-preview.jpeg", fullImage: "/gallery/m11-full.jpeg", alt: "Men Style 11", category: "Men" },
-  { id: 36, previewImage: "/gallery/m12-preview.jpeg", backImage: "/gallery/m13-preview.jpeg", fullImage: "/gallery/m12-full.jpeg", alt: "Men Style 12", category: "Men" },
-  { id: 37, previewImage: "/gallery/m13-preview.jpeg", backImage: "/gallery/m14-preview.jpeg", fullImage: "/gallery/m13-full.jpeg", alt: "Men Style 13", category: "Men" },
-  { id: 38, previewImage: "/gallery/m14-preview.jpeg", backImage: "/gallery/m15-preview.jpeg", fullImage: "/gallery/m14-full.jpeg", alt: "Men Style 14", category: "Men" },
-  { id: 39, previewImage: "/gallery/m15-preview.jpeg", backImage: "/gallery/m16-preview.jpeg", fullImage: "/gallery/m15-full.jpeg", alt: "Men Style 15", category: "Men" },
-  { id: 40, previewImage: "/gallery/m16-preview.jpeg", backImage: "/gallery/m17-preview.jpeg", fullImage: "/gallery/m16-full.jpeg", alt: "Men Style 16", category: "Men" },
-  { id: 41, previewImage: "/gallery/m17-preview.jpeg", backImage: "/gallery/m18-preview.jpg",  fullImage: "/gallery/m17-full.jpeg", alt: "Men Style 17", category: "Men" },
-  { id: 42, previewImage: "/gallery/m18-preview.jpg",  backImage: "/gallery/m19-preview.jpg",  fullImage: "/gallery/m18-full.jpeg", alt: "Men Style 18", category: "Men" },
-  { id: 43, previewImage: "/gallery/m19-preview.jpg",  backImage: "/gallery/m20-preview.jpeg", fullImage: "/gallery/m19-full.jpeg", alt: "Men Style 19", category: "Men" },
-  { id: 44, previewImage: "/gallery/m20-preview.jpeg", backImage: "/gallery/m21-preview.jpeg", fullImage: "/gallery/m20-full.jpeg", alt: "Men Style 20", category: "Men" },
-  { id: 45, previewImage: "/gallery/m21-preview.jpeg", backImage: "/gallery/m22-preview.jpg",  fullImage: "/gallery/m21-full.png",  alt: "Men Style 21", category: "Men" },
-  { id: 46, previewImage: "/gallery/m22-preview.jpg",  backImage: "/gallery/m23-preview.jpg",  fullImage: "/gallery/m22-full.jpg",  alt: "Men Style 22", category: "Men" },
-  { id: 47, previewImage: "/gallery/m23-preview.jpg",  backImage: "/gallery/m24-preview.jpg",  fullImage: "/gallery/m23-full.jpg",  alt: "Men Style 23", category: "Men" },
-  { id: 48, previewImage: "/gallery/m24-preview.jpg",  backImage: "/gallery/m25-preview.jpg",  fullImage: "/gallery/m24-full.jpg",  alt: "Men Style 24", category: "Men" },
-  { id: 49, previewImage: "/gallery/m25-preview.jpg",  backImage: "/gallery/m26-preview.jpg",  fullImage: "/gallery/m25-full.jpg",  alt: "Men Style 25", category: "Men" },
-  { id: 50, previewImage: "/gallery/m26-preview.jpg",  backImage: "/gallery/m27-preview.jpg",  fullImage: "/gallery/m26-full.png",  alt: "Men Style 26", category: "Men" },
-  { id: 51, previewImage: "/gallery/m27-preview.jpg",  backImage: "/gallery/m28-preview.jpeg", fullImage: "/gallery/m27-full.jpg",  alt: "Men Style 27", category: "Men" },
-  { id: 52, previewImage: "/gallery/m28-preview.jpeg", backImage: "/gallery/m29-preview.jpg",  fullImage: "/gallery/m28-full.jpeg", alt: "Men Style 28", category: "Men" },
-  { id: 53, previewImage: "/gallery/m29-preview.jpg",  backImage: "/gallery/m30-preview.jpg",  fullImage: "/gallery/m29-full.jpg",  alt: "Men Style 29", category: "Men" },
-  { id: 54, previewImage: "/gallery/m30-preview.jpg",  backImage: "/gallery/m31-preview.jpg",  fullImage: "/gallery/m30-full.jpg",  alt: "Men Style 30", category: "Men" },
-  { id: 55, previewImage: "/gallery/m31-preview.jpg",  backImage: "/gallery/m32-preview.jpg",  fullImage: "/gallery/m31-full.jpg",  alt: "Men Style 31", category: "Men" },
-  { id: 56, previewImage: "/gallery/m32-preview.jpg",  backImage: "/gallery/m33-preview.jpg",  fullImage: "/gallery/m32-full.jpg",  alt: "Men Style 32", category: "Men" },
-  { id: 57, previewImage: "/gallery/m33-preview.jpg",  backImage: "/gallery/m34-preview.jpg",  fullImage: "/gallery/m33-full.jpg",  alt: "Men Style 33", category: "Men" },
-  { id: 58, previewImage: "/gallery/m34-preview.jpg",  backImage: "/gallery/m35-preview.jpg",  fullImage: "/gallery/m34-full.jpg",  alt: "Men Style 34", category: "Men" },
-  { id: 59, previewImage: "/gallery/m35-preview.jpg",  backImage: "/gallery/m36-preview.jpg",  fullImage: "/gallery/m35-full.jpg",  alt: "Men Style 35", category: "Men" },
-  { id: 60, previewImage: "/gallery/m36-preview.jpg",  backImage: "/gallery/m37-preview.jpg",  fullImage: "/gallery/m36-full.jpg",  alt: "Men Style 36", category: "Men" },
-  { id: 61, previewImage: "/gallery/m37-preview.jpg",  backImage: "/gallery/m38-preview.jpg",  fullImage: "/gallery/m37-full.jpg",  alt: "Men Style 37", category: "Men" },
-  { id: 62, previewImage: "/gallery/m38-preview.jpg",  backImage: "/gallery/m39-preview.jpg",  fullImage: "/gallery/m38-full.jpg",  alt: "Men Style 38", category: "Men" },
-  { id: 63, previewImage: "/gallery/m39-preview.jpg",  backImage: "/gallery/m40-preview.jpg",  fullImage: "/gallery/m39-full.jpg",  alt: "Men Style 39", category: "Men" },
-  { id: 64, previewImage: "/gallery/m40-preview.jpg",  backImage: "/gallery/m1-preview.jpeg",  fullImage: "/gallery/m40-full.png",  alt: "Men Style 40", category: "Men" },
-  // Women
-  { id: 7,  previewImage: "/gallery/w1-preview.jpg",  backImage: "/gallery/w2-preview.jpg",  fullImage: "/gallery/w1-full.jpg",  alt: "Women Style 1",  category: "Women" },
-  { id: 8,  previewImage: "/gallery/w2-preview.jpg",  backImage: "/gallery/w3-preview.jpg",  fullImage: "/gallery/w2-full.png",  alt: "Women Style 2",  category: "Women" },
-  { id: 9,  previewImage: "/gallery/w3-preview.jpg",  backImage: "/gallery/w4-preview.jpg",  fullImage: "/gallery/w3-full.jpg",  alt: "Women Style 3",  category: "Women" },
-  { id: 10, previewImage: "/gallery/w4-preview.jpg",  backImage: "/gallery/w5-preview.jpg",  fullImage: "/gallery/w4-full.jpg",  alt: "Women Style 4",  category: "Women" },
-  { id: 11, previewImage: "/gallery/w5-preview.jpg",  backImage: "/gallery/w6-preview.jpg",  fullImage: "/gallery/w5-full.jpg",  alt: "Women Style 5",  category: "Women" },
-  { id: 12, previewImage: "/gallery/w6-preview.jpg",  backImage: "/gallery/w7-preview.jpg",  fullImage: "/gallery/w6-full.jpg",  alt: "Women Style 6",  category: "Women" },
-  { id: 19, previewImage: "/gallery/w7-preview.jpg",  backImage: "/gallery/w8-preview.jpg",  fullImage: "/gallery/w7-full.jpg",  alt: "Women Style 7",  category: "Women" },
-  { id: 20, previewImage: "/gallery/w8-preview.jpg",  backImage: "/gallery/w9-preview.jpg",  fullImage: "/gallery/w8-full.jpg",  alt: "Women Style 8",  category: "Women" },
-  { id: 21, previewImage: "/gallery/w9-preview.jpg",  backImage: "/gallery/w10-preview.jpg", fullImage: "/gallery/w9-full.jpg",  alt: "Women Style 9",  category: "Women" },
-  { id: 22, previewImage: "/gallery/w10-preview.jpg", backImage: "/gallery/w11-preview.jpg", fullImage: "/gallery/w10-full.jpg", alt: "Women Style 10", category: "Women" },
-  { id: 23, previewImage: "/gallery/w11-preview.jpg", backImage: "/gallery/w12-preview.jpg", fullImage: "/gallery/w11-full.jpg", alt: "Women Style 11", category: "Women" },
-  { id: 24, previewImage: "/gallery/w12-preview.jpg", backImage: "/gallery/w13-preview.jpg", fullImage: "/gallery/w12-full.jpg", alt: "Women Style 12", category: "Women" },
-  { id: 25, previewImage: "/gallery/w13-preview.jpg", backImage: "/gallery/w14-preview.jpg", fullImage: "/gallery/w13-full.jpg", alt: "Women Style 13", category: "Women" },
-  { id: 26, previewImage: "/gallery/w14-preview.jpg", backImage: "/gallery/w15-preview.jpg", fullImage: "/gallery/w14-full.jpg", alt: "Women Style 14", category: "Women" },
-  { id: 27, previewImage: "/gallery/w15-preview.jpg", backImage: "/gallery/w16-preview.jpg", fullImage: "/gallery/w15-full.png", alt: "Women Style 15", category: "Women" },
-  { id: 28, previewImage: "/gallery/w16-preview.jpg", backImage: "/gallery/w17-preview.jpg", fullImage: "/gallery/w16-full.jpg", alt: "Women Style 16", category: "Women" },
-  { id: 29, previewImage: "/gallery/w17-preview.jpg", backImage: "/gallery/w18-preview.jpg", fullImage: "/gallery/w17-full.jpg", alt: "Women Style 17", category: "Women" },
-  { id: 30, previewImage: "/gallery/w18-preview.jpg", backImage: "/gallery/w1-preview.jpg",  fullImage: "/gallery/w18-full.jpg", alt: "Women Style 18", category: "Women" },
-  // Hair & Makeup
-  { id: 13, previewImage: "/gallery/hm1-preview.jpg", backImage: "/gallery/hm2-preview.jpg", fullImage: "/gallery/hm1-full.jpg",  alt: "Hair & Makeup 1", category: "Hair & Makeup" },
-  { id: 14, previewImage: "/gallery/hm2-preview.jpg", backImage: "/gallery/hm3-preview.jpg", fullImage: "/gallery/hm2-full.jpg",  alt: "Hair & Makeup 2", category: "Hair & Makeup" },
-  { id: 15, previewImage: "/gallery/hm3-preview.jpg", backImage: "/gallery/hm4-preview.jpg", fullImage: "/gallery/hm3-full.jpg",  alt: "Hair & Makeup 3", category: "Hair & Makeup" },
-  { id: 16, previewImage: "/gallery/hm4-preview.jpg", backImage: "/gallery/hm5-preview.jpg", fullImage: "/gallery/hm4-full.png",  alt: "Hair & Makeup 4", category: "Hair & Makeup" },
-  { id: 17, previewImage: "/gallery/hm5-preview.jpg", backImage: "/gallery/hm1-preview.jpg", fullImage: "/gallery/hm5-full.jpg",  alt: "Hair & Makeup 5", category: "Hair & Makeup" },
-];
+const CATEGORY_MAP: Record<string, ImageCategory> = {
+  men:   "Men",
+  women: "Women",
+  both:  "Hair & Makeup",
+}
+
+function buildGalleryItems(portfolioImages: SitePortfolioImage[]): GalleryItem[] {
+  return portfolioImages.map((img, i, arr) => {
+    const sameCat = arr.filter(x => x.category === img.category)
+    const myIdx   = sameCat.findIndex(x => x.id === img.id)
+    const next    = sameCat[(myIdx + 1) % sameCat.length]
+    return {
+      id:           i + 1,
+      previewImage: img.url,
+      backImage:    next?.url ?? img.url,
+      fullImage:    img.url,
+      alt:          img.alt || img.title,
+      category:     CATEGORY_MAP[img.category] ?? "Men",
+    }
+  })
+}
 
 const VIDEO_ITEMS: VideoItem[] = [
   { id: "B23e-dWG2Ws", title: "Shear Madness — Salon Feature"        },
@@ -114,26 +64,6 @@ function shuffle<T>(arr: T[]): T[] {
 }
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
-/* ─────────────────────────────────────────────
-   Testimonials Data
-───────────────────────────────────────────── */
-const TESTIMONIALS = [
-  { name: "Verified Reviewer",   role: "Google Review", text: "I love this place. Right when you walk in, you are always greeted by David, who is super friendly and welcoming. Victor is the absolute best. He takes his time and is meticulous with his cuts/styling. I highly recommend you give this place a try :)" },
-  { name: "Michelle Ferran",     role: "Google Review", text: "OMG I had my first haircut from Victor — what an amazing experience!!! Not only did I get a fabulous haircut, Victor took the time to talk me through my new style. He showed me how to style it with his hair products." },
-  { name: "Bradley Paszkiewicz", role: "Google Review", text: "Honestly the best haircut I have ever gotten. Victor has an absolutely amazing personality that makes the whole experience fun, plus super experienced. He explains everything he is doing/about to do and why." },
-  { name: "Ángeles González",    role: "Google Review", text: "Today my boyfriend went to this place to get his hair cut. He received what we believe is the best haircut he's ever had, so I had to come here to say THANK YOU." },
-  { name: "Henna Vora",          role: "Google Review", text: "I love my husband's haircut and styling. Victor is professional and excellent at his job. Brilliant skill set to handle my husband's hair volumes. Big thank you." },
-  { name: "Gregory G.",          role: "Google Review", text: "The 2 owner operators are always on-site, so the well run, full service shop is always fully stocked, staffed, and maintained. David and Viktor space appointments that they can actually honor." },
-  { name: "Saarth Shah",         role: "Google Review", text: "Best haircut place in town. Victor is amazing at knowing the hair style you want and has some great suggestions. David is very nice and friendly." },
-  { name: "G Bha",               role: "Google Review", text: "Love the edgy cuts Victor does! He always takes the time to make sure it's cut and styled well. I've tried different hair salons both in Hoboken and New York City but Shear Madness is a cut above all of them!" },
-  { name: "Jaime Zimmel",        role: "Google Review", text: "David and Victor are always on-site, and always very accommodating and professional. The site is always well maintained and clean. They always make the experience very warm and welcoming." },
-  { name: "Jesse Luo",           role: "Google Review", text: "Met with Victor, he was very patient with me in building up a better haircut than my usual, and explained all his recommendations in detail. Highly recommended and worth a trip." },
-  { name: "Andrew Lazirko",      role: "Google Review", text: "My first haircut at a new salon in 28 years. Absolute legends in here. 10/10 would recommend to everyone. Class act establishment. My new spot for sure." },
-  { name: "Erdal Turnacioglu",   role: "Google Review", text: "I've been going to Victor for over 15 years now, no matter where I've lived and worked in New York or New Jersey. He's the best! Highly recommend!" },
-  { name: "Brad Mundt",          role: "Google Review", text: "Excellent cut by Victor. I appreciate his explanations as to why he is doing certain things and his overall skill level." },
-  { name: "Georgiy Yudintsev",   role: "Google Review", text: "Excellent haircut, a little pricey but it was very well done. Very chill and easy going staff too!" },
-  { name: "Daniel Mikus",        role: "Google Review", text: "I love this place! Even after moving to Brooklyn I still make the journey across both rivers monthly to get my hair cut." },
-];
 
 
 /* ─────────────────────────────────────────────
@@ -141,33 +71,24 @@ const TESTIMONIALS = [
 ───────────────────────────────────────────── */
 export default function GalleryPageContent({
   bgImage,
-  cmsGalleryImages,
+  portfolioImages = [],
+  testimonials    = [],
 }: {
-  bgImage?:          string;
-  cmsGalleryImages?: CmsGalleryImage[];
+  bgImage?:         string;
+  portfolioImages?: SitePortfolioImage[];
+  testimonials?:    SiteTestimonial[];
 }) {
-  // Convert CMS images to GalleryItems (shown in "All" tab only).
-  const cmsItems: GalleryItem[] = (cmsGalleryImages ?? []).map((img, i, arr) => ({
-    id:           -(i + 1),
-    previewImage: img.url,
-    backImage:    arr[(i + 1) % arr.length]?.url ?? img.url,
-    fullImage:    img.url,
-    alt:          img.alt || img.title || `Gallery Image ${i + 1}`,
-    category:     "Men" as ImageCategory,
-  }));
-  const allWithCms = [...cmsItems, ...GALLERY_ITEMS];
+  const galleryItems = buildGalleryItems(portfolioImages);
 
   const [activeTab, setActiveTab]       = useState<ActiveTab>("All");
   const [lightboxItem, setLightboxItem] = useState<GalleryItem | null>(null);
-  // Start with original order on both server and client to avoid hydration mismatch,
-  // then shuffle on the client after mount.
-  const [allItems, setAllItems] = useState<GalleryItem[]>(allWithCms);
-  useEffect(() => { setAllItems(shuffle([...allWithCms])); }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  const [allItems, setAllItems]         = useState<GalleryItem[]>(galleryItems);
+  useEffect(() => { setAllItems(shuffle([...galleryItems])); }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const visibleItems: GalleryItem[] =
     activeTab === "All"    ? allItems :
     activeTab === "Videos" ? []       :
-    GALLERY_ITEMS.filter((item) => item.category === activeTab);
+    galleryItems.filter((item) => item.category === activeTab);
 
   const isVideos = activeTab === "Videos";
 
@@ -301,7 +222,7 @@ export default function GalleryPageContent({
 
       </div>{/* end relative z-10 */}
     </section>
-    <ReviewsSection />
+    <ReviewsSection testimonials={testimonials} />
     </div>{/* end shared bg wrapper */}
     </>
   );
@@ -630,7 +551,7 @@ function VideoSection() {
 /* ─────────────────────────────────────────────
    Testimonial Card
 ───────────────────────────────────────────── */
-function TestimonialCard({ t }: { t: { name: string; role: string; text: string } }) {
+function TestimonialCard({ t }: { t: SiteTestimonial }) {
   return (
     <div
       style={{
@@ -665,7 +586,7 @@ function TestimonialCard({ t }: { t: { name: string; role: string; text: string 
           flex:       1,
         }}
       >
-        &ldquo;{t.text}&rdquo;
+        &ldquo;{t.review}&rdquo;
       </p>
 
       {/* Divider */}
@@ -674,10 +595,10 @@ function TestimonialCard({ t }: { t: { name: string; role: string; text: string 
       {/* Author */}
       <div>
         <p style={{ fontWeight: 600, fontSize: "0.87rem", color: "#3A3832", letterSpacing: "0.02em" }}>
-          {t.name}
+          {t.customer_name}
         </p>
         <p style={{ fontSize: "0.75rem", color: "rgba(58,56,50,0.48)", marginTop: 2, letterSpacing: "0.04em" }}>
-          {t.role}
+          Google Review
         </p>
       </div>
     </div>
@@ -687,7 +608,7 @@ function TestimonialCard({ t }: { t: { name: string; role: string; text: string 
 /* ─────────────────────────────────────────────
    Reviews Section — horizontal testimonial carousel
 ───────────────────────────────────────────── */
-function ReviewsSection() {
+function ReviewsSection({ testimonials }: { testimonials: SiteTestimonial[] }) {
   const [idx, setIdx]         = useState(0);
   const [paused, setPaused]   = useState(false);
   const [visibleCount, setVC] = useState(3);
@@ -698,7 +619,7 @@ function ReviewsSection() {
   const dragStart  = useRef<number | null>(null);
   const [transOn, setTransOn] = useState(true);
 
-  const N        = TESTIMONIALS.length;
+  const N        = testimonials.length;
   const GAP      = 20;
   const maxIndex = Math.max(0, N - visibleCount);
   const cardW    = visibleCount === 1
@@ -831,7 +752,7 @@ function ReviewsSection() {
               willChange: "transform",
             }}
           >
-            {TESTIMONIALS.map((t, i) => (
+            {testimonials.map((t, i) => (
               <div key={i} style={{ flexShrink: 0, width: cardW || "auto" }}>
                 <TestimonialCard t={t} />
               </div>

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Navbar from "@/components/Navbar";
 import ContactSection from "@/components/ContactPage";
 import CustomCursor from "@/components/CustomCursor";
-import { getSiteImages } from "@/lib/site-images";
+import { getSiteData, buildFooterHours } from "@/lib/site-data";
 
 export const dynamic = "force-dynamic";
 
@@ -20,12 +20,13 @@ export const metadata: Metadata = {
 };
 
 export default async function ContactPage() {
-  const imgs = await getSiteImages();
+  const data = await getSiteData();
+  const contact = data.contact;
+  const footerHours = buildFooterHours(data.hours);
 
   return (
     <main style={{ background: "#0B0B0B", minHeight: "100vh" }}>
       <CustomCursor />
-      {/* Force Navbar links/logo to white on dark background */}
       <style>{`
         .contact-page header { background: rgba(14,14,14,0.0) !important; }
         .contact-page header a,
@@ -36,16 +37,14 @@ export default async function ContactPage() {
         <Navbar />
       </div>
       <ContactSection
-        bgImage={imgs.contact_background_image ?? undefined}
-        phone={imgs.site_phone || undefined}
-        email={imgs.site_email || undefined}
-        addressLine1={imgs.site_address_line_1 || undefined}
-        cityStateZip={imgs.site_city_state_zip || undefined}
-        hoursTueThu={imgs.hours_tue_thu || undefined}
-        hoursFri={imgs.hours_fri || undefined}
-        hoursSat={imgs.hours_sat || undefined}
-        hoursSunMon={imgs.hours_sun_mon || undefined}
-        mapsUrl={imgs.google_maps_url || undefined}
+        phone={contact?.phone || undefined}
+        email={contact?.email || undefined}
+        addressLine1={contact?.address_line_1 || undefined}
+        cityStateZip={contact?.city_state_zip || undefined}
+        hoursTueThu={footerHours.hoursTueThu}
+        hoursFri={footerHours.hoursFri}
+        hoursSat={footerHours.hoursSat}
+        mapsUrl={contact?.google_maps_url || undefined}
       />
     </main>
   );

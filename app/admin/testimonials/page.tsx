@@ -56,7 +56,7 @@ function StarRating({
           onClick={() => onChange?.(s)}
           className={cn(
             "transition-colors",
-            s <= value ? "text-amber-400" : "text-zinc-700",
+            s <= value ? "text-amber-400" : "text-gray-200",
             onChange && "hover:text-amber-300 cursor-pointer"
           )}
         >
@@ -302,11 +302,11 @@ export default function TestimonialsPage() {
           }
         />
       ) : (
-        <div className="space-y-3">
+        <div className="space-y-4">
           {testimonials.map((t) => (
             <div
               key={t.id}
-              className="bg-zinc-900 border border-zinc-800 rounded-xl p-5 flex gap-4"
+              className="bg-white border border-gray-200 rounded-2xl p-6 flex gap-5 shadow-sm"
             >
               {/* Avatar */}
               <div className="shrink-0">
@@ -314,11 +314,11 @@ export default function TestimonialsPage() {
                   <img
                     src={t.customer_photo_url}
                     alt={t.customer_name}
-                    className="h-12 w-12 rounded-full object-cover border border-zinc-700"
+                    className="h-14 w-14 rounded-full object-cover border-2 border-gray-200"
                   />
                 ) : (
-                  <div className="h-12 w-12 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center">
-                    <User className="h-5 w-5 text-zinc-500" />
+                  <div className="h-14 w-14 rounded-full bg-gray-100 border border-gray-200 flex items-center justify-center">
+                    <User className="h-6 w-6 text-gray-400" />
                   </div>
                 )}
               </div>
@@ -327,8 +327,8 @@ export default function TestimonialsPage() {
               <div className="flex-1 min-w-0">
                 <div className="flex items-start justify-between gap-3 mb-2">
                   <div>
-                    <div className="flex items-center gap-2">
-                      <span className="font-medium text-white text-sm">{t.customer_name}</span>
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="font-bold text-gray-900 text-base">{t.customer_name}</span>
                       {!t.is_visible && (
                         <Badge variant="secondary">Hidden</Badge>
                       )}
@@ -351,7 +351,7 @@ export default function TestimonialsPage() {
                     />
                   </div>
                 </div>
-                <p className="text-sm text-zinc-300 line-clamp-3">{t.review}</p>
+                <p className="text-sm text-gray-600 line-clamp-3 mt-2">{t.review}</p>
               </div>
             </div>
           ))}

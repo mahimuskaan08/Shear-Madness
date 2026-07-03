@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import BookingPageContent from "@/components/BookingPageContent";
-import { getSiteImages } from "@/lib/site-images";
+import { getSiteData, buildFooterHours } from "@/lib/site-data";
 
 export const dynamic = "force-dynamic";
 
@@ -20,21 +20,23 @@ export const metadata: Metadata = {
 };
 
 export default async function BookingPage() {
-  const imgs = await getSiteImages();
+  const data = await getSiteData();
+  const contact = data.contact;
+  const footerHours = buildFooterHours(data.hours);
 
   return (
     <>
       <Navbar />
-      <BookingPageContent bgImage={imgs.booking_background_image ?? undefined} />
+      <BookingPageContent />
       <Footer
-        phone={imgs.site_phone || undefined}
-        email={imgs.site_email || undefined}
-        addressLine1={imgs.site_address_line_1 || undefined}
-        cityStateZip={imgs.site_city_state_zip || undefined}
-        hoursTueThu={imgs.hours_tue_thu || undefined}
-        hoursFri={imgs.hours_fri || undefined}
-        hoursSat={imgs.hours_sat || undefined}
-        hoursSunMon={imgs.hours_sun_mon || undefined}
+        phone={contact?.phone || undefined}
+        email={contact?.email || undefined}
+        addressLine1={contact?.address_line_1 || undefined}
+        cityStateZip={contact?.city_state_zip || undefined}
+        hoursTueThu={footerHours.hoursTueThu}
+        hoursFri={footerHours.hoursFri}
+        hoursSat={footerHours.hoursSat}
+        hoursSunMon={footerHours.hoursSunMon}
       />
     </>
   );

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
+import Footer from "@/components/Footer";
 import ServicesPageContent from "@/components/ServicesPageContent";
-import { getSiteImages } from "@/lib/site-images";
+import { getSiteData, buildFooterHours } from "@/lib/site-data";
 
 export const dynamic = "force-dynamic";
 
@@ -18,10 +19,23 @@ export const metadata: Metadata = {
 };
 
 export default async function ServicesPage() {
-  const imgs = await getSiteImages();
+  const data = await getSiteData();
+  const contact = data.contact;
+  const footerHours = buildFooterHours(data.hours);
+
   return (
-    <ServicesPageContent
-      bgImage={imgs.services_page_background_image ?? undefined}
-    />
+    <>
+      <ServicesPageContent />
+      <Footer
+        phone={contact?.phone || undefined}
+        email={contact?.email || undefined}
+        addressLine1={contact?.address_line_1 || undefined}
+        cityStateZip={contact?.city_state_zip || undefined}
+        hoursTueThu={footerHours.hoursTueThu}
+        hoursFri={footerHours.hoursFri}
+        hoursSat={footerHours.hoursSat}
+        hoursSunMon={footerHours.hoursSunMon}
+      />
+    </>
   );
 }

@@ -3,7 +3,6 @@
 import { useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
 import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import CustomCursor from "@/components/CustomCursor";
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
@@ -734,7 +733,6 @@ export default function ServicesPageContent({ bgImage }: { bgImage?: string }) {
         <BrandMarquee />
       </div>
 
-      <Footer />
     </>
   );
 }
