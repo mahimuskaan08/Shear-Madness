@@ -144,7 +144,7 @@ export async function getSiteData(): Promise<SiteData> {
     supabase.from("services").select("id, name, price, category, display_order").eq("is_visible", true).order("display_order"),
     supabase.from("team_members").select("id, name, position, bio, image_url, display_order").order("display_order"),
     supabase.from("testimonials").select("id, customer_name, customer_photo_url, review, rating").eq("is_visible", true).order("created_at", { ascending: false }),
-    supabase.from("portfolio_images").select("id, url, alt, title, category, featured, display_order, multi_angle_images").order("display_order"),
+    supabase.from("portfolio_images").select("id, url, alt, title, category, featured, display_order").order("display_order"),
     supabase.from("before_after_gallery").select("id, title, before_image_url, after_image_url, display_order").order("display_order"),
     supabase.from("faq").select("id, question, answer, display_order").eq("is_visible", true).order("display_order"),
     supabase.from("opening_hours").select("day, open_time, close_time, is_closed, display_order").order("display_order"),
