@@ -3,6 +3,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import GalleryPageContent from "@/components/GalleryPageContent";
 import { getSiteData, buildFooterHours } from "@/lib/site-data";
+import { getLocalGalleryImages } from "@/lib/local-gallery";
 
 export const dynamic = "force-dynamic";
 
@@ -24,12 +25,20 @@ export default async function GalleryPage() {
   const contact = data.contact;
   const footerHours = buildFooterHours(data.hours);
 
+  // Local static files are the primary gallery source (display + full pairs).
+  // Supabase images (uploaded via admin) are appended after.
+  const localImages = getLocalGalleryImages();
+  const supabaseIds = new Set(data.portfolioImages.map(img => img.url));
+  // Avoid duplicating any local image that was also uploaded to Supabase
+  const supabaseOnly = data.portfolioImages.filter(img => !supabaseIds.has(img.url) || img.url.startsWith("http"));
+  const allPortfolioImages = [...localImages, ...supabaseOnly];
+
   return (
     <>
       <Navbar />
       <main>
         <GalleryPageContent
-          portfolioImages={data.portfolioImages}
+          portfolioImages={allPortfolioImages}
           testimonials={data.testimonials}
         />
       </main>

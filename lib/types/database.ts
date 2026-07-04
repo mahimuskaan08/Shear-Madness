@@ -37,6 +37,7 @@ export interface Database {
           category: "women" | "men" | "both"
           featured: boolean
           display_order: number
+          multi_angle_images: Json
           created_at: string
           updated_at: string
         }
@@ -49,6 +50,7 @@ export interface Database {
           category: "women" | "men" | "both"
           featured?: boolean
           display_order?: number
+          multi_angle_images?: Json
           created_at?: string
           updated_at?: string
         }
@@ -61,6 +63,7 @@ export interface Database {
           category?: "women" | "men" | "both"
           featured?: boolean
           display_order?: number
+          multi_angle_images?: Json
           created_at?: string
           updated_at?: string
         }

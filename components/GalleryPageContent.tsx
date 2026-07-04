@@ -42,8 +42,8 @@ function buildGalleryItems(portfolioImages: SitePortfolioImage[]): GalleryItem[]
       id:           i + 1,
       previewImage: img.url,
       backImage:    next?.url ?? img.url,
-      fullImage:    img.url,
-      alt:          img.alt || img.title,
+      fullImage:    img.full_url ?? img.url, // full_url = lightbox image; falls back to preview
+      alt:          img.alt || img.title || "Gallery image",
       category:     CATEGORY_MAP[img.category] ?? "Men",
     }
   })

@@ -191,29 +191,6 @@ export default function TestimonialsSection({ testimonials: dbTestimonials }: { 
           </motion.div>
         </div>
 
-        {/* Testimonial selector mini cards */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 max-w-6xl mx-auto">
-          {testimonials.map((t, i) => (
-            <button
-              key={t.id}
-              onClick={() => setActive(i)}
-              className={`text-left p-5 border transition-all duration-400 rounded-sm cursor-pointer ${
-                active === i
-                  ? "border-[#C4A96A] bg-white shadow-[0_4px_24px_rgba(196,169,106,0.12)] -translate-y-0.5"
-                  : "border-[#E4DDD4] bg-transparent hover:border-[#C4A96A]/40 hover:bg-white/50 hover:-translate-y-1 hover:shadow-[0_8px_32px_rgba(196,169,106,0.10)]"
-              }`}
-            >
-              <div className="flex gap-0.5 mb-3">
-                {Array.from({ length: t.rating }).map((_, si) => (
-                  <StarIcon key={si} />
-                ))}
-              </div>
-              <p className="font-sans text-[#3A3832] text-xs font-medium">
-                {t.customer_name}
-              </p>
-            </button>
-          ))}
-        </div>
       </div>
     </section>
   );

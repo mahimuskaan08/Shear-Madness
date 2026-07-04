@@ -4,7 +4,6 @@ import HeroSection from "@/components/HeroSection";
 import AboutSection from "@/components/AboutSection";
 import ServicesSection from "@/components/ServicesSection";
 import ArtistSection from "@/components/ArtistSection";
-import TestimonialsSection from "@/components/TestimonialsSection";
 import ContactSection from "@/components/ContactPage";
 import Footer from "@/components/Footer";
 import CustomCursor from "@/components/CustomCursor";
@@ -56,6 +55,7 @@ export default async function Home() {
   const data = await getSiteData();
   const contact = data.contact;
   const footerHours = buildFooterHours(data.hours);
+  const heroBg = data.backgrounds.find(b => b.section === "hero_desktop")?.image_url ?? undefined;
 
   return (
     <main className="min-h-screen">
@@ -65,11 +65,10 @@ export default async function Home() {
       />
       <CustomCursor />
       <Navbar />
-      <HeroSection />
+      <HeroSection bgImage={heroBg} />
       <AboutSection />
       <ServicesSection />
       <ArtistSection />
-      <TestimonialsSection testimonials={data.testimonials} />
       <ContactSection />
       <Footer
         phone={contact?.phone || undefined}

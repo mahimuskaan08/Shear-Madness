@@ -24,9 +24,11 @@ import {
   Star,
   Loader2,
   Grid3X3,
+  X,
+  Images,
 } from "lucide-react"
 import { createSupabaseClient } from "@/lib/supabase/client"
-import { type Tables, type Inserts, type Updates } from "@/lib/types/database"
+import { type Tables, type Inserts, type Updates, type Json } from "@/lib/types/database"
 import { ImageUploader } from "@/components/admin/ImageUploader"
 import { PageHeader } from "@/components/admin/PageHeader"
 import { EmptyState } from "@/components/admin/EmptyState"
@@ -63,10 +65,9 @@ type Category = "women" | "men" | "both"
 
 type PortfolioImage = Tables<"portfolio_images">
 
-type UploadDraft = {
-  url: string
-  path: string
-} | null
+type AngleDraft = { url: string; path: string }
+
+type UploadDraft = AngleDraft | null
 
 // ─── Config ───────────────────────────────────────────────────────────────────
 
@@ -80,6 +81,18 @@ const CATEGORY_BADGE_VARIANT: Record<Category, "default" | "secondary" | "succes
   women: "default",
   men: "success",
   both: "secondary",
+}
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+function parseAngles(raw: Json): AngleDraft[] {
+  if (!Array.isArray(raw)) return []
+  return raw.filter(
+    (item): item is AngleDraft =>
+      typeof item === "object" &&
+      item !== null &&
+      typeof (item as AngleDraft).url === "string"
+  )
 }
 
 // ─── Fetch ────────────────────────────────────────────────────────────────────
@@ -108,7 +121,9 @@ function UploadDialog({
   defaultCategory: Category
   onSuccess: () => void
 }) {
-  const [uploadDraft, setUploadDraft] = useState<UploadDraft>(null)
+  const [displayDraft, setDisplayDraft] = useState<UploadDraft>(null)
+  const [angleDrafts, setAngleDrafts] = useState<AngleDraft[]>([])
+  const [addingAngle, setAddingAngle] = useState(false)
   const [category, setCategory] = useState<Category>(defaultCategory)
   const [alt, setAlt] = useState("")
   const [title, setTitle] = useState("")
@@ -116,7 +131,9 @@ function UploadDialog({
   const [isSaving, setIsSaving] = useState(false)
 
   function resetForm() {
-    setUploadDraft(null)
+    setDisplayDraft(null)
+    setAngleDrafts([])
+    setAddingAngle(false)
     setCategory(defaultCategory)
     setAlt("")
     setTitle("")
@@ -132,9 +149,13 @@ function UploadDialog({
     onOpenChange(next)
   }
 
+  function removeAngle(idx: number) {
+    setAngleDrafts((prev) => prev.filter((_, i) => i !== idx))
+  }
+
   async function handleSave() {
-    if (!uploadDraft) {
-      toast.error("Please upload an image first.")
+    if (!displayDraft) {
+      toast.error("Please upload a display picture first.")
       return
     }
 
@@ -142,7 +163,6 @@ function UploadDialog({
     try {
       const supabase = createSupabaseClient()
 
-      // Get the current max display_order for this category
       const { data: existing } = await supabase
         .from("portfolio_images")
         .select("display_order")
@@ -153,13 +173,14 @@ function UploadDialog({
       const nextOrder = (existing?.[0]?.display_order ?? -1) + 1
 
       const payload: Inserts<"portfolio_images"> = {
-        url: uploadDraft.url,
-        path: uploadDraft.path,
+        url: displayDraft.url,
+        path: displayDraft.path,
         alt: alt.trim() || "Portfolio image",
         title: title.trim() || "",
         category,
         featured,
         display_order: nextOrder,
+        multi_angle_images: angleDrafts as Json,
       }
       const { error } = await supabase.from("portfolio_images").insert(payload)
 
@@ -177,31 +198,106 @@ function UploadDialog({
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent className="max-w-lg">
+      <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Add Portfolio Photo</DialogTitle>
           <DialogDescription>
-            Upload a new image to your portfolio gallery.
+            Upload a display picture and optional multi-angle shots.
           </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-5 py-2">
-          {/* Image uploader */}
-          <div>
-            <Label className="text-xs font-medium text-zinc-400 uppercase tracking-wider mb-2 block">
-              Photo
+        <div className="space-y-6 py-2">
+          {/* ── Display Picture ── */}
+          <div className="space-y-2">
+            <Label className="text-xs font-medium text-zinc-400 uppercase tracking-wider block">
+              Display Picture <span className="text-red-400">*</span>
             </Label>
+            <p className="text-xs text-zinc-500">
+              The main thumbnail shown in the gallery card.
+            </p>
             <ImageUploader
               bucket="portfolio"
               folder={category}
-              currentUrl={uploadDraft?.url ?? null}
-              onUploadComplete={(url, path) => setUploadDraft({ url, path })}
-              onRemove={() => setUploadDraft(null)}
+              currentUrl={displayDraft?.url ?? null}
+              onUploadComplete={(url, path) => setDisplayDraft({ url, path })}
+              onRemove={() => setDisplayDraft(null)}
               aspectHint="Portrait or square"
             />
           </div>
 
-          {/* Category */}
+          {/* ── Multi-Angle Pictures ── */}
+          <div className="space-y-2">
+            <Label className="text-xs font-medium text-zinc-400 uppercase tracking-wider block">
+              Multi-Angle Pictures{" "}
+              <span className="text-zinc-600 normal-case font-normal">(optional)</span>
+            </Label>
+            <p className="text-xs text-zinc-500">
+              Extra shots from different angles shown when the photo is expanded.
+            </p>
+
+            {/* Uploaded angle thumbnails */}
+            {angleDrafts.length > 0 && (
+              <div className="flex flex-wrap gap-2">
+                {angleDrafts.map((draft, idx) => (
+                  <div
+                    key={idx}
+                    className="relative w-16 h-16 rounded-lg overflow-hidden border border-zinc-700 group"
+                  >
+                    <img
+                      src={draft.url}
+                      alt={`Angle ${idx + 1}`}
+                      className="w-full h-full object-cover"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => removeAngle(idx)}
+                      className="absolute top-0.5 right-0.5 rounded-full bg-zinc-900/80 p-0.5 opacity-0 group-hover:opacity-100 hover:bg-red-500/90 transition-all"
+                    >
+                      <X className="h-2.5 w-2.5 text-white" />
+                    </button>
+                    <span className="absolute bottom-0.5 left-0.5 text-[9px] font-bold text-white bg-zinc-900/70 rounded px-1">
+                      {idx + 1}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Inline angle uploader */}
+            {addingAngle ? (
+              <div className="space-y-2">
+                <ImageUploader
+                  bucket="portfolio"
+                  folder={`${category}/angles`}
+                  currentUrl={null}
+                  onUploadComplete={(url, path) => {
+                    setAngleDrafts((prev) => [...prev, { url, path }])
+                    setAddingAngle(false)
+                  }}
+                  onRemove={() => setAddingAngle(false)}
+                  aspectHint="Portrait or square"
+                />
+                <button
+                  type="button"
+                  onClick={() => setAddingAngle(false)}
+                  className="text-xs text-zinc-500 hover:text-zinc-300 transition-colors"
+                >
+                  Cancel
+                </button>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={() => setAddingAngle(true)}
+                className="flex items-center gap-1.5 text-xs text-zinc-400 hover:text-amber-400 transition-colors mt-1"
+              >
+                <Plus className="h-3.5 w-3.5" />
+                {angleDrafts.length === 0 ? "Add angle photo" : "Add another angle"}
+              </button>
+            )}
+          </div>
+
+          {/* ── Category ── */}
           <div className="space-y-1.5">
             <Label htmlFor="dialog-category" className="text-xs font-medium text-zinc-400 uppercase tracking-wider">
               Category
@@ -218,7 +314,7 @@ function UploadDialog({
             </Select>
           </div>
 
-          {/* Title */}
+          {/* ── Title ── */}
           <div className="space-y-1.5">
             <Label htmlFor="dialog-title" className="text-xs font-medium text-zinc-400 uppercase tracking-wider">
               Title <span className="text-zinc-600 normal-case font-normal">(optional)</span>
@@ -232,7 +328,7 @@ function UploadDialog({
             />
           </div>
 
-          {/* Alt text */}
+          {/* ── Alt text ── */}
           <div className="space-y-1.5">
             <Label htmlFor="dialog-alt" className="text-xs font-medium text-zinc-400 uppercase tracking-wider">
               Alt text <span className="text-zinc-600 normal-case font-normal">(accessibility)</span>
@@ -246,7 +342,7 @@ function UploadDialog({
             />
           </div>
 
-          {/* Featured toggle */}
+          {/* ── Featured toggle ── */}
           <div className="flex items-center justify-between rounded-xl bg-zinc-800/50 border border-zinc-800 px-4 py-3">
             <div>
               <p className="text-sm font-medium text-white">Featured photo</p>
@@ -269,7 +365,7 @@ function UploadDialog({
           </DialogClose>
           <Button
             onClick={handleSave}
-            disabled={isSaving || !uploadDraft}
+            disabled={isSaving || !displayDraft}
             className="bg-amber-500 hover:bg-amber-400 text-zinc-950 font-semibold"
           >
             {isSaving ? (
@@ -290,89 +386,6 @@ function UploadDialog({
   )
 }
 
-// ─── Portfolio Image Card ─────────────────────────────────────────────────────
-
-function PortfolioCard({
-  image,
-  onToggleFeatured,
-  onDelete,
-  isTogglingFeatured,
-  isDeleting,
-}: {
-  image: PortfolioImage
-  onToggleFeatured: (image: PortfolioImage) => void
-  onDelete: (image: PortfolioImage) => void
-  isTogglingFeatured: boolean
-  isDeleting: boolean
-}) {
-  return (
-    <div
-      className={cn(
-        "rounded-xl border border-zinc-800 bg-zinc-900 overflow-hidden flex flex-col transition-opacity",
-        isDeleting && "opacity-50 pointer-events-none"
-      )}
-    >
-      {/* Image preview */}
-      <div className="relative aspect-[4/3] bg-zinc-800 overflow-hidden">
-        <img
-          src={image.url}
-          alt={image.alt}
-          className="w-full h-full object-cover"
-          loading="lazy"
-        />
-        {image.featured && (
-          <div className="absolute top-2 left-2">
-            <span className="inline-flex items-center gap-1 text-[10px] font-semibold bg-amber-500 text-zinc-950 rounded-full px-2 py-0.5">
-              <Star className="h-2.5 w-2.5 fill-current" />
-              Featured
-            </span>
-          </div>
-        )}
-        <div className="absolute top-2 right-2">
-          <Badge variant={CATEGORY_BADGE_VARIANT[image.category]} className="text-[10px]">
-            {CATEGORY_LABELS[image.category]}
-          </Badge>
-        </div>
-      </div>
-
-      {/* Card footer */}
-      <div className="px-3 py-2.5 flex items-center justify-between gap-2 border-t border-zinc-800">
-        <div className="min-w-0 flex-1">
-          {image.title ? (
-            <p className="text-xs font-medium text-zinc-200 truncate">{image.title}</p>
-          ) : (
-            <p className="text-xs text-zinc-600 italic truncate">No title</p>
-          )}
-        </div>
-
-        <div className="flex items-center gap-1.5 shrink-0">
-          {/* Featured toggle */}
-          <button
-            type="button"
-            onClick={() => onToggleFeatured(image)}
-            disabled={isTogglingFeatured}
-            className={cn(
-              "flex items-center justify-center h-7 w-7 rounded-lg transition-colors",
-              image.featured
-                ? "text-amber-400 bg-amber-500/15 hover:bg-amber-500/25"
-                : "text-zinc-600 hover:text-zinc-400 hover:bg-zinc-800"
-            )}
-            title={image.featured ? "Remove from featured" : "Mark as featured"}
-          >
-            <Star className={cn("h-3.5 w-3.5", image.featured && "fill-current")} />
-          </button>
-
-          {/* Delete */}
-          <ConfirmDelete
-            onConfirm={() => onDelete(image)}
-            itemName={image.title || "this photo"}
-          />
-        </div>
-      </div>
-    </div>
-  )
-}
-
 // ─── Category Tab Panel ───────────────────────────────────────────────────────
 
 function CategoryPanel({
@@ -389,7 +402,6 @@ function CategoryPanel({
     queryFn: () => fetchPortfolioImages(category),
   })
 
-  // Local optimistic order for drag-and-drop
   const [localOrder, setLocalOrder] = useState<string[] | null>(null)
 
   const orderedImages =
@@ -452,18 +464,25 @@ function CategoryPanel({
     mutationFn: async (image: PortfolioImage) => {
       const supabase = createSupabaseClient()
 
-      // Delete from storage first
-      if (image.path) {
+      // Collect all storage paths to remove
+      const pathsToRemove: string[] = []
+      if (image.path) pathsToRemove.push(image.path)
+
+      // Include multi-angle paths
+      const angles = parseAngles(image.multi_angle_images)
+      for (const angle of angles) {
+        if (angle.path) pathsToRemove.push(angle.path)
+      }
+
+      if (pathsToRemove.length > 0) {
         const { error: storageError } = await supabase.storage
           .from("portfolio")
-          .remove([image.path])
-        // Non-fatal: file may already be gone
+          .remove(pathsToRemove)
         if (storageError) {
           console.warn("Storage delete warning:", storageError.message)
         }
       }
 
-      // Delete from database
       const { error } = await supabase
         .from("portfolio_images")
         .delete()
@@ -528,7 +547,6 @@ function CategoryPanel({
 
   return (
     <>
-      {/* Drag instruction */}
       <p className="text-xs text-zinc-600 mb-4">
         Drag the handle on the left of each row to reorder.{" "}
         {reorderMutation.isPending && (
@@ -546,64 +564,70 @@ function CategoryPanel({
           strategy={verticalListSortingStrategy}
         >
           <div className="space-y-2">
-            {orderedImages.map((image) => (
-              <SortableItem key={image.id} id={image.id}>
-                {/* Inline row layout: image thumb + info + controls */}
-                <div className="flex items-center gap-3 rounded-xl border border-zinc-800 bg-zinc-900 p-2 hover:border-zinc-700 transition-colors w-full">
-                  {/* Thumb */}
-                  <div className="h-14 w-20 rounded-lg overflow-hidden bg-zinc-800 shrink-0 border border-zinc-700">
-                    <img
-                      src={image.url}
-                      alt={image.alt}
-                      className="h-full w-full object-cover"
-                      loading="lazy"
-                    />
-                  </div>
+            {orderedImages.map((image) => {
+              const angles = parseAngles(image.multi_angle_images)
+              return (
+                <SortableItem key={image.id} id={image.id}>
+                  <div className="flex items-center gap-3 rounded-xl border border-zinc-800 bg-zinc-900 p-2 hover:border-zinc-700 transition-colors w-full">
+                    {/* Display picture thumb */}
+                    <div className="h-14 w-20 rounded-lg overflow-hidden bg-zinc-800 shrink-0 border border-zinc-700">
+                      <img
+                        src={image.url}
+                        alt={image.alt}
+                        className="h-full w-full object-cover"
+                        loading="lazy"
+                      />
+                    </div>
 
-                  {/* Info */}
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      {image.title ? (
-                        <p className="text-sm font-medium text-white truncate">{image.title}</p>
-                      ) : (
-                        <p className="text-sm text-zinc-600 italic">Untitled</p>
-                      )}
-                      <Badge variant={CATEGORY_BADGE_VARIANT[image.category]} className="text-[10px] shrink-0">
-                        {CATEGORY_LABELS[image.category]}
-                      </Badge>
-                      {image.featured && (
-                        <span className="inline-flex items-center gap-1 text-[10px] font-semibold bg-amber-500/15 text-amber-400 border border-amber-500/20 rounded-full px-2 py-0.5 shrink-0">
-                          <Star className="h-2.5 w-2.5 fill-current" />
-                          Featured
+                    {/* Info */}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        {image.title ? (
+                          <p className="text-sm font-medium text-white truncate">{image.title}</p>
+                        ) : (
+                          <p className="text-sm text-zinc-600 italic">Untitled</p>
+                        )}
+                        <Badge variant={CATEGORY_BADGE_VARIANT[image.category]} className="text-[10px] shrink-0">
+                          {CATEGORY_LABELS[image.category]}
+                        </Badge>
+                        {image.featured && (
+                          <span className="inline-flex items-center gap-1 text-[10px] font-semibold bg-amber-500/15 text-amber-400 border border-amber-500/20 rounded-full px-2 py-0.5 shrink-0">
+                            <Star className="h-2.5 w-2.5 fill-current" />
+                            Featured
+                          </span>
+                        )}
+                      </div>
+                      {/* Angle count */}
+                      {angles.length > 0 && (
+                        <span className="inline-flex items-center gap-1 text-[10px] text-zinc-500 mt-0.5">
+                          <Images className="h-3 w-3" />
+                          {angles.length} angle{angles.length !== 1 ? "s" : ""}
                         </span>
                       )}
                     </div>
-                    {image.alt && image.alt !== "Portfolio image" && (
-                      <p className="text-xs text-zinc-600 truncate mt-0.5">{image.alt}</p>
-                    )}
-                  </div>
 
-                  {/* Controls */}
-                  <div className="flex items-center gap-1.5 shrink-0">
-                    <div className="flex items-center gap-2 mr-1">
-                      <span className="text-xs text-zinc-600 hidden sm:block">
-                        {image.featured ? "Featured" : "Feature"}
-                      </span>
-                      <Switch
-                        checked={image.featured}
-                        onCheckedChange={() => toggleFeaturedMutation.mutate(image)}
-                        disabled={toggleFeaturedMutation.isPending}
+                    {/* Controls */}
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      <div className="flex items-center gap-2 mr-1">
+                        <span className="text-xs text-zinc-600 hidden sm:block">
+                          {image.featured ? "Featured" : "Feature"}
+                        </span>
+                        <Switch
+                          checked={image.featured}
+                          onCheckedChange={() => toggleFeaturedMutation.mutate(image)}
+                          disabled={toggleFeaturedMutation.isPending}
+                        />
+                      </div>
+                      <ConfirmDelete
+                        onConfirm={() => deleteMutation.mutate(image)}
+                        itemName={image.title || "this photo"}
+                        disabled={deleteMutation.isPending}
                       />
                     </div>
-                    <ConfirmDelete
-                      onConfirm={() => deleteMutation.mutate(image)}
-                      itemName={image.title || "this photo"}
-                      disabled={deleteMutation.isPending}
-                    />
                   </div>
-                </div>
-              </SortableItem>
-            ))}
+                </SortableItem>
+              )
+            })}
           </div>
         </SortableContext>
       </DndContext>
@@ -618,7 +642,6 @@ export default function PortfolioPage() {
   const [activeTab, setActiveTab] = useState<Category>("women")
   const [dialogOpen, setDialogOpen] = useState(false)
 
-  // Counts for badges
   const { data: womenImages } = useQuery<PortfolioImage[]>({
     queryKey: ["portfolio", "women"],
     queryFn: () => fetchPortfolioImages("women"),

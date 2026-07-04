@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { toast } from "sonner"
-import { Loader2, Save, ImageIcon, Monitor, Tablet, Smartphone } from "lucide-react"
+import { Loader2, Save, ImageIcon, Monitor, Tablet, Smartphone, RotateCcw } from "lucide-react"
 import { createSupabaseClient } from "@/lib/supabase/client"
 import { type Tables, type Inserts } from "@/lib/types/database"
 import { ImageUploader } from "@/components/admin/ImageUploader"
@@ -72,6 +72,19 @@ function formatSectionName(section: string): string {
   return overrides[section] ?? section.charAt(0).toUpperCase() + section.slice(1)
 }
 
+// Default static images per section/device (the fallbacks baked into each component)
+const DEFAULTS: Record<SectionKey, Record<DeviceKey, string | null>> = {
+  hero:     { desktop: "/hero-bg.png",           tablet: null,                    mobile: "/hero-bg-mobile.png"     },
+  about:    { desktop: "/about-bg.png",          tablet: "/about-bg-tablet.png",  mobile: "/about-bg-mobile.png"    },
+  artist:   { desktop: "/artist-bg.png",         tablet: null,                    mobile: null                      },
+  services: { desktop: "/services-koi-bg.png",   tablet: null,                    mobile: null                      },
+  contact:  { desktop: "/contact-koi-bg.png",    tablet: null,                    mobile: "/contact-koi-bg-mobile.png" },
+  booking:  { desktop: "/booking-bg.jpg",        tablet: null,                    mobile: "/booking-bg-mobile.png"  },
+  join:     { desktop: "/join-bg.jpg",           tablet: "/join-bg-tablet.png",   mobile: "/join-bg-mobile.png"     },
+  gallery:  { desktop: null,                     tablet: null,                    mobile: null                      },
+  credits:  { desktop: null,                     tablet: null,                    mobile: null                      },
+}
+
 // DB row key: "hero_desktop", "hero_tablet", "hero_mobile", etc.
 function dbKey(section: SectionKey, device: DeviceKey): string {
   return `${section}_${device}`
@@ -98,6 +111,7 @@ function DeviceUploader({
   draft,
   onUploadComplete,
   onRemove,
+  onRestoreDefault,
 }: {
   section: SectionKey
   device: (typeof DEVICES)[number]
@@ -105,8 +119,12 @@ function DeviceUploader({
   draft: DeviceDraft
   onUploadComplete: (section: SectionKey, device: DeviceKey, url: string, path: string) => void
   onRemove: (section: SectionKey, device: DeviceKey) => void
+  onRestoreDefault: (section: SectionKey, device: DeviceKey) => void
 }) {
   const displayUrl = draft.dirty ? draft.url : currentUrl
+  const defaultUrl = DEFAULTS[section][device.key]
+  const isAtDefault = displayUrl === defaultUrl || (!displayUrl && !defaultUrl)
+  const canRestore = !!defaultUrl && !isAtDefault
   const Icon = device.icon
 
   return (
@@ -118,6 +136,16 @@ function DeviceUploader({
           <span className="text-xs text-amber-500 font-medium ml-auto">Unsaved</span>
         )}
       </div>
+      {canRestore && (
+        <button
+          type="button"
+          onClick={() => onRestoreDefault(section, device.key)}
+          className="flex items-center gap-1.5 text-xs text-gray-500 hover:text-gray-800 transition-colors py-1"
+        >
+          <RotateCcw className="h-3 w-3" />
+          Restore to default
+        </button>
+      )}
       <ImageUploader
         bucket="backgrounds"
         folder={`${section}/${device.key}`}
@@ -138,6 +166,7 @@ function BackgroundCard({
   sectionDraft,
   onUploadComplete,
   onRemove,
+  onRestoreDefault,
   onSave,
   isSaving,
 }: {
@@ -146,6 +175,7 @@ function BackgroundCard({
   sectionDraft: SectionDraft
   onUploadComplete: (section: SectionKey, device: DeviceKey, url: string, path: string) => void
   onRemove: (section: SectionKey, device: DeviceKey) => void
+  onRestoreDefault: (section: SectionKey, device: DeviceKey) => void
   onSave: (section: SectionKey) => void
   isSaving: boolean
 }) {
@@ -218,6 +248,7 @@ function BackgroundCard({
             draft={sectionDraft[device.key]}
             onUploadComplete={onUploadComplete}
             onRemove={onRemove}
+            onRestoreDefault={onRestoreDefault}
           />
         ))}
       </div>
@@ -309,6 +340,21 @@ export default function BackgroundsPage() {
     })
   }
 
+  function handleRestoreDefault(section: SectionKey, device: DeviceKey) {
+    const defaultUrl = DEFAULTS[section][device]
+    if (!defaultUrl) return
+    setDrafts((prev) => {
+      const existing = prev[section] ?? emptySection()
+      return {
+        ...prev,
+        [section]: {
+          ...existing,
+          [device]: { url: defaultUrl, path: null, dirty: true },
+        },
+      }
+    })
+  }
+
   function handleSave(section: SectionKey) {
     const sectionDraft = drafts[section]
     if (!sectionDraft) return
@@ -391,6 +437,7 @@ export default function BackgroundsPage() {
                 sectionDraft={sectionDraft}
                 onUploadComplete={handleUploadComplete}
                 onRemove={handleRemove}
+                onRestoreDefault={handleRestoreDefault}
                 onSave={handleSave}
                 isSaving={savingSection === section && saveMutation.isPending}
               />
