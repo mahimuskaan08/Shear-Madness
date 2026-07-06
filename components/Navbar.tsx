@@ -102,7 +102,7 @@ export default function Navbar() {
 
           {/* ── DESKTOP NAV — glass pill, truly centered ─────────────── */}
           <nav
-            className="hidden md:flex items-center gap-4 lg:gap-6 absolute -translate-x-1/2"
+            className="hidden xl:flex items-center gap-4 xl:gap-6 absolute -translate-x-1/2"
             style={{
               left: "50%",
               background: scrolled ? "transparent" : "rgba(255,255,255,0.14)",
@@ -189,7 +189,7 @@ export default function Navbar() {
           </nav>
 
           {/* ── RIGHT BUTTONS: Contact + Book Now — absolute right edge ─ */}
-          <div className="hidden lg:flex items-center gap-3 absolute right-6 lg:right-10">
+          <div className="hidden xl:flex items-center gap-3 absolute right-6 xl:right-10">
             <NavPillButton href="/contact" label="Contact" />
             <NavPillButton href="/booking" label="Book Now" />
           </div>
@@ -198,7 +198,7 @@ export default function Navbar() {
           <button
             onClick={() => setMenuOpen(!menuOpen)}
             aria-label="Toggle navigation"
-            className="md:hidden absolute right-4 z-[60] flex items-center justify-center w-11 h-11"
+            className="xl:hidden absolute right-4 z-[60] flex items-center justify-center w-11 h-11"
           >
             <div className="flex flex-col justify-center gap-[5px] w-6 h-6 pointer-events-none">
               <motion.span animate={menuOpen ? { rotate: 45, y: 5 } : { rotate: 0, y: 0 }} transition={{ duration: 0.28 }} className="block h-px w-full bg-[#2C2A25]" />

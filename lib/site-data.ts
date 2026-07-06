@@ -212,9 +212,18 @@ export function buildFooterHours(hours: SiteHours[]): {
   const byDay: Record<string, SiteHours> = {}
   for (const h of hours) byDay[h.day] = h
 
+  function to12h(time: string): string {
+    const [hStr, mStr] = time.split(":")
+    const h = parseInt(hStr, 10)
+    const m = parseInt(mStr, 10)
+    const period = h >= 12 ? "pm" : "am"
+    const hour = h % 12 || 12
+    return `${hour}:${m.toString().padStart(2, "0")} ${period}`
+  }
+
   function fmt(h?: SiteHours): string {
     if (!h || h.is_closed || !h.open_time || !h.close_time) return "Closed"
-    return `${h.open_time} – ${h.close_time}`
+    return `${to12h(h.open_time)} – ${to12h(h.close_time)}`
   }
 
   return {
