@@ -18,6 +18,7 @@ import {
 } from "@dnd-kit/sortable"
 import { Plus, Scissors, Eye, EyeOff, Pencil } from "lucide-react"
 import { createSupabaseClient } from "@/lib/supabase/client"
+import { ImageUploader } from "@/components/admin/ImageUploader"
 import { PageHeader } from "@/components/admin/PageHeader"
 import { EmptyState } from "@/components/admin/EmptyState"
 import { SortableItem } from "@/components/admin/SortableItem"
@@ -56,6 +57,7 @@ type Service = {
   category: "womens" | "mens" | "treatments" | "bridal"
   display_order: number
   is_visible: boolean
+  image_url: string | null
   created_at: string
   updated_at: string
 }
@@ -73,6 +75,7 @@ interface ServiceFormState {
   price: string
   category: ServiceCategory
   is_visible: boolean
+  image_url: string | null
 }
 
 const DEFAULT_FORM: ServiceFormState = {
@@ -80,6 +83,7 @@ const DEFAULT_FORM: ServiceFormState = {
   price: "",
   category: "womens",
   is_visible: true,
+  image_url: null,
 }
 
 function useServices(category: ServiceCategory) {
@@ -115,7 +119,7 @@ interface ServiceDialogProps {
   trigger: React.ReactNode
   title: string
   initialValues?: ServiceFormState
-  onSave: (values: ServiceFormState) => Promise<void>
+  onSave: (values: ServiceFormState, closeDialog: () => void) => void
   isSaving: boolean
 }
 
@@ -137,7 +141,7 @@ function ServiceDialog({
     [initialValues]
   )
 
-  const handleSave = async () => {
+  const handleSave = () => {
     if (!form.name.trim()) {
       toast.error("Service name is required")
       return
@@ -146,14 +150,13 @@ function ServiceDialog({
       toast.error("Price is required")
       return
     }
-    await onSave(form)
-    setOpen(false)
+    onSave(form, () => setOpen(false))
   }
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent className="sm:max-w-md bg-zinc-900 border-zinc-800">
+      <DialogContent className="sm:max-w-md bg-zinc-900 border-zinc-800 max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-white">{title}</DialogTitle>
         </DialogHeader>
@@ -198,6 +201,20 @@ function ServiceDialog({
                 ))}
               </SelectContent>
             </Select>
+          </div>
+
+          <div className="space-y-1.5">
+            <Label className="text-zinc-300 text-sm">
+              Service Image <span className="text-zinc-500 font-normal">(optional)</span>
+            </Label>
+            <ImageUploader
+              bucket="services"
+              folder={form.category}
+              currentUrl={form.image_url}
+              onUploadComplete={(url) => setForm((f) => ({ ...f, image_url: url }))}
+              onRemove={() => setForm((f) => ({ ...f, image_url: null }))}
+              aspectHint="4:3 landscape"
+            />
           </div>
 
           <div className="flex items-center justify-between rounded-lg border border-zinc-800 bg-zinc-800/30 px-4 py-3">
@@ -259,6 +276,7 @@ function CategoryPanel({ category }: CategoryPanelProps) {
         price: values.price.trim(),
         category: values.category,
         is_visible: values.is_visible,
+        image_url: values.image_url ?? null,
         display_order: maxOrder + 1,
       })
       if (error) throw error
@@ -285,6 +303,7 @@ function CategoryPanel({ category }: CategoryPanelProps) {
           price: values.price.trim(),
           category: values.category,
           is_visible: values.is_visible,
+          image_url: values.image_url ?? null,
           updated_at: new Date().toISOString(),
         })
         .eq("id", id)
@@ -424,6 +443,16 @@ function CategoryPanel({ category }: CategoryPanelProps) {
                 className="border-b border-zinc-800/60 last:border-b-0 hover:bg-zinc-800/30 transition-colors"
               >
                 <div className="flex items-center gap-3 px-4 py-3">
+                  {/* Thumbnail */}
+                  <div className="h-9 w-12 rounded overflow-hidden bg-zinc-800 shrink-0 border border-zinc-700">
+                    {service.image_url ? (
+                      <img src={service.image_url} alt="" className="h-full w-full object-cover" />
+                    ) : (
+                      <div className="h-full w-full flex items-center justify-center">
+                        <Scissors className="h-3 w-3 text-zinc-600" />
+                      </div>
+                    )}
+                  </div>
                   {/* Name */}
                   <div className="flex-1 flex items-center gap-2 min-w-0">
                     <span className="text-sm font-medium text-white truncate">
@@ -475,9 +504,10 @@ function CategoryPanel({ category }: CategoryPanelProps) {
                       price: service.price,
                       category: service.category,
                       is_visible: service.is_visible,
+                      image_url: service.image_url,
                     }}
-                    onSave={async (values) => {
-                      await updateMutation.mutateAsync({ id: service.id, values })
+                    onSave={(values, closeDialog) => {
+                      updateMutation.mutate({ id: service.id, values }, { onSuccess: closeDialog })
                     }}
                     isSaving={updateMutation.isPending}
                     trigger={
@@ -509,8 +539,8 @@ function CategoryPanel({ category }: CategoryPanelProps) {
         <ServiceDialog
           title="Add Service"
           initialValues={{ ...DEFAULT_FORM, category }}
-          onSave={async (values) => {
-            await insertMutation.mutateAsync(values)
+          onSave={(values, closeDialog) => {
+            insertMutation.mutate(values, { onSuccess: closeDialog })
           }}
           isSaving={insertMutation.isPending}
           trigger={

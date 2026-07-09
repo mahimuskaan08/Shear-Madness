@@ -77,6 +77,7 @@ export interface Database {
           category: "womens" | "mens" | "treatments" | "bridal"
           display_order: number
           is_visible: boolean
+          image_url: string | null
           created_at: string
           updated_at: string
         }
@@ -87,6 +88,7 @@ export interface Database {
           category: "womens" | "mens" | "treatments" | "bridal"
           display_order?: number
           is_visible?: boolean
+          image_url?: string | null
           created_at?: string
           updated_at?: string
         }
@@ -97,6 +99,7 @@ export interface Database {
           category?: "womens" | "mens" | "treatments" | "bridal"
           display_order?: number
           is_visible?: boolean
+          image_url?: string | null
           created_at?: string
           updated_at?: string
         }
