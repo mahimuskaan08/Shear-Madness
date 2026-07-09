@@ -24,38 +24,43 @@ export const metadata: Metadata = {
   },
 };
 
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@type": "HairSalon",
-  name: "Shear Madness Hoboken",
-  description:
-    "Premium hair salon for men and women in Hoboken, NJ offering haircuts, color, treatments, and bridal services.",
-  url: "https://shearmadnesshoboken.com",
-  telephone: "(201) 222-2102",
-  priceRange: "$$",
-  address: {
-    "@type": "PostalAddress",
-    streetAddress: "80 Park Ave #1",
-    addressLocality: "Hoboken",
-    addressRegion: "NJ",
-    postalCode: "07030",
-    addressCountry: "US",
-  },
-  geo: {
-    "@type": "GeoCoordinates",
-    latitude: 40.744,
-    longitude: -74.0324,
-  },
-  hasMap: "https://maps.google.com/?q=80+Park+Ave+%231+Hoboken+NJ+07030",
-  image: "https://shearmadnesshoboken.com/og-image.jpg",
-  sameAs: ["https://shearmadnesshoboken.com"],
-};
-
 export default async function Home() {
   const data = await getSiteData();
   const contact = data.contact;
   const footerHours = buildFooterHours(data.hours);
-  const heroBg = data.backgrounds.find(b => b.section === "hero_desktop")?.image_url ?? undefined;
+  const heroBg   = data.backgrounds.find(b => b.section === "hero_desktop")?.image_url ?? undefined;
+  const aboutBg  = data.backgrounds.find(b => b.section === "about_desktop"  || b.section === "about")?.image_url  ?? undefined;
+  const artistBg = data.backgrounds.find(b => b.section === "artist_desktop" || b.section === "artist")?.image_url ?? undefined;
+  const contactBg = data.backgrounds.find(b => b.section === "contact_desktop" || b.section === "contact")?.image_url ?? undefined;
+  const oscar  = data.team.find(m => m.name.toLowerCase().includes("oscar"));
+  const george = data.team.find(m => m.name.toLowerCase().includes("george"));
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "HairSalon",
+    name: "Shear Madness Hoboken",
+    description:
+      "Premium hair salon for men and women in Hoboken, NJ offering haircuts, color, treatments, and bridal services.",
+    url: "https://shearmadnesshoboken.com",
+    telephone: contact?.phone || "(201) 222-2102",
+    priceRange: "$$",
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: contact?.address_line_1 || "80 Park Ave #1",
+      addressLocality: "Hoboken",
+      addressRegion: "NJ",
+      postalCode: "07030",
+      addressCountry: "US",
+    },
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: 40.744,
+      longitude: -74.0324,
+    },
+    hasMap: contact?.google_maps_url || "https://maps.google.com/?q=80+Park+Ave+%231+Hoboken+NJ+07030",
+    image: "https://shearmadnesshoboken.com/og-image.jpg",
+    sameAs: ["https://shearmadnesshoboken.com"],
+  };
 
   return (
     <main className="min-h-screen">
@@ -66,10 +71,29 @@ export default async function Home() {
       <CustomCursor />
       <Navbar />
       <HeroSection bgImage={heroBg} />
-      <AboutSection />
+      <AboutSection
+        bgImage={aboutBg}
+      />
       <ServicesSection />
-      <ArtistSection />
-      <ContactSection />
+      <ArtistSection
+        artistBg={artistBg}
+        oscarImage={oscar?.image_url ?? undefined}
+        georgeImage={george?.image_url ?? undefined}
+        oscarBio={oscar?.bio ?? undefined}
+        georgeBio={george?.bio ?? undefined}
+      />
+      <ContactSection
+        bgImage={contactBg}
+        phone={contact?.phone || undefined}
+        email={contact?.email || undefined}
+        addressLine1={contact?.address_line_1 || undefined}
+        cityStateZip={contact?.city_state_zip || undefined}
+        hoursTueThu={footerHours.hoursTueThu}
+        hoursFri={footerHours.hoursFri}
+        hoursSat={footerHours.hoursSat}
+        hoursSunMon={footerHours.hoursSunMon}
+        mapsUrl={contact?.google_maps_url || undefined}
+      />
       <Footer
         phone={contact?.phone || undefined}
         email={contact?.email || undefined}
@@ -79,6 +103,7 @@ export default async function Home() {
         hoursFri={footerHours.hoursFri}
         hoursSat={footerHours.hoursSat}
         hoursSunMon={footerHours.hoursSunMon}
+        social={data.social}
       />
     </main>
   );

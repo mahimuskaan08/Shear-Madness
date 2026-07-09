@@ -27,7 +27,7 @@ export default async function BookingPage() {
   return (
     <>
       <Navbar />
-      <BookingPageContent />
+      <BookingPageContent storeHours={data.hours} />
       <Footer
         phone={contact?.phone || undefined}
         email={contact?.email || undefined}
@@ -37,6 +37,7 @@ export default async function BookingPage() {
         hoursFri={footerHours.hoursFri}
         hoursSat={footerHours.hoursSat}
         hoursSunMon={footerHours.hoursSunMon}
+        social={data.social}
       />
     </>
   );

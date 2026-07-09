@@ -5,6 +5,45 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
+/* ─── Store hours helpers ────────────────────────────────────────────────── */
+type StoreHoursEntry = {
+  day: string
+  open_time: string | null
+  close_time: string | null
+  is_closed: boolean
+}
+
+const DAY_NAMES = ["sunday","monday","tuesday","wednesday","thursday","friday","saturday"];
+
+function minutesToTimeStr(totalMinutes: number): string {
+  const h = Math.floor(totalMinutes / 60);
+  const m = totalMinutes % 60;
+  const period = h >= 12 ? "PM" : "AM";
+  const displayH = h % 12 === 0 ? 12 : h % 12;
+  return `${displayH}:${m.toString().padStart(2, "0")} ${period}`;
+}
+
+function generateTimeSlots(openTime: string, closeTime: string): string[] {
+  const openH = parseInt(openTime.split(":")[0], 10);
+  const closeH = parseInt(closeTime.split(":")[0], 10);
+  const openMin = openH * 60 + parseInt(openTime.split(":")[1] ?? "0", 10);
+  // Same PM correction as buildFooterHours: if close < open, it was stored in 12h format
+  const effectiveCloseH = closeH < openH ? closeH + 12 : closeH;
+  const closeMin = effectiveCloseH * 60 + parseInt(closeTime.split(":")[1] ?? "0", 10);
+  const slots: string[] = [];
+  for (let m = openMin; m < closeMin; m += 30) {
+    slots.push(minutesToTimeStr(m));
+  }
+  return slots;
+}
+
+function getHoursForDateStr(dateStr: string, storeHours: StoreHoursEntry[]): StoreHoursEntry | undefined {
+  if (!dateStr || !storeHours.length) return undefined;
+  const [y, mo, d] = dateStr.split("-").map(Number);
+  const dayName = DAY_NAMES[new Date(y, mo - 1, d).getDay()];
+  return storeHours.find(h => h.day === dayName);
+}
+
 /* ─── Data ─────────────────────────────────────────────────────────────── */
 const STYLISTS = ["No Preference", "George Fraggos", "Oscar Victor"];
 
@@ -52,12 +91,13 @@ const SERVICE_GROUPS = [
 // Flat list kept for tag display (strip price suffix for brevity)
 const SERVICES = SERVICE_GROUPS.flatMap((g) => g.items);
 
-const TIME_SLOTS: string[] = [];
+// Fallback used when no storeHours prop is provided
+const FALLBACK_TIME_SLOTS: string[] = [];
 for (let h = 10; h <= 20; h++) {
   ["00", "30"].forEach((m) => {
     const hour = h > 12 ? h - 12 : h;
     const ampm = h < 12 ? "AM" : "PM";
-    TIME_SLOTS.push(`${hour}:${m} ${ampm}`);
+    FALLBACK_TIME_SLOTS.push(`${hour}:${m} ${ampm}`);
   });
 }
 
@@ -318,26 +358,55 @@ function ServicesSelect({ selected, onChange }: {
 }
 
 /* ─── Date-Time pair ────────────────────────────────────────────────────── */
-function DateTimePair({ index, date, time, onDate, onTime, required }: {
+function DateTimePair({ index, date, time, onDate, onTime, required, storeHours }: {
   index: number; date: string; time: string;
   onDate: (v: string) => void; onTime: (v: string) => void;
-  required?: boolean;
+  required?: boolean; storeHours?: StoreHoursEntry[];
 }) {
   const ordinals = ["First", "Second", "Third"];
   const label = ordinals[index];
   const today = new Date().toISOString().split("T")[0];
   const [dateError, setDateError] = useState("");
 
+  // Which days are closed — used for the hint below the date input
+  const closedDayNames = (storeHours ?? [])
+    .filter(h => h.is_closed)
+    .map(h => h.day.charAt(0).toUpperCase() + h.day.slice(1) + "s")
+    .join(" & ");
+
+  // Hours for the currently selected date
+  const dayHours = date && storeHours?.length
+    ? getHoursForDateStr(date, storeHours)
+    : undefined;
+
+  // Time slots: dynamic if we have store hours + a date, else fallback list
+  const timeSlots =
+    dayHours && !dayHours.is_closed && dayHours.open_time && dayHours.close_time
+      ? generateTimeSlots(dayHours.open_time, dayHours.close_time)
+      : storeHours?.length ? [] : FALLBACK_TIME_SLOTS;
+
   function handleDateChange(v: string) {
-    if (v) {
-      const day = new Date(v).getUTCDay(); // 0 = Sun, 1 = Mon
-      if (day === 0 || day === 1) {
+    if (v && storeHours?.length) {
+      const hours = getHoursForDateStr(v, storeHours);
+      if (hours?.is_closed) {
+        const [y, mo, d] = v.split("-").map(Number);
+        const dayName = DAY_NAMES[new Date(y, mo - 1, d).getDay()];
+        setDateError(`We're closed on ${dayName.charAt(0).toUpperCase() + dayName.slice(1)}s. Please choose another day.`);
+        onDate(""); onTime("");
+        return;
+      }
+    } else if (v && !storeHours?.length) {
+      // Fallback: block Sun/Mon when no store hours provided
+      const [y, mo, d] = v.split("-").map(Number);
+      const dow = new Date(y, mo - 1, d).getDay();
+      if (dow === 0 || dow === 1) {
         setDateError("We're closed on Sundays and Mondays. Please choose another day.");
-        onDate("");
+        onDate(""); onTime("");
         return;
       }
     }
     setDateError("");
+    onTime(""); // reset time whenever date changes
     onDate(v);
   }
 
@@ -349,19 +418,31 @@ function DateTimePair({ index, date, time, onDate, onTime, required }: {
         </FieldLabel>
         <Input id={`date-${index}`} type="date" required={required}
           value={date} onChange={handleDateChange} min={today} />
-        {dateError && (
+        {dateError ? (
           <p style={{ marginTop: 5, fontSize: "0.75rem", color: "#B8462A", fontFamily: "'Inter', sans-serif" }}>
             {dateError}
           </p>
-        )}
+        ) : closedDayNames ? (
+          <p style={{ marginTop: 5, fontSize: "0.72rem", color: "rgba(58,56,50,0.48)", fontFamily: "'Inter', sans-serif" }}>
+            Closed on {closedDayNames}
+          </p>
+        ) : null}
       </div>
       <div>
         <FieldLabel htmlFor={`time-${index}`} required={required}>
           {label} preferred time
         </FieldLabel>
         <Select id={`time-${index}`} value={time} onChange={onTime}>
-          <option value="">Select time…</option>
-          {TIME_SLOTS.map((t) => <option key={t} value={t}>{t}</option>)}
+          {!date ? (
+            <option value="">Select a date first…</option>
+          ) : dayHours?.is_closed ? (
+            <option value="">Closed this day</option>
+          ) : (
+            <>
+              <option value="">Select time…</option>
+              {timeSlots.map((t) => <option key={t} value={t}>{t}</option>)}
+            </>
+          )}
         </Select>
       </div>
     </div>
@@ -682,7 +763,7 @@ function FallingPetals() {
 }
 
 /* ─── Main component ────────────────────────────────────────────────────── */
-export default function BookingPageContent({ bgImage }: { bgImage?: string }) {
+export default function BookingPageContent({ bgImage, storeHours }: { bgImage?: string; storeHours?: StoreHoursEntry[] }) {
   const resolvedBg = bgImage ?? "/booking-bg.jpg";
 
   /* form state */
@@ -943,11 +1024,11 @@ export default function BookingPageContent({ bgImage }: { bgImage?: string }) {
 
                 <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
                   <DateTimePair index={0} date={dates[0]} time={times[0]}
-                    onDate={(v) => setDate(0, v)} onTime={(v) => setTime(0, v)} required />
+                    onDate={(v) => setDate(0, v)} onTime={(v) => setTime(0, v)} required storeHours={storeHours} />
                   <DateTimePair index={1} date={dates[1]} time={times[1]}
-                    onDate={(v) => setDate(1, v)} onTime={(v) => setTime(1, v)} />
+                    onDate={(v) => setDate(1, v)} onTime={(v) => setTime(1, v)} storeHours={storeHours} />
                   <DateTimePair index={2} date={dates[2]} time={times[2]}
-                    onDate={(v) => setDate(2, v)} onTime={(v) => setTime(2, v)} />
+                    onDate={(v) => setDate(2, v)} onTime={(v) => setTime(2, v)} storeHours={storeHours} />
                 </div>
 
                 <Divider />

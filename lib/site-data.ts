@@ -26,6 +26,7 @@ export type SiteService = {
   price: string
   category: "womens" | "mens" | "treatments" | "bridal"
   display_order: number
+  image_url: string | null
 }
 
 export type SiteTeamMember = {
@@ -212,18 +213,23 @@ export function buildFooterHours(hours: SiteHours[]): {
   const byDay: Record<string, SiteHours> = {}
   for (const h of hours) byDay[h.day] = h
 
-  function to12h(time: string): string {
+  function to12h(time: string, forcePm = false): string {
     const [hStr, mStr] = time.split(":")
     const h = parseInt(hStr, 10)
     const m = parseInt(mStr, 10)
-    const period = h >= 12 ? "pm" : "am"
-    const hour = h % 12 || 12
+    const effectiveH = forcePm && h < 12 ? h + 12 : h
+    const period = effectiveH >= 12 ? "pm" : "am"
+    const hour = effectiveH % 12 || 12
     return `${hour}:${m.toString().padStart(2, "0")} ${period}`
   }
 
   function fmt(h?: SiteHours): string {
     if (!h || h.is_closed || !h.open_time || !h.close_time) return "Closed"
-    return `${to12h(h.open_time)} – ${to12h(h.close_time)}`
+    const openHour = parseInt(h.open_time.split(":")[0], 10)
+    const closeHour = parseInt(h.close_time.split(":")[0], 10)
+    // If close hour < open hour, the time was stored in 12h format and needs PM
+    const closeForcePm = closeHour < openHour
+    return `${to12h(h.open_time)} – ${to12h(h.close_time, closeForcePm)}`
   }
 
   return {

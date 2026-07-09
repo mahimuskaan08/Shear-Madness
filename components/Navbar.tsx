@@ -31,12 +31,18 @@ function NavPillButton({ href, label }: { href: string; label: string }) {
   return (
     <a
       href={href}
-      className="group relative inline-flex items-center justify-center rounded-full text-[11.5px] tracking-[0.16em] uppercase font-semibold text-white overflow-hidden transition-all duration-300 hover:-translate-y-0.5"
+      className="
+        group relative inline-flex items-center justify-center rounded-full
+        uppercase font-semibold text-white overflow-hidden
+        transition-all duration-300 hover:-translate-y-0.5
+        text-[8.5px] tracking-[0.14em] px-[9px] py-[6px]
+        lg:text-[10px] lg:tracking-[0.16em] lg:px-[14px] lg:py-[7px]
+        xl:text-[11.5px] xl:px-[22px] xl:py-[9px]
+      "
       style={{
         fontFamily: "'Neue World', Georgia, serif",
         fontWeight: 700,
         background: "linear-gradient(135deg, #C9A96E 0%, #B8935A 55%, #C4A96A 100%)",
-        padding: "9px 22px",
         boxShadow: "0 4px 18px rgba(196,169,106,0.40), inset 0 1px 0 rgba(255,255,255,0.20)",
       }}
       onMouseEnter={(e) => {
@@ -69,6 +75,90 @@ export default function Navbar() {
     setScrolled(y > 50);
   });
 
+  const glassPillStyle: React.CSSProperties = {
+    background: scrolled ? "transparent" : "rgba(255,255,255,0.14)",
+    backdropFilter: scrolled ? "none" : "blur(20px) saturate(1.8)",
+    WebkitBackdropFilter: scrolled ? "none" : "blur(20px) saturate(1.8)",
+    border: scrolled ? "1px solid transparent" : "1px solid rgba(255,255,255,0.38)",
+    borderRadius: 100,
+    boxShadow: scrolled ? "none" : "0 2px 18px rgba(0,0,0,0.07), inset 0 1px 0 rgba(255,255,255,0.55)",
+    transition: "background 0.5s ease, box-shadow 0.5s ease, border-color 0.5s ease",
+  };
+
+  // Shared nav link renderer — avoids duplicating JSX between tablet and desktop navs
+  const renderLinks = (textClass: string) =>
+    navLinks.map((link) =>
+      link.dropdown ? (
+        <div
+          key={link.label}
+          className="relative"
+          onMouseEnter={() => setOpenDropdown(link.label)}
+          onMouseLeave={() => setOpenDropdown(null)}
+        >
+          <a
+            href={link.href}
+            className={`${textClass} relative text-[#2C2A25] uppercase font-black whitespace-nowrap transition-colors duration-300 hover:text-[#C4A96A] flex items-center gap-0.5`}
+            style={{ fontFamily: "'Neue World', Georgia, serif", fontWeight: 900 }}
+          >
+            {link.label}
+            <svg
+              width="9" height="9" viewBox="0 0 10 10" fill="none"
+              className="transition-transform duration-300 flex-shrink-0"
+              style={{ transform: openDropdown === link.label ? "rotate(180deg)" : "rotate(0deg)" }}
+            >
+              <path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </a>
+
+          <AnimatePresence>
+            {openDropdown === link.label && (
+              <motion.div
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 8 }}
+                transition={{ duration: 0.22, ease: EASE }}
+                className="absolute top-full left-1/2 -translate-x-1/2 pt-3"
+                style={{ zIndex: 100 }}
+              >
+                <div style={{
+                  background: "rgba(252,249,244,0.97)",
+                  backdropFilter: "blur(18px) saturate(1.4)",
+                  WebkitBackdropFilter: "blur(18px) saturate(1.4)",
+                  border: "1px solid rgba(196,169,106,0.22)",
+                  borderRadius: 10,
+                  boxShadow: "0 12px 40px rgba(58,56,50,0.12), 0 2px 8px rgba(58,56,50,0.06)",
+                  padding: "8px 0",
+                  minWidth: 170,
+                }}>
+                  <div style={{ height: 2, background: "linear-gradient(to right, transparent, rgba(196,169,106,0.50), transparent)", marginBottom: 4 }} />
+                  {link.items.map((item) => (
+                    <a
+                      key={item.label}
+                      href={item.href}
+                      className="block text-[#2C2A25] hover:text-[#C4A96A] hover:bg-[rgba(196,169,106,0.06)] transition-all duration-200"
+                      style={{ fontFamily: "'Neue World', Georgia, serif", fontSize: "10px", letterSpacing: "0.12em", textTransform: "uppercase", fontWeight: 700, padding: "9px 18px" }}
+                    >
+                      {item.label}
+                    </a>
+                  ))}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      ) : (
+        <a
+          key={link.label}
+          href={link.href}
+          className={`${textClass} relative text-[#2C2A25] uppercase font-black whitespace-nowrap transition-colors duration-300 hover:text-[#C4A96A] group`}
+          style={{ fontFamily: "'Neue World', Georgia, serif", fontWeight: 900 }}
+        >
+          {link.label}
+          <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-[#C4A96A] transition-all duration-300 group-hover:w-full" />
+        </a>
+      )
+    );
+
   return (
     <>
       <motion.header
@@ -84,121 +174,60 @@ export default function Navbar() {
           boxShadow: scrolled ? "0 2px 32px rgba(58,56,50,0.07)" : "none",
         }}
       >
-        <div className="w-full px-6 md:px-10 flex items-center h-[66px] md:h-[72px] relative">
+        {/*
+          Layout strategy:
+          • md/lg (tablet + iPad): normal flex row → [logo | flex-1 centered pill | buttons]
+            No absolute positioning so elements can NEVER overlap each other.
+          • xl (desktop): all three become absolute so the pill can be viewport-centred.
+        */}
+        <div className="w-full flex items-center h-[64px] lg:h-[68px] xl:h-[72px] px-4 md:px-5 lg:px-8 xl:px-10 relative">
 
-          {/* ── LOGO — absolute left edge ─────────────────────────────── */}
+          {/* ── LOGO ─────────────────────────────────────────────────────
+              md/lg: in flex flow (flex-shrink-0) at the start of the row.
+              xl:   absolutely pinned to left edge.                        */}
           <motion.a
             href="/"
-            className="absolute left-6 md:left-10 z-10 flex items-center gap-3"
+            className="flex-shrink-0 z-10 flex items-center gap-3 xl:absolute xl:left-10"
             animate={{ opacity: showBranding ? 1 : 0, pointerEvents: showBranding ? "auto" : "none" }}
             transition={{ duration: 0.4, ease: EASE }}
           >
             <img
               src="/hero-logo.png"
               alt="Shear Madness"
-              style={{ height: 38, width: "auto", objectFit: "contain" }}
+              className="h-[28px] lg:h-[34px] xl:h-[38px]"
+              style={{ width: "auto", objectFit: "contain" }}
             />
           </motion.a>
 
-          {/* ── DESKTOP NAV — glass pill, truly centered ─────────────── */}
-          <nav
-            className="hidden xl:flex items-center gap-4 xl:gap-6 absolute -translate-x-1/2"
-            style={{
-              left: "50%",
-              background: scrolled ? "transparent" : "rgba(255,255,255,0.14)",
-              backdropFilter: scrolled ? "none" : "blur(20px) saturate(1.8)",
-              WebkitBackdropFilter: scrolled ? "none" : "blur(20px) saturate(1.8)",
-              border: scrolled ? "1px solid transparent" : "1px solid rgba(255,255,255,0.38)",
-              borderRadius: 100,
-              boxShadow: scrolled ? "none" : "0 2px 18px rgba(0,0,0,0.07), inset 0 1px 0 rgba(255,255,255,0.55)",
-              padding: "7px 16px",
-              transition: "background 0.5s ease, box-shadow 0.5s ease, border-color 0.5s ease",
-            }}
-          >
-            {navLinks.map((link) =>
-              link.dropdown ? (
-                <div
-                  key={link.label}
-                  className="relative"
-                  onMouseEnter={() => setOpenDropdown(link.label)}
-                  onMouseLeave={() => setOpenDropdown(null)}
-                >
-                  <a
-                    href={link.href}
-                    className="relative text-[#2C2A25] text-[10px] lg:text-[11.5px] tracking-[0.12em] lg:tracking-[0.14em] uppercase font-black transition-colors duration-300 hover:text-[#C4A96A] flex items-center gap-1 whitespace-nowrap"
-                    style={{ fontFamily: "'Neue World', Georgia, serif", fontWeight: 900 }}
-                  >
-                    {link.label}
-                    <svg
-                      width="10" height="10" viewBox="0 0 10 10" fill="none"
-                      className="transition-transform duration-300"
-                      style={{ transform: openDropdown === link.label ? "rotate(180deg)" : "rotate(0deg)" }}
-                    >
-                      <path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  </a>
+          {/* ── TABLET / IPAD NAV (md → lg) ──────────────────────────────
+              A flex-1 wrapper centres the pill between logo and buttons.
+              `xl:contents` dissolves the wrapper at desktop so the pill
+              participates directly in xl absolute-positioning.           */}
+          <div className="hidden md:flex xl:contents flex-1 justify-center items-center">
+            <nav
+              className="flex items-center
+                         xl:absolute xl:left-1/2 xl:-translate-x-1/2
+                         gap-2 lg:gap-3 xl:gap-6
+                         px-[16px] py-[9px] lg:px-[22px] lg:py-[10px] xl:px-[16px] xl:py-[7px]"
+              style={glassPillStyle}
+            >
+              {renderLinks("text-[8.5px] tracking-[0.08em] lg:text-[10px] lg:tracking-[0.12em] xl:text-[11.5px] xl:tracking-[0.14em]")}
+            </nav>
+          </div>
 
-                  <AnimatePresence>
-                    {openDropdown === link.label && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 8 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 8 }}
-                        transition={{ duration: 0.22, ease: EASE }}
-                        className="absolute top-full left-1/2 -translate-x-1/2 pt-3"
-                        style={{ zIndex: 100 }}
-                      >
-                        <div style={{
-                          background: "rgba(252,249,244,0.97)",
-                          backdropFilter: "blur(18px) saturate(1.4)",
-                          WebkitBackdropFilter: "blur(18px) saturate(1.4)",
-                          border: "1px solid rgba(196,169,106,0.22)",
-                          borderRadius: 10,
-                          boxShadow: "0 12px 40px rgba(58,56,50,0.12), 0 2px 8px rgba(58,56,50,0.06)",
-                          padding: "8px 0",
-                          minWidth: 180,
-                        }}>
-                          <div style={{ height: 2, background: "linear-gradient(to right, transparent, rgba(196,169,106,0.50), transparent)", marginBottom: 4 }} />
-                          {link.items.map((item) => (
-                            <a
-                              key={item.label}
-                              href={item.href}
-                              className="block text-[#2C2A25] hover:text-[#C4A96A] hover:bg-[rgba(196,169,106,0.06)] transition-all duration-200"
-                              style={{ fontFamily: "'Neue World', Georgia, serif", fontSize: "11px", letterSpacing: "0.12em", textTransform: "uppercase", fontWeight: 700, padding: "10px 20px" }}
-                            >
-                              {item.label}
-                            </a>
-                          ))}
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              ) : (
-                <a
-                  key={link.label}
-                  href={link.href}
-                  className="relative text-[#2C2A25] text-[10px] lg:text-[11.5px] tracking-[0.12em] lg:tracking-[0.14em] uppercase font-black transition-colors duration-300 hover:text-[#C4A96A] group whitespace-nowrap"
-                  style={{ fontFamily: "'Neue World', Georgia, serif", fontWeight: 900 }}
-                >
-                  {link.label}
-                  <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-[#C4A96A] transition-all duration-300 group-hover:w-full" />
-                </a>
-              )
-            )}
-          </nav>
-
-          {/* ── RIGHT BUTTONS: Contact + Book Now — absolute right edge ─ */}
-          <div className="hidden xl:flex items-center gap-3 absolute right-6 xl:right-10">
+          {/* ── RIGHT BUTTONS ────────────────────────────────────────────
+              md/lg: in flex flow (flex-shrink-0) at the end of the row.
+              xl:   absolutely pinned to right edge.                      */}
+          <div className="hidden md:flex items-center gap-2 lg:gap-3 flex-shrink-0 xl:absolute xl:right-10">
             <NavPillButton href="/contact" label="Contact" />
             <NavPillButton href="/booking" label="Book Now" />
           </div>
 
-          {/* ── MOBILE HAMBURGER ──────────────────────────────────────── */}
+          {/* ── MOBILE HAMBURGER — hidden from md up ─────────────────── */}
           <button
             onClick={() => setMenuOpen(!menuOpen)}
             aria-label="Toggle navigation"
-            className="xl:hidden absolute right-4 z-[60] flex items-center justify-center w-11 h-11"
+            className="md:hidden absolute right-4 z-[60] flex items-center justify-center w-11 h-11"
           >
             <div className="flex flex-col justify-center gap-[5px] w-6 h-6 pointer-events-none">
               <motion.span animate={menuOpen ? { rotate: 45, y: 5 } : { rotate: 0, y: 0 }} transition={{ duration: 0.28 }} className="block h-px w-full bg-[#2C2A25]" />
@@ -209,12 +238,12 @@ export default function Navbar() {
         </div>
       </motion.header>
 
-      {/* ── MOBILE MENU ───────────────────────────────────────────────── */}
+      {/* ── MOBILE MENU — only below md ───────────────────────────────── */}
       <motion.div
         initial={false}
         animate={menuOpen ? { opacity: 1, pointerEvents: "auto" as const } : { opacity: 0, pointerEvents: "none" as const }}
         transition={{ duration: 0.35 }}
-        className="fixed inset-0 z-[55] flex flex-col items-center justify-center overflow-y-auto"
+        className="fixed inset-0 z-[55] flex flex-col items-center justify-center overflow-y-auto md:hidden"
         style={{ background: "rgba(250,246,239,0.97)", backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)", paddingTop: 80, paddingBottom: 24 }}
       >
         <div className="absolute top-24 left-1/2 -translate-x-1/2 w-12 h-px bg-[#C4A96A]/40" />
