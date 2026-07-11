@@ -92,7 +92,7 @@ export default function ServicesSection() {
           {/* Main heading */}
           <h2 style={{
             fontFamily: "'Cormorant Garamond', Georgia, serif",
-            fontSize: "clamp(2.2rem, 4.5vw, 3.8rem)",
+            fontSize: "clamp(2.4rem, 3.8vw, 3.25rem)",
             fontWeight: 600,
             lineHeight: 1.1,
             letterSpacing: "0.01em",

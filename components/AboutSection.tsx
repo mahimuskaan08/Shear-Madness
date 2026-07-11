@@ -225,7 +225,7 @@ export default function AboutSection({
             <h2
               style={{
                 fontFamily: "'Cormorant Garamond', Georgia, serif",
-                fontSize: "clamp(2.0rem, 3.2vw, 2.75rem)",
+                fontSize: "clamp(2.4rem, 3.8vw, 3.25rem)",
                 fontWeight: 600,
                 lineHeight: 1.15,
                 letterSpacing: "0.02em",

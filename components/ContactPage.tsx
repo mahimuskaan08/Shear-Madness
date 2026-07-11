@@ -228,7 +228,7 @@ export default function ContactPage({
         >
           <h2 style={{
             fontFamily: "'Cormorant Garamond', Georgia, serif",
-            fontSize: "clamp(2.8rem, 6vw, 5.4rem)",
+            fontSize: "clamp(2.4rem, 3.8vw, 3.25rem)",
             fontWeight: 600, lineHeight: 1.0,
             letterSpacing: "0.01em", color: "#FFFFFF", marginBottom: 18,
           }}>

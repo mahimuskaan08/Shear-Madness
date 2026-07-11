@@ -263,7 +263,7 @@ export default function ArtistSection({
         >
           <h2 style={{
             fontFamily: "'Cormorant Garamond', Georgia, serif",
-            fontSize: "clamp(2.8rem, 6vw, 5.2rem)",
+            fontSize: "clamp(2.4rem, 3.8vw, 3.25rem)",
             fontWeight: 600, lineHeight: 1.0,
             letterSpacing: "0.01em", color: "#556B2F", marginBottom: 6,
             display: "inline-block",
