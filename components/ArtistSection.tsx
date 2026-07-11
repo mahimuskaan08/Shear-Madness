@@ -164,10 +164,14 @@ export default function ArtistSection({
   artistBg,
   oscarImage,
   georgeImage,
+  oscarBio,
+  georgeBio,
 }: {
   artistBg?:    string;
   oscarImage?:  string;
   georgeImage?: string;
+  oscarBio?:    string;
+  georgeBio?:   string;
 }) {
   const [hoveredArtist, setHoveredArtist] = useState<"oscar" | "george" | null>(null);
   const [isTouch, setIsTouch] = useState(false);
@@ -257,14 +261,6 @@ export default function ArtistSection({
           transition={{ duration: 0.9, ease: EASE }}
           style={{ marginBottom: isMobile ? "clamp(32px, 5vh, 52px)" : "clamp(14px, 2vh, 24px)", textAlign: "center" }}
         >
-          <p style={{
-            fontFamily: "'Inter', sans-serif",
-            fontSize: "0.62rem", fontWeight: 700,
-            letterSpacing: "0.30em", textTransform: "uppercase",
-            color: "#7A5C10", marginBottom: 3,
-          }}>
-            Meet the Artists
-          </p>
           <h2 style={{
             fontFamily: "'Cormorant Garamond', Georgia, serif",
             fontSize: "clamp(2.8rem, 6vw, 5.2rem)",
@@ -403,12 +399,9 @@ export default function ArtistSection({
                 <div style={{ ...BIO_PANEL_INNER, width: "100%", borderRadius: "0 14px 14px 0", height: "100%", boxSizing: "border-box", display: "flex", flexDirection: "column" }}>
                   <div style={{ height: 1, background: "linear-gradient(to right, rgba(198,167,107,0.55), transparent)", marginBottom: 16, flexShrink: 0 }} />
                   <div className="bio-scroll-inner" style={{ display: "flex", flexDirection: "column", gap: 12, flex: 1, minHeight: 0, marginBottom: 16 }}>
-                    <p style={BIO_TEXT}>
-                      Co-founding Shear Madness in 2003, Oscar &ldquo;Victor&rdquo; Landicho has helped shape the salon into one of Hoboken&apos;s most trusted beauty destinations. As Manager, he continues to serve his longstanding clientele while also welcoming new guests through personal referrals and word of mouth.
-                    </p>
-                    <p style={BIO_TEXT}>
-                      With nearly three decades of experience (since 1987) — including almost two decades in Hoboken — Oscar has become known for his precision, consistency, and intuitive understanding of personal style.
-                    </p>
+                    {(oscarBio ?? "Co-founding Shear Madness in 2003, Oscar \"Victor\" Landicho has helped shape the salon into one of Hoboken's most trusted beauty destinations. As Manager, he continues to serve his longstanding clientele while also welcoming new guests through personal referrals and word of mouth.\n\nWith nearly four decades of experience (since 1987) — including almost two decades in Hoboken — Oscar has become known for his precision, consistency, and intuitive understanding of personal style.").split("\n\n").map((para, i) => (
+                      <p key={i} style={BIO_TEXT}>{para}</p>
+                    ))}
                   </div>
                   <p style={{ ...BIO_CLOSING, flexShrink: 0 }}>If the lights are on, Oscar &ldquo;Victor&rdquo; is in.</p>
                 </div>
@@ -456,12 +449,9 @@ export default function ArtistSection({
                 <div style={{ ...BIO_PANEL_INNER, width: "100%", borderRadius: "14px 0 0 14px", height: "100%", boxSizing: "border-box", display: "flex", flexDirection: "column" }}>
                   <div style={{ height: 1, background: "linear-gradient(to right, rgba(198,167,107,0.55), transparent)", marginBottom: 16, flexShrink: 0 }} />
                   <div className="bio-scroll-inner" style={{ display: "flex", flexDirection: "column", gap: 12, flex: 1, minHeight: 0, marginBottom: 16 }}>
-                    <p style={BIO_TEXT}>
-                      George joined Shear Madness from the Spa at Port Liberté, bringing with him over 28 years of experience in the beauty industry. His expertise extends beyond the salon, having worked in the entertainment industry on Broadway and in film with renowned talents such as Melanie Griffith, Raul Julia, Melissa Manchester, and Rosie Perez.
-                    </p>
-                    <p style={BIO_TEXT}>
-                      He also served as a National Educator for Glemby International, associated with prestigious retailers like Saks Fifth Avenue and Bergdorf Goodman. Specializing in cut, color, and styling, George also offers make-up and massage services.
-                    </p>
+                    {(georgeBio ?? "George joined Shear Madness from the Spa at Port Liberté, bringing with him over 28 years of experience in the beauty industry. His expertise extends beyond the salon, having worked in the entertainment industry on Broadway and in film with renowned talents such as Melanie Griffith, Raul Julia, Melissa Manchester, and Rosie Perez.\n\nHe also served as a National Educator for Glemby International, associated with prestigious retailers like Saks Fifth Avenue and Bergdorf Goodman. Specializing in cut, color, and styling, George also offers make-up and massage services.").split("\n\n").map((para, i) => (
+                      <p key={i} style={BIO_TEXT}>{para}</p>
+                    ))}
                   </div>
                   <p style={{ ...BIO_CLOSING, flexShrink: 0 }}>Accepting appointments Tuesday – Saturday, 10:00 AM until closing.</p>
                 </div>
@@ -534,24 +524,18 @@ export default function ArtistSection({
                 {hoveredArtist === "oscar" ? (
                   <>
                     <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 14 }}>
-                      <p style={{ ...BIO_TEXT, fontSize: "0.85rem" }}>
-                        Co-founding Shear Madness in 2003, Oscar &ldquo;Victor&rdquo; Landicho has helped shape the salon into one of Hoboken&apos;s most trusted beauty destinations. As Manager, he continues to serve his longstanding clientele while also welcoming new guests through personal referrals.
-                      </p>
-                      <p style={{ ...BIO_TEXT, fontSize: "0.85rem" }}>
-                        With nearly three decades of experience (since 1987), Oscar has become known for his precision, consistency, and intuitive understanding of personal style.
-                      </p>
+                      {(oscarBio ?? "Co-founding Shear Madness in 2003, Oscar \"Victor\" Landicho has helped shape the salon into one of Hoboken's most trusted beauty destinations. As Manager, he continues to serve his longstanding clientele while also welcoming new guests through personal referrals and word of mouth.\n\nWith nearly four decades of experience (since 1987) — including almost two decades in Hoboken — Oscar has become known for his precision, consistency, and intuitive understanding of personal style.").split("\n\n").map((para, i) => (
+                        <p key={i} style={{ ...BIO_TEXT, fontSize: "0.85rem" }}>{para}</p>
+                      ))}
                     </div>
                     <p style={{ ...BIO_CLOSING, fontSize: "0.92rem" }}>If the lights are on, Oscar &ldquo;Victor&rdquo; is in.</p>
                   </>
                 ) : (
                   <>
                     <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 14 }}>
-                      <p style={{ ...BIO_TEXT, fontSize: "0.85rem" }}>
-                        George joined Shear Madness from the Spa at Port Liberté, bringing over 28 years of experience — including Broadway and film work with Melanie Griffith, Raul Julia, and Rosie Perez.
-                      </p>
-                      <p style={{ ...BIO_TEXT, fontSize: "0.85rem" }}>
-                        A former National Educator for Glemby International (Saks Fifth Avenue, Bergdorf Goodman), specializing in cut, color, styling, make-up, and massage.
-                      </p>
+                      {(georgeBio ?? "George joined Shear Madness from the Spa at Port Liberté, bringing with him over 28 years of experience in the beauty industry. His expertise extends beyond the salon, having worked in the entertainment industry on Broadway and in film with renowned talents such as Melanie Griffith, Raul Julia, Melissa Manchester, and Rosie Perez.\n\nHe also served as a National Educator for Glemby International, associated with prestigious retailers like Saks Fifth Avenue and Bergdorf Goodman. Specializing in cut, color, and styling, George also offers make-up and massage services.").split("\n\n").map((para, i) => (
+                        <p key={i} style={{ ...BIO_TEXT, fontSize: "0.85rem" }}>{para}</p>
+                      ))}
                     </div>
                     <p style={{ ...BIO_CLOSING, fontSize: "0.92rem" }}>Accepting appointments Tuesday – Saturday, 10:00 AM until closing.</p>
                   </>

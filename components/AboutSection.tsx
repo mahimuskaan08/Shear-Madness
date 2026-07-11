@@ -222,19 +222,6 @@ export default function AboutSection({
             transition={{ duration: 1.0, ease: EASE, delay: 0.15 }}
             style={{ flexShrink: 0 }}
           >
-            <p
-              style={{
-                fontFamily: "'Inter', sans-serif",
-                fontSize: "0.62rem",
-                fontWeight: 500,
-                letterSpacing: "0.28em",
-                textTransform: "uppercase",
-                color: "#7A5C10",
-                marginBottom: 8,
-              }}
-            >
-              <span className="about-label-text">Our Story</span>
-            </p>
             <h2
               style={{
                 fontFamily: "'Cormorant Garamond', Georgia, serif",

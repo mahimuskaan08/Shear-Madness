@@ -62,14 +62,6 @@ export default async function CreditsPage() {
 
           {/* ── HEADER ──────────────────────────────────────────────────── */}
           <header style={{ textAlign: "center", marginBottom: "clamp(48px, 7vh, 72px)" }}>
-            <p style={{
-              fontFamily: "'Inter', sans-serif",
-              fontSize: "0.78rem", fontWeight: 700,
-              letterSpacing: "0.30em", textTransform: "uppercase",
-              color: "#7A5C10", marginBottom: 10,
-            }}>
-              With Gratitude
-            </p>
             <h1 style={{
               fontFamily: "'Cormorant Garamond', Georgia, serif",
               fontSize: "clamp(2.6rem, 5vw, 4.2rem)",
@@ -198,6 +190,7 @@ export default async function CreditsPage() {
         hoursFri={footerHours.hoursFri}
         hoursSat={footerHours.hoursSat}
         hoursSunMon={footerHours.hoursSunMon}
+        social={data.social}
       />
     </>
   );

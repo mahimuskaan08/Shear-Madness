@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
+import type { SiteSocial } from "@/lib/site-data";
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
@@ -21,36 +22,55 @@ const DEFAULT_HOURS = [
   { days: "Sun – Mon", time: "Closed"              },
 ];
 
-const SOCIALS = [
-  {
-    label: "Instagram",
-    href: "https://www.instagram.com/shearmadnesshoboken/",
-    icon: (
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
-        <rect x="2" y="2" width="20" height="20" rx="5" />
-        <circle cx="12" cy="12" r="4" />
-        <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
-      </svg>
-    ),
-  },
-  {
-    label: "Facebook",
-    href: "https://www.facebook.com/ShearMadnessHobokenNJ/",
-    icon: (
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
-        <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
-      </svg>
-    ),
-  },
-  {
-    label: "X (Twitter)",
-    href: "https://x.com/ShearMadnessNJ",
-    icon: (
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-      </svg>
-    ),
-  },
+// SVG icons keyed by lowercase platform name
+const ICON_MAP: Record<string, React.ReactNode> = {
+  instagram: (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
+      <rect x="2" y="2" width="20" height="20" rx="5" />
+      <circle cx="12" cy="12" r="4" />
+      <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
+    </svg>
+  ),
+  facebook: (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
+      <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+    </svg>
+  ),
+  twitter: (
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+    </svg>
+  ),
+  x: (
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+    </svg>
+  ),
+  tiktok: (
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.3 6.3 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.81a8.18 8.18 0 0 0 4.78 1.52V6.9a4.85 4.85 0 0 1-1.01-.21z" />
+    </svg>
+  ),
+  youtube: (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
+      <path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z" />
+      <polygon fill="currentColor" stroke="none" points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" />
+    </svg>
+  ),
+};
+
+const GENERIC_ICON = (
+  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
+    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+  </svg>
+);
+
+// Hardcoded fallback used when no social prop is passed
+const FALLBACK_SOCIALS = [
+  { label: "Instagram", href: "https://www.instagram.com/shearmadnesshoboken/",  icon: ICON_MAP.instagram },
+  { label: "Facebook",  href: "https://www.facebook.com/ShearMadnessHobokenNJ/", icon: ICON_MAP.facebook  },
+  { label: "X",         href: "https://x.com/ShearMadnessNJ",                    icon: ICON_MAP.x         },
 ];
 
 export default function Footer({
@@ -62,6 +82,7 @@ export default function Footer({
   hoursFri,
   hoursSat,
   hoursSunMon,
+  social,
 }: {
   phone?:        string;
   email?:        string;
@@ -71,7 +92,13 @@ export default function Footer({
   hoursFri?:     string;
   hoursSat?:     string;
   hoursSunMon?:  string;
+  social?:       SiteSocial[];
 } = {}) {
+  const socialsToShow = social?.filter(s => s.is_enabled && s.url).map(s => ({
+    label: s.platform,
+    href:  s.url,
+    icon:  ICON_MAP[s.platform.toLowerCase()] ?? GENERIC_ICON,
+  })) ?? FALLBACK_SOCIALS;
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-40px" });
 
@@ -326,7 +353,7 @@ export default function Footer({
 
             {/* Social icons */}
             <div style={{ display: "flex", gap: 10, justifyContent: "center" }}>
-              {SOCIALS.map(s => (
+              {socialsToShow.map(s => (
                 <a
                   key={s.label}
                   href={s.href}

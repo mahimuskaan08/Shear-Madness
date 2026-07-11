@@ -51,6 +51,7 @@ export default async function GalleryPage() {
         hoursFri={footerHours.hoursFri}
         hoursSat={footerHours.hoursSat}
         hoursSunMon={footerHours.hoursSunMon}
+        social={data.social}
       />
     </>
   );

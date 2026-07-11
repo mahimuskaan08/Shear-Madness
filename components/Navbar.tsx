@@ -219,8 +219,8 @@ export default function Navbar() {
               md/lg: in flex flow (flex-shrink-0) at the end of the row.
               xl:   absolutely pinned to right edge.                      */}
           <div className="hidden md:flex items-center gap-2 lg:gap-3 flex-shrink-0 xl:absolute xl:right-10">
-            <NavPillButton href="/contact" label="Contact" />
-            <NavPillButton href="/booking" label="Book Now" />
+            <NavPillButton href="/contact" label="Hrs & Loc" />
+            <NavPillButton href="/booking" label="Set an Appt." />
           </div>
 
           {/* ── MOBILE HAMBURGER — hidden from md up ─────────────────── */}
@@ -309,15 +309,15 @@ export default function Navbar() {
               className="rounded-full text-[10px] tracking-[0.2em] uppercase text-white px-7 py-3 transition-all duration-300"
               style={{ fontFamily: "'Neue World', Georgia, serif", background: "linear-gradient(135deg, #C9A96E, #B8935A)", boxShadow: "0 4px 18px rgba(196,169,106,0.45)" }}
             >
-              Contact
+              Hrs & Loc
             </a>
             <a
               href="/booking"
               onClick={() => setMenuOpen(false)}
-              className="rounded-full text-[10px] tracking-[0.2em] uppercase text-white px-7 py-3 transition-all duration-300"
+              className="rounded-full text-[10px] tracking-[0.2em] uppercase text-white px-5 py-3 transition-all duration-300"
               style={{ fontFamily: "'Neue World', Georgia, serif", background: "linear-gradient(135deg, #C9A96E, #B8935A)", boxShadow: "0 4px 18px rgba(196,169,106,0.45)" }}
             >
-              Book Now
+              Set an Appt.
             </a>
           </motion.div>
         </div>

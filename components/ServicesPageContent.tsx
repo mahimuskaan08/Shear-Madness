@@ -75,9 +75,9 @@ const TREATMENTS: Service[] = [
 ];
 
 const CATEGORIES: CategoryData[] = [
-  { id: "womens",     eyebrow: "For Her",          title: "Women's Services",  description: "Thoughtfully tailored cuts, color, and styling services designed to enhance your natural beauty with precision and artistry.", note: "Color services include Toner/Glaze & Blowout ($95 value)", services: WOMENS,     bg: "transparent", accentBg: "transparent" },
-  { id: "mens",       eyebrow: "For Him",          title: "Men's Services",    description: "Clean, polished grooming and color services crafted with comfort, detail, and modern style in mind.",                           services: MENS,       bg: "transparent", accentBg: "transparent" },
-  { id: "treatments", eyebrow: "Restore & Refine", title: "Hair Treatments",   description: "Restorative treatments designed to nourish, strengthen, and refine the hair from root to finish.",                             services: TREATMENTS, bg: "transparent", accentBg: "transparent" },
+  { id: "womens",     eyebrow: "",  title: "Women's Services",  description: "Thoughtfully tailored cuts, color, and styling services designed to enhance your natural beauty with precision and artistry.", note: "Color services include Toner/Glaze & Blowout ($95 value)", services: WOMENS,     bg: "transparent", accentBg: "transparent" },
+  { id: "mens",       eyebrow: "",  title: "Men's Services",    description: "Clean, polished grooming and color services crafted with comfort, detail, and modern style in mind.",                           services: MENS,       bg: "transparent", accentBg: "transparent" },
+  { id: "treatments", eyebrow: "",  title: "Hair Treatments",   description: "Treatments designed to nourish and strengthen the hair from root to finish.",                             services: TREATMENTS, bg: "transparent", accentBg: "transparent" },
 ];
 
 const NOTES = [
@@ -500,9 +500,11 @@ function CategorySection({ cat }: { cat: CategoryData }) {
 
           {/* Left: eyebrow + title + description */}
           <div style={{ display:"flex", flexDirection:"column", gap:14, flex:1, minWidth:0 }}>
+            {cat.eyebrow && (
             <p className="svc-cat-eyebrow" style={{ fontFamily:"'Inter',sans-serif", fontSize:"0.60rem", fontWeight:500, letterSpacing:"0.34em", textTransform:"uppercase", color:"#7A5C10" }}>
               <span style={{ background:"rgba(252,248,240,0.55)", backdropFilter:"blur(8px)", WebkitBackdropFilter:"blur(8px)", borderRadius:4, padding:"2px 10px" }}>{cat.eyebrow}</span>
             </p>
+            )}
             <div>
               <h2 className="svc-cat-h2" style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"clamp(2.2rem,4vw,3.4rem)", fontWeight:600, lineHeight:1.1, letterSpacing:"0.01em", color:"#556B2F", marginBottom:14 }}>
                 <span style={{ background:"rgba(252,248,240,0.55)", backdropFilter:"blur(8px)", WebkitBackdropFilter:"blur(8px)", borderRadius:8, padding:"2px 14px" }}>{cat.title}</span>
@@ -643,12 +645,6 @@ function HeroSection() {
       {/* ── CONTENT ───────────────────────────────────────────────────── */}
       <div className="svc-page-hero" style={{ maxWidth:1280, margin:"0 auto", width:"100%", position:"relative", zIndex:2, padding:"clamp(72px,9vh,80px) clamp(24px,7vw,96px) clamp(3px,0.4vh,5px)" }}>
         <div style={{ textAlign:"center", maxWidth:700, margin:"0 auto" }}>
-
-          <motion.p initial={{ opacity:0, y:20 }} animate={{ opacity:1, y:0 }} transition={{ duration:0.9, ease:EASE, delay:0.2 }}
-            className="svc-hero-eyebrow"
-            style={{ fontFamily:"'Inter',sans-serif", fontSize:"0.60rem", fontWeight:500, letterSpacing:"0.40em", textTransform:"uppercase", color:"#7A5C10", marginBottom:14 }}>
-            <span style={{ background:"rgba(252,248,240,0.55)", backdropFilter:"blur(8px)", WebkitBackdropFilter:"blur(8px)", borderRadius:4, padding:"2px 10px" }}>Our Services</span>
-          </motion.p>
 
           <motion.h1 initial={{ opacity:0, y:26 }} animate={{ opacity:1, y:0 }} transition={{ duration:1.1, ease:EASE, delay:0.34 }}
             className="svc-hero-h1"

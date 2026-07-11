@@ -147,16 +147,6 @@ export default function GalleryPageContent({
 
       {/* ── Header ── */}
       <div id="portfolio" className="flex flex-col items-center text-center px-6 pb-10 md:pb-12" style={{ scrollMarginTop: "calc(var(--navbar-h) + 16px)" }}>
-        <motion.p
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: EASE }}
-          className="font-sans text-[10px] tracking-[0.35em] uppercase font-medium"
-          style={{ color: "#7A5C10" }}
-        >
-          Gallery
-        </motion.p>
-
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

@@ -226,14 +226,6 @@ export default function ContactPage({
           transition={{ duration: 1.0, ease: EASE }}
           style={{ marginBottom: "clamp(36px, 5vh, 56px)" }}
         >
-          <p style={{
-            fontFamily: "'Inter', sans-serif",
-            fontSize: "0.62rem", fontWeight: 700,
-            letterSpacing: "0.30em", textTransform: "uppercase",
-            color: "#FFFFFF", marginBottom: 8,
-          }}>
-            Find Us
-          </p>
           <h2 style={{
             fontFamily: "'Cormorant Garamond', Georgia, serif",
             fontSize: "clamp(2.8rem, 6vw, 5.4rem)",

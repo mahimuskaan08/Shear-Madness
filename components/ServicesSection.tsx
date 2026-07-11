@@ -89,19 +89,6 @@ export default function ServicesSection() {
           transition={{ duration: 1.1, ease: EASE }}
           style={{ textAlign: "center", marginBottom: "clamp(24px, 3.5vh, 40px)", position: "relative", zIndex: 1 }}
         >
-          {/* Eyebrow */}
-          <p style={{
-            fontFamily: "'Inter', sans-serif",
-            fontSize: "0.62rem",
-            fontWeight: 700,
-            letterSpacing: "0.30em",
-            textTransform: "uppercase",
-            color: "#7A5C10",
-            marginBottom: 8,
-          }}>
-            What We Offer
-          </p>
-
           {/* Main heading */}
           <h2 style={{
             fontFamily: "'Cormorant Garamond', Georgia, serif",

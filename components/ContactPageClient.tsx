@@ -323,12 +323,6 @@ function ContactInfoMap() {
                 "linear-gradient(90deg, transparent, #C4A96A, transparent)",
             }}
           />
-          <motion.p
-            {...fadeUp(0.1)}
-            className="font-sans text-[#8FA68C] text-[10px] tracking-[0.35em] uppercase font-medium mb-3"
-          >
-            Find Us
-          </motion.p>
           <motion.h2
             {...fadeUp(0.2)}
             className="font-serif text-[#556B2F] leading-[1.08]"
