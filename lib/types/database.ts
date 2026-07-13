@@ -32,6 +32,8 @@ export interface Database {
           id: string
           url: string
           path: string
+          thumbnail_url: string | null
+          thumbnail_path: string | null
           alt: string
           title: string
           category: "women" | "men" | "both"
@@ -45,6 +47,8 @@ export interface Database {
           id?: string
           url: string
           path: string
+          thumbnail_url?: string | null
+          thumbnail_path?: string | null
           alt?: string
           title?: string
           category: "women" | "men" | "both"
@@ -58,6 +62,8 @@ export interface Database {
           id?: string
           url?: string
           path?: string
+          thumbnail_url?: string | null
+          thumbnail_path?: string | null
           alt?: string
           title?: string
           category?: "women" | "men" | "both"

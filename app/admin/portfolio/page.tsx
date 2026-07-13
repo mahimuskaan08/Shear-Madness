@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import {
   DndContext,
@@ -26,6 +26,7 @@ import {
   Grid3X3,
   X,
   Images,
+  Pencil,
 } from "lucide-react"
 import { createSupabaseClient } from "@/lib/supabase/client"
 import { type Tables, type Inserts, type Updates, type Json } from "@/lib/types/database"
@@ -121,9 +122,8 @@ function UploadDialog({
   defaultCategory: Category
   onSuccess: () => void
 }) {
-  const [displayDraft, setDisplayDraft] = useState<UploadDraft>(null)
-  const [angleDrafts, setAngleDrafts] = useState<AngleDraft[]>([])
-  const [addingAngle, setAddingAngle] = useState(false)
+  const [thumbnailDraft, setThumbnailDraft] = useState<UploadDraft>(null)
+  const [multiAngleDraft, setMultiAngleDraft] = useState<UploadDraft>(null)
   const [category, setCategory] = useState<Category>(defaultCategory)
   const [alt, setAlt] = useState("")
   const [title, setTitle] = useState("")
@@ -131,9 +131,8 @@ function UploadDialog({
   const [isSaving, setIsSaving] = useState(false)
 
   function resetForm() {
-    setDisplayDraft(null)
-    setAngleDrafts([])
-    setAddingAngle(false)
+    setThumbnailDraft(null)
+    setMultiAngleDraft(null)
     setCategory(defaultCategory)
     setAlt("")
     setTitle("")
@@ -149,13 +148,9 @@ function UploadDialog({
     onOpenChange(next)
   }
 
-  function removeAngle(idx: number) {
-    setAngleDrafts((prev) => prev.filter((_, i) => i !== idx))
-  }
-
   async function handleSave() {
-    if (!displayDraft) {
-      toast.error("Please upload a display picture first.")
+    if (!multiAngleDraft) {
+      toast.error("Please upload a multi-angle photo first.")
       return
     }
 
@@ -173,14 +168,16 @@ function UploadDialog({
       const nextOrder = (existing?.[0]?.display_order ?? -1) + 1
 
       const payload: Inserts<"portfolio_images"> = {
-        url: displayDraft.url,
-        path: displayDraft.path,
+        url: multiAngleDraft.url,
+        path: multiAngleDraft.path,
+        thumbnail_url: thumbnailDraft?.url ?? null,
+        thumbnail_path: thumbnailDraft?.path ?? null,
         alt: alt.trim() || "Portfolio image",
         title: title.trim() || "",
         category,
         featured,
         display_order: nextOrder,
-        multi_angle_images: angleDrafts as Json,
+        multi_angle_images: [],
       }
       const { error } = await supabase.from("portfolio_images").insert(payload)
 
@@ -202,99 +199,46 @@ function UploadDialog({
         <DialogHeader>
           <DialogTitle>Add Portfolio Photo</DialogTitle>
           <DialogDescription>
-            Upload a display picture and optional multi-angle shots.
+            Upload a thumbnail and a multi-angle photo for the gallery.
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-6 py-2">
-          {/* ── Display Picture ── */}
+          {/* ── Thumbnail Picture ── */}
           <div className="space-y-2">
-            <Label className="text-xs font-medium text-zinc-400 uppercase tracking-wider block">
-              Display Picture <span className="text-red-400">*</span>
+            <Label className="text-xs font-medium text-amber-400 uppercase tracking-wider block">
+              Thumbnail Picture{" "}
+              <span className="text-zinc-600 normal-case font-normal">(optional)</span>
             </Label>
             <p className="text-xs text-zinc-500">
-              The main thumbnail shown in the gallery card.
+              A single clean portrait shown as the gallery card preview.
             </p>
             <ImageUploader
               bucket="portfolio"
-              folder={category}
-              currentUrl={displayDraft?.url ?? null}
-              onUploadComplete={(url, path) => setDisplayDraft({ url, path })}
-              onRemove={() => setDisplayDraft(null)}
+              folder={`${category}/thumbnails`}
+              currentUrl={thumbnailDraft?.url ?? null}
+              onUploadComplete={(url, path) => setThumbnailDraft({ url, path })}
+              onRemove={() => setThumbnailDraft(null)}
               aspectHint="Portrait or square"
             />
           </div>
 
-          {/* ── Multi-Angle Pictures ── */}
+          {/* ── Multi-Angle Photo ── */}
           <div className="space-y-2">
-            <Label className="text-xs font-medium text-zinc-400 uppercase tracking-wider block">
-              Multi-Angle Pictures{" "}
-              <span className="text-zinc-600 normal-case font-normal">(optional)</span>
+            <Label className="text-xs font-medium text-blue-400 uppercase tracking-wider block">
+              Multi-Angle Photo <span className="text-red-400">*</span>
             </Label>
             <p className="text-xs text-zinc-500">
-              Extra shots from different angles shown when the photo is expanded.
+              The collage or multi-shot image shown in the full gallery view.
             </p>
-
-            {/* Uploaded angle thumbnails */}
-            {angleDrafts.length > 0 && (
-              <div className="flex flex-wrap gap-2">
-                {angleDrafts.map((draft, idx) => (
-                  <div
-                    key={idx}
-                    className="relative w-16 h-16 rounded-lg overflow-hidden border border-zinc-700 group"
-                  >
-                    <img
-                      src={draft.url}
-                      alt={`Angle ${idx + 1}`}
-                      className="w-full h-full object-cover"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => removeAngle(idx)}
-                      className="absolute top-0.5 right-0.5 rounded-full bg-zinc-900/80 p-0.5 opacity-0 group-hover:opacity-100 hover:bg-red-500/90 transition-all"
-                    >
-                      <X className="h-2.5 w-2.5 text-white" />
-                    </button>
-                    <span className="absolute bottom-0.5 left-0.5 text-[9px] font-bold text-white bg-zinc-900/70 rounded px-1">
-                      {idx + 1}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {/* Inline angle uploader */}
-            {addingAngle ? (
-              <div className="space-y-2">
-                <ImageUploader
-                  bucket="portfolio"
-                  folder={`${category}/angles`}
-                  currentUrl={null}
-                  onUploadComplete={(url, path) => {
-                    setAngleDrafts((prev) => [...prev, { url, path }])
-                    setAddingAngle(false)
-                  }}
-                  onRemove={() => setAddingAngle(false)}
-                  aspectHint="Portrait or square"
-                />
-                <button
-                  type="button"
-                  onClick={() => setAddingAngle(false)}
-                  className="text-xs text-zinc-500 hover:text-zinc-300 transition-colors"
-                >
-                  Cancel
-                </button>
-              </div>
-            ) : (
-              <button
-                type="button"
-                onClick={() => setAddingAngle(true)}
-                className="flex items-center gap-1.5 text-xs text-zinc-400 hover:text-amber-400 transition-colors mt-1"
-              >
-                <Plus className="h-3.5 w-3.5" />
-                {angleDrafts.length === 0 ? "Add angle photo" : "Add another angle"}
-              </button>
-            )}
+            <ImageUploader
+              bucket="portfolio"
+              folder={category}
+              currentUrl={multiAngleDraft?.url ?? null}
+              onUploadComplete={(url, path) => setMultiAngleDraft({ url, path })}
+              onRemove={() => setMultiAngleDraft(null)}
+              aspectHint="Portrait or square"
+            />
           </div>
 
           {/* ── Category ── */}
@@ -350,10 +294,7 @@ function UploadDialog({
                 Featured photos are highlighted in the gallery
               </p>
             </div>
-            <Switch
-              checked={featured}
-              onCheckedChange={setFeatured}
-            />
+            <Switch checked={featured} onCheckedChange={setFeatured} />
           </div>
         </div>
 
@@ -365,7 +306,7 @@ function UploadDialog({
           </DialogClose>
           <Button
             onClick={handleSave}
-            disabled={isSaving || !displayDraft}
+            disabled={isSaving || !multiAngleDraft}
             className="bg-amber-500 hover:bg-amber-400 text-zinc-950 font-semibold"
           >
             {isSaving ? (
@@ -378,6 +319,161 @@ function UploadDialog({
                 <Plus className="h-4 w-4" />
                 Add to Portfolio
               </>
+            )}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  )
+}
+
+// ─── Edit Dialog ─────────────────────────────────────────────────────────────
+
+function EditDialog({
+  image,
+  open,
+  onOpenChange,
+  onSuccess,
+}: {
+  image: PortfolioImage | null
+  open: boolean
+  onOpenChange: (open: boolean) => void
+  onSuccess: () => void
+}) {
+  const [thumbnailDraft, setThumbnailDraft] = useState<UploadDraft>(null)
+  const [multiAngleDraft, setMultiAngleDraft] = useState<UploadDraft>(null)
+  const [isSaving, setIsSaving] = useState(false)
+
+  useEffect(() => {
+    if (image && open) {
+      setThumbnailDraft(
+        image.thumbnail_url && image.thumbnail_path
+          ? { url: image.thumbnail_url, path: image.thumbnail_path }
+          : null
+      )
+      setMultiAngleDraft({ url: image.url, path: image.path })
+    }
+  }, [image, open])
+
+  function handleOpenChange(next: boolean) {
+    if (!next) {
+      setThumbnailDraft(null)
+      setMultiAngleDraft(null)
+    }
+    onOpenChange(next)
+  }
+
+  async function handleSave() {
+    if (!image || !multiAngleDraft) return
+
+    setIsSaving(true)
+    try {
+      const supabase = createSupabaseClient()
+
+      // Remove old multi-angle photo from storage if replaced
+      if (multiAngleDraft.path !== image.path && image.path) {
+        await supabase.storage.from("portfolio").remove([image.path])
+      }
+
+      // Remove old thumbnail from storage if replaced or removed
+      const oldThumbPath = image.thumbnail_path
+      const newThumbPath = thumbnailDraft?.path ?? null
+      if (oldThumbPath && oldThumbPath !== newThumbPath) {
+        await supabase.storage.from("portfolio").remove([oldThumbPath])
+      }
+
+      const patch: Updates<"portfolio_images"> = {
+        url: multiAngleDraft.url,
+        path: multiAngleDraft.path,
+        thumbnail_url: thumbnailDraft?.url ?? null,
+        thumbnail_path: thumbnailDraft?.path ?? null,
+        updated_at: new Date().toISOString(),
+      }
+
+      const { error } = await supabase
+        .from("portfolio_images")
+        .update(patch)
+        .eq("id", image.id)
+
+      if (error) throw error
+
+      toast.success("Portfolio photo updated")
+      onSuccess()
+      handleOpenChange(false)
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Failed to save changes")
+    } finally {
+      setIsSaving(false)
+    }
+  }
+
+  return (
+    <Dialog open={open} onOpenChange={handleOpenChange}>
+      <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle>Edit Portfolio Photo</DialogTitle>
+          <DialogDescription>
+            Update the thumbnail and multi-angle photo.
+          </DialogDescription>
+        </DialogHeader>
+
+        <div className="space-y-6 py-2">
+          {/* ── Thumbnail Picture ── */}
+          <div className="space-y-2">
+            <Label className="text-xs font-medium text-amber-400 uppercase tracking-wider block">
+              Thumbnail Picture{" "}
+              <span className="text-zinc-600 normal-case font-normal">(optional)</span>
+            </Label>
+            <p className="text-xs text-zinc-500">
+              A single clean portrait shown as the gallery card preview.
+            </p>
+            <ImageUploader
+              bucket="portfolio"
+              folder={`${image?.category ?? "women"}/thumbnails`}
+              currentUrl={thumbnailDraft?.url ?? null}
+              onUploadComplete={(url, path) => setThumbnailDraft({ url, path })}
+              onRemove={() => setThumbnailDraft(null)}
+              aspectHint="Portrait or square"
+            />
+          </div>
+
+          {/* ── Multi-Angle Photo ── */}
+          <div className="space-y-2">
+            <Label className="text-xs font-medium text-blue-400 uppercase tracking-wider block">
+              Multi-Angle Photo <span className="text-red-400">*</span>
+            </Label>
+            <p className="text-xs text-zinc-500">
+              The collage or multi-shot image shown in the full gallery view.
+            </p>
+            <ImageUploader
+              bucket="portfolio"
+              folder={image?.category ?? "women"}
+              currentUrl={multiAngleDraft?.url ?? null}
+              onUploadComplete={(url, path) => setMultiAngleDraft({ url, path })}
+              onRemove={() => setMultiAngleDraft(null)}
+              aspectHint="Portrait or square"
+            />
+          </div>
+        </div>
+
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button variant="outline" className="border-zinc-700 text-zinc-400 hover:text-white hover:border-zinc-600">
+              Cancel
+            </Button>
+          </DialogClose>
+          <Button
+            onClick={handleSave}
+            disabled={isSaving || !multiAngleDraft}
+            className="bg-amber-500 hover:bg-amber-400 text-zinc-950 font-semibold"
+          >
+            {isSaving ? (
+              <>
+                <Loader2 className="h-4 w-4 animate-spin" />
+                Saving…
+              </>
+            ) : (
+              "Save Changes"
             )}
           </Button>
         </DialogFooter>
@@ -403,6 +499,7 @@ function CategoryPanel({
   })
 
   const [localOrder, setLocalOrder] = useState<string[] | null>(null)
+  const [editingImage, setEditingImage] = useState<PortfolioImage | null>(null)
 
   const orderedImages =
     localOrder && images
@@ -569,14 +666,41 @@ function CategoryPanel({
               return (
                 <SortableItem key={image.id} id={image.id}>
                   <div className="flex items-center gap-3 rounded-xl border border-zinc-800 bg-zinc-900 p-2 hover:border-zinc-700 transition-colors w-full">
-                    {/* Display picture thumb */}
-                    <div className="h-14 w-20 rounded-lg overflow-hidden bg-zinc-800 shrink-0 border border-zinc-700">
-                      <img
-                        src={image.url}
-                        alt={image.alt}
-                        className="h-full w-full object-cover"
-                        loading="lazy"
-                      />
+                    {/* Thumbnail picture box */}
+                    <div className="shrink-0 rounded-lg border-2 border-amber-500/40 bg-zinc-800 overflow-hidden w-[80px]">
+                      <div className="bg-amber-500/20 px-1 py-1 text-center border-b border-amber-500/30">
+                        <span className="text-[10px] font-bold text-amber-400 uppercase tracking-wide">Thumbnail</span>
+                      </div>
+                      <div className="h-16 w-full">
+                        {image.thumbnail_url ? (
+                          <img
+                            src={image.thumbnail_url}
+                            alt={image.alt}
+                            className="h-full w-full object-cover"
+                            loading="lazy"
+                          />
+                        ) : (
+                          <div className="h-full w-full flex flex-col items-center justify-center gap-1">
+                            <ImageIcon className="h-4 w-4 text-amber-500/30" />
+                            <span className="text-[9px] text-zinc-600">Not set</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Multi-angle box */}
+                    <div className="shrink-0 rounded-lg border-2 border-blue-500/40 bg-zinc-800 overflow-hidden w-[80px]">
+                      <div className="bg-blue-500/20 px-1 py-1 text-center border-b border-blue-500/30">
+                        <span className="text-[10px] font-bold text-blue-400 uppercase tracking-wide">Multi-angle</span>
+                      </div>
+                      <div className="h-16 w-full">
+                        <img
+                          src={image.url}
+                          alt={image.alt}
+                          className="h-full w-full object-cover"
+                          loading="lazy"
+                        />
+                      </div>
                     </div>
 
                     {/* Info */}
@@ -597,13 +721,6 @@ function CategoryPanel({
                           </span>
                         )}
                       </div>
-                      {/* Angle count */}
-                      {angles.length > 0 && (
-                        <span className="inline-flex items-center gap-1 text-[10px] text-zinc-500 mt-0.5">
-                          <Images className="h-3 w-3" />
-                          {angles.length} angle{angles.length !== 1 ? "s" : ""}
-                        </span>
-                      )}
                     </div>
 
                     {/* Controls */}
@@ -618,6 +735,14 @@ function CategoryPanel({
                           disabled={toggleFeaturedMutation.isPending}
                         />
                       </div>
+                      <button
+                        type="button"
+                        onClick={() => setEditingImage(image)}
+                        className="inline-flex items-center justify-center h-8 w-8 rounded-lg border border-zinc-700 bg-zinc-800 hover:border-amber-500/50 hover:bg-amber-500/10 hover:text-amber-400 text-zinc-400 transition-colors"
+                        title="Edit photos"
+                      >
+                        <Pencil className="h-3.5 w-3.5" />
+                      </button>
                       <ConfirmDelete
                         onConfirm={() => deleteMutation.mutate(image)}
                         itemName={image.title || "this photo"}
@@ -631,6 +756,16 @@ function CategoryPanel({
           </div>
         </SortableContext>
       </DndContext>
+
+      <EditDialog
+        image={editingImage}
+        open={editingImage !== null}
+        onOpenChange={(open) => { if (!open) setEditingImage(null) }}
+        onSuccess={() => {
+          queryClient.invalidateQueries({ queryKey: ["portfolio", category] })
+          setEditingImage(null)
+        }}
+      />
     </>
   )
 }
