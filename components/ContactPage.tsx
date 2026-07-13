@@ -91,6 +91,7 @@ const STYLES = `
   }
   /* Larger text on mobile */
   .contact-info-line { font-size: 1.7rem !important; }
+  .contact-info-line-large { font-size: 2.2rem !important; }
   .contact-section-divider {
     background: rgba(255,255,255,0.25) !important;
   }
@@ -264,7 +265,7 @@ export default function ContactPage({
 
             <div style={{
               display: "flex", flexDirection: "column",
-              gap: "clamp(14px, 2vh, 20px)",
+              gap: "clamp(28px, 4vh, 44px)",
               position: "relative", zIndex: 1,
             }}>
 
@@ -309,8 +310,8 @@ export default function ContactPage({
                 </InfoBlock>
 
                 <InfoBlock label="Contact" inView={inView} delay={0.62}>
-                  <InfoLine primary href={`mailto:${displayEmail}`}>{displayEmail}</InfoLine>
-                  <InfoLine href={telHref}>{displayPhone}</InfoLine>
+                  <InfoLine primary large href={`mailto:${displayEmail}`}>{displayEmail}</InfoLine>
+                  <InfoLine large href={telHref}>{displayPhone}</InfoLine>
                 </InfoBlock>
 
                 <motion.div
@@ -425,9 +426,9 @@ function InfoBlock({
       className="contact-info-block-box"
     >
       <p style={{
-        fontFamily: "'Inter', sans-serif",
-        fontSize: "0.65rem", fontWeight: 700,
-        letterSpacing: "0.32em", textTransform: "uppercase",
+        fontFamily: "'Cormorant Garamond', Georgia, serif",
+        fontSize: "1rem", fontWeight: 700,
+        letterSpacing: "0.22em", textTransform: "uppercase",
         color: "#D4AE6A", marginBottom: 10,
       }}>
         {label}
@@ -438,17 +439,17 @@ function InfoBlock({
   );
 }
 
-function InfoLine({ children, primary, href }: { children: React.ReactNode; primary?: boolean; href?: string }) {
+function InfoLine({ children, primary, href, large }: { children: React.ReactNode; primary?: boolean; href?: string; large?: boolean }) {
   const style: React.CSSProperties = {
     fontFamily: "'Cormorant Garamond', Georgia, serif",
-    fontSize: "clamp(1.45rem, 2vw, 1.8rem)",
-    fontWeight: 400, lineHeight: 1.55,
+    fontSize: large ? "clamp(2.2rem, 3.2vw, 3rem)" : "clamp(1.45rem, 2vw, 1.8rem)",
+    fontWeight: large ? 500 : 400, lineHeight: 1.45,
     color: primary ? "#FFFFFF" : "rgba(255,255,255,0.82)",
     letterSpacing: "0.01em",
   };
   if (href) {
     return (
-      <a href={href} className="contact-info-line" style={{ ...style, display: "block", textDecoration: "none", transition: "color 0.2s" }}
+      <a href={href} className={large ? "contact-info-line-large" : "contact-info-line"} style={{ ...style, display: "block", textDecoration: "none", transition: "color 0.2s" }}
         onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = "#C4A96A"; }}
         onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = primary ? "#FFFFFF" : "rgba(255,255,255,0.82)"; }}
       >
@@ -456,5 +457,5 @@ function InfoLine({ children, primary, href }: { children: React.ReactNode; prim
       </a>
     );
   }
-  return <p className="contact-info-line" style={style}>{children}</p>;
+  return <p className={large ? "contact-info-line-large" : "contact-info-line"} style={style}>{children}</p>;
 }

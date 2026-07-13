@@ -25,7 +25,7 @@ export default async function ServicesPage() {
 
   return (
     <>
-      <ServicesPageContent />
+      <ServicesPageContent services={data.services} />
       <Footer
         phone={contact?.phone || undefined}
         email={contact?.email || undefined}

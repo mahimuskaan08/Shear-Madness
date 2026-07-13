@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import CustomCursor from "@/components/CustomCursor";
+import type { SiteService } from "@/lib/site-data";
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
@@ -79,6 +80,45 @@ const CATEGORIES: CategoryData[] = [
   { id: "mens",       eyebrow: "",  title: "Men's Services",    description: "Clean, polished grooming and color services crafted with comfort, detail, and modern style in mind.",                           services: MENS,       bg: "transparent", accentBg: "transparent" },
   { id: "treatments", eyebrow: "",  title: "Hair Treatments",   description: "Treatments designed to nourish and strengthen the hair from root to finish.",                             services: TREATMENTS, bg: "transparent", accentBg: "transparent" },
 ];
+
+const CAT_META: Record<string, { title: string; description: string; note?: string }> = {
+  womens:     { title: "Women's Services",  description: "Thoughtfully tailored cuts, color, and styling services designed to enhance your natural beauty with precision and artistry.", note: "Color services include Toner/Glaze & Blowout ($95 value)" },
+  mens:       { title: "Men's Services",    description: "Clean, polished grooming and color services crafted with comfort, detail, and modern style in mind." },
+  treatments: { title: "Hair Treatments",   description: "Treatments designed to nourish and strengthen the hair from root to finish." },
+  bridal:     { title: "Bridal Services",   description: "Elegant bridal and special occasion styling for your most memorable moments." },
+};
+const CAT_ORDER = ["womens", "mens", "treatments", "bridal"];
+const PH_BY_CAT: Record<string, string> = { womens: PH.rose, mens: PH.slate, treatments: PH.sage, bridal: PH.blush };
+
+function buildCategoriesFromServices(services: SiteService[]): CategoryData[] {
+  if (!services.length) return [];
+  const grouped: Record<string, SiteService[]> = {};
+  for (const svc of services) {
+    if (!grouped[svc.category]) grouped[svc.category] = [];
+    grouped[svc.category].push(svc);
+  }
+  return CAT_ORDER
+    .filter(catId => grouped[catId]?.length)
+    .map(catId => {
+      const meta = CAT_META[catId] ?? { title: catId, description: "" };
+      return {
+        id: catId,
+        eyebrow: "",
+        title: meta.title,
+        description: meta.description,
+        note: meta.note,
+        services: grouped[catId].map(svc => ({
+          name: svc.name,
+          price: svc.price,
+          imageSrc: svc.image_url ?? "",
+          imageAlt: svc.name,
+          placeholderGradient: PH_BY_CAT[catId] ?? PH.rose,
+        })),
+        bg: "transparent",
+        accentBg: "transparent",
+      };
+    });
+}
 
 const NOTES = [
   "Complimentary bang trim and clean-up services available between haircuts.",
@@ -687,7 +727,10 @@ function HeroSection() {
 // ─────────────────────────────────────────────────────────────────────────────
 // PAGE ROOT
 // ─────────────────────────────────────────────────────────────────────────────
-export default function ServicesPageContent({ bgImage }: { bgImage?: string }) {
+export default function ServicesPageContent({ bgImage, services = [] }: { bgImage?: string; services?: SiteService[] }) {
+  const displayCategories = buildCategoriesFromServices(services);
+  const cats = displayCategories.length > 0 ? displayCategories : CATEGORIES;
+
   return (
     <>
       <style dangerouslySetInnerHTML={{ __html: STYLES }} />
@@ -717,7 +760,7 @@ export default function ServicesPageContent({ bgImage }: { bgImage?: string }) {
           {/* Layer 3: all content — hero flows straight into sections, no seam */}
           <div style={{ position: "relative", zIndex: 2 }}>
             <HeroSection />
-            {CATEGORIES.map(cat => <CategorySection key={cat.id} cat={cat} />)}
+            {cats.map(cat => <CategorySection key={cat.id} cat={cat} />)}
             <NotesSection />
           </div>
         </div>

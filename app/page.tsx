@@ -28,10 +28,15 @@ export default async function Home() {
   const data = await getSiteData();
   const contact = data.contact;
   const footerHours = buildFooterHours(data.hours);
-  const heroBg   = data.backgrounds.find(b => b.section === "hero_desktop")?.image_url ?? undefined;
-  const aboutBg  = data.backgrounds.find(b => b.section === "about_desktop"  || b.section === "about")?.image_url  ?? undefined;
-  const artistBg = data.backgrounds.find(b => b.section === "artist_desktop" || b.section === "artist")?.image_url ?? undefined;
-  const contactBg = data.backgrounds.find(b => b.section === "contact_desktop" || b.section === "contact")?.image_url ?? undefined;
+  const bg = (primary: string, fallback?: string) =>
+    (data.backgrounds.find(b => b.section === primary)?.image_url
+      ?? (fallback ? data.backgrounds.find(b => b.section === fallback)?.image_url : null)
+      ?? undefined) as string | undefined;
+
+  const heroBg    = bg("hero_desktop");
+  const aboutBg   = bg("about_desktop",   "about");
+  const artistBg  = bg("artist_desktop",  "artist");
+  const contactBg = bg("contact_desktop", "contact");
   const oscar  = data.team.find(m => m.name.toLowerCase().includes("oscar"));
   const george = data.team.find(m => m.name.toLowerCase().includes("george"));
 

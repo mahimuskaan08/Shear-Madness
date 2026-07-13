@@ -332,7 +332,7 @@ export default function HeroSection({ bgImage }: { bgImage?: string }) {
                 el.style.transform  = "translateY(0)";
               }}
             >
-              Book Now
+              Set an Appt.
             </a>
 
             <a

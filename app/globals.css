@@ -43,16 +43,8 @@ html {
   background-color: #1E1C18;
 }
 
-/* iPad (all models 768–1366px wide): prevent cream body background from
-   appearing as a blank spacer below the dark footer on viewport-height
-   discrepancies between iPad models / Safari address-bar states. All
-   content sections have explicit backgrounds so this is invisible elsewhere. */
-@media (min-width: 768px) and (max-width: 1366px) {
-  body { background-color: #1E1C18; }
-}
-
 body {
-  background-color: var(--color-warm-white);
+  background-color: #1E1C18;
   color: var(--color-charcoal);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;

@@ -35,9 +35,9 @@ function NavPillButton({ href, label }: { href: string; label: string }) {
         group relative inline-flex items-center justify-center rounded-full
         uppercase font-semibold text-white overflow-hidden
         transition-all duration-300 hover:-translate-y-0.5
-        text-[8.5px] tracking-[0.14em] px-[9px] py-[6px]
-        lg:text-[10px] lg:tracking-[0.16em] lg:px-[14px] lg:py-[7px]
-        xl:text-[11.5px] xl:px-[22px] xl:py-[9px]
+        text-[8.5px] tracking-[0.14em] px-[14px] py-[6px]
+        lg:text-[10px] lg:tracking-[0.16em] lg:px-[20px] lg:py-[7px]
+        xl:text-[11.5px] xl:px-[30px] xl:py-[9px]
       "
       style={{
         fontFamily: "'Neue World', Georgia, serif",
