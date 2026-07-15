@@ -73,6 +73,11 @@ const FALLBACK_SOCIALS = [
   { label: "X",         href: "https://x.com/ShearMadnessNJ",                    icon: ICON_MAP.x         },
 ];
 
+const MAP_BULLETS = [
+  "5 min walk from Hoboken Path",
+  "Street parking nearby",
+];
+
 export default function Footer({
   phone,
   email,
@@ -83,6 +88,7 @@ export default function Footer({
   hoursSat,
   hoursSunMon,
   social,
+  mapsUrl,
 }: {
   phone?:        string;
   email?:        string;
@@ -93,6 +99,7 @@ export default function Footer({
   hoursSat?:     string;
   hoursSunMon?:  string;
   social?:       SiteSocial[];
+  mapsUrl?:      string;
 } = {}) {
   const socialsToShow = social?.filter(s => s.is_enabled && s.url).map(s => ({
     label: s.platform,
@@ -102,6 +109,7 @@ export default function Footer({
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-40px" });
 
+  const displayMapsUrl     = mapsUrl      || "https://www.google.com/maps/dir/?api=1&destination=80+Park+Ave,+Hoboken,+NJ+07030";
   const displayPhone       = phone        || "(201) 222-2102";
   const displayEmail       = email        || "info@shearmadnesshoboken.com";
   const displayAddr1       = addressLine1 || "80 Park Ave";
@@ -145,11 +153,11 @@ export default function Footer({
           padding: "clamp(48px, 7vh, 80px) clamp(24px, 6vw, 80px) 0",
         }}
       >
-        {/* ── 3-COLUMN GRID ───────────────────────────────────────────────── */}
+        {/* ── 4-COLUMN GRID ───────────────────────────────────────────────── */}
         <div id="footer-grid" style={{
           display: "grid",
-          gridTemplateColumns: "1.1fr 1fr 1fr",
-          gap: "clamp(32px, 5vw, 72px)",
+          gridTemplateColumns: "1.1fr 1fr 1fr 1fr",
+          gap: "clamp(24px, 4vw, 56px)",
           marginBottom: "clamp(40px, 6vh, 64px)",
         }}>
 
@@ -308,7 +316,7 @@ export default function Footer({
             </div>
           </motion.div>
 
-          {/* ── RIGHT: NAV + SOCIAL ───────────────────────────────────────── */}
+          {/* ── COL 3: NAV + SOCIAL ───────────────────────────────────────── */}
           <motion.div
             initial={{ opacity: 0, y: 22 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -385,6 +393,86 @@ export default function Footer({
               ))}
             </div>
           </motion.div>
+
+          {/* ── COL 4: MAP ────────────────────────────────────────────────────── */}
+          <motion.div
+            initial={{ opacity: 0, y: 22 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.9, ease: EASE, delay: 0.36 }}
+          >
+            <p style={{
+              fontFamily: "'Inter', sans-serif",
+              fontSize: "0.58rem",
+              fontWeight: 700,
+              letterSpacing: "0.30em",
+              textTransform: "uppercase",
+              color: "#7A5C10",
+              marginBottom: 16,
+            }}>
+              Find Us
+            </p>
+
+            <div id="footer-map-box" style={{
+              borderRadius: 12, overflow: "hidden",
+              aspectRatio: "1/1", position: "relative",
+              boxShadow: "0 8px 32px rgba(0,0,0,0.35)",
+              border: "1px solid rgba(198,167,107,0.18)",
+              marginBottom: 12,
+            }}>
+              <iframe
+                src="https://www.google.com/maps?q=80+Park+Ave,+Hoboken,+NJ+07030&output=embed"
+                width="100%" height="100%"
+                style={{
+                  border: 0, display: "block",
+                  width: "100%", height: "100%",
+                  position: "absolute", top: 0, left: 0, right: 0, bottom: 0,
+                  filter: "grayscale(30%) contrast(1.02) brightness(0.88)",
+                }}
+                allowFullScreen loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                title="Shear Madness location map"
+              />
+            </div>
+
+            <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: 6 }}>
+              {MAP_BULLETS.map(bullet => (
+                <li key={bullet} style={{
+                  display: "flex", alignItems: "center", gap: 7,
+                  fontFamily: "'Inter', sans-serif",
+                  fontSize: "0.72rem",
+                  fontWeight: 400,
+                  color: "rgba(250,246,239,0.45)",
+                  letterSpacing: "0.01em",
+                  lineHeight: 1.4,
+                }}>
+                  <span style={{ color: "#C6A76B", fontSize: "0.55rem", flexShrink: 0 }}>◆</span>
+                  {bullet}
+                </li>
+              ))}
+            </ul>
+
+            <a
+              href={displayMapsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: "inline-block",
+                marginTop: 12,
+                fontFamily: "'Inter', sans-serif",
+                fontSize: "0.68rem",
+                fontWeight: 600,
+                letterSpacing: "0.14em",
+                textTransform: "uppercase",
+                color: "#C6A76B",
+                textDecoration: "none",
+                transition: "opacity 0.25s",
+              }}
+              onMouseEnter={e => (e.currentTarget.style.opacity = "0.7")}
+              onMouseLeave={e => (e.currentTarget.style.opacity = "1")}
+            >
+              Get Directions →
+            </a>
+          </motion.div>
         </div>
 
         {/* ── BOTTOM BAR ──────────────────────────────────────────────────── */}
@@ -412,11 +500,16 @@ export default function Footer({
       </div>
 
       <style>{`
-        @media (max-width: 860px) {
-          #footer-grid { grid-template-columns: 1fr !important; }
+        @media (max-width: 1100px) and (min-width: 901px) {
+          #footer-grid { gap: 20px !important; }
         }
-        @media (max-width: 540px) {
+        @media (max-width: 900px) {
+          #footer-grid { grid-template-columns: 1fr 1fr !important; }
+          #footer-map-box { aspect-ratio: 16/7 !important; }
+        }
+        @media (max-width: 640px) {
           #footer-grid { grid-template-columns: 1fr !important; }
+          #footer-map-box { aspect-ratio: 16/6 !important; }
         }
         @media (max-width: 380px) {
           .footer-hours-row { flex-wrap: wrap !important; gap: 2px !important; }

@@ -4,7 +4,7 @@ import ContactSection from "@/components/ContactPage";
 import CustomCursor from "@/components/CustomCursor";
 import { getSiteData, buildFooterHours } from "@/lib/site-data";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: "Contact Us | Shear Madness Hoboken",

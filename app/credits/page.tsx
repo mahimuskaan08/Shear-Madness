@@ -3,7 +3,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { getSiteData, buildFooterHours } from "@/lib/site-data";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 60;
 
 export const metadata = {
   title: "Credits | Shear Madness Hoboken",
@@ -191,6 +191,7 @@ export default async function CreditsPage() {
         hoursSat={footerHours.hoursSat}
         hoursSunMon={footerHours.hoursSunMon}
         social={data.social}
+        mapsUrl={contact?.google_maps_url || undefined}
       />
     </>
   );

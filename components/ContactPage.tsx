@@ -13,10 +13,6 @@ const DEFAULT_CONTACT_HOURS = [
   { days: "Sun – Mon", time: "Closed"              },
 ];
 
-const MAP_BULLETS = [
-  "5 Mins walk from Hoboken Path Station",
-  "Street parking available nearby",
-];
 
 const STYLES = `
 /* ── RIPPLE ANIMATION ───────────────────────────────────────────── */
@@ -62,14 +58,9 @@ const STYLES = `
 }
 /* ── RESPONSIVE ─────────────────────────────────────────────────── */
 @media (min-width: 601px) and (max-width: 1100px) {
-  /* iPad: stack map below info panel */
+  /* iPad: stack below info panel */
   #contact-grid { flex-direction: column !important; }
   #contact-info-panel { max-width: 100% !important; }
-  #contact-map {
-    width: 200px !important;
-    margin-top: 32px;
-  }
-  #contact-map > div { aspect-ratio: 1/1 !important; }
   /* iPad: keep full bg coverage, no cropping */
   #contact-bg-img { object-position: center center !important; object-fit: cover !important; }
 }
@@ -93,7 +84,7 @@ const STYLES = `
   .contact-info-line { font-size: 1.7rem !important; }
   .contact-info-line-large { font-size: 2.2rem !important; }
   .contact-section-divider {
-    background: rgba(255,255,255,0.25) !important;
+    background: rgba(0,0,0,0.15) !important;
   }
 }
 `;
@@ -231,9 +222,15 @@ export default function ContactPage({
             fontFamily: "'Cormorant Garamond', Georgia, serif",
             fontSize: "clamp(2.4rem, 3.8vw, 3.25rem)",
             fontWeight: 600, lineHeight: 1.0,
-            letterSpacing: "0.01em", color: "#FFFFFF", marginBottom: 18,
+            letterSpacing: "0.01em", color: "#556B2F", marginBottom: 6,
+            display: "inline-block",
+            background: "rgba(255,252,245,0.45)",
+            backdropFilter: "blur(6px)",
+            WebkitBackdropFilter: "blur(6px)",
+            borderRadius: 6,
+            padding: "2px 12px",
           }}>
-            Hours and Location
+            Hours and <em>Location</em>
           </h2>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <div style={{ height: 1, width: 44, background: "linear-gradient(to right, transparent, rgba(198,167,107,0.65))" }} />
@@ -242,11 +239,12 @@ export default function ContactPage({
           </div>
         </motion.div>
 
-        {/* ── 2-COLUMN LAYOUT ──────────────────────────────────────────────────── */}
+        {/* ── INFO + MAP LAYOUT ────────────────────────────────────────────────── */}
         <div id="contact-grid" style={{
           display: "flex",
           gap: "clamp(40px, 4vw, 64px)",
           alignItems: "start",
+          paddingBottom: "clamp(36px, 5vh, 60px)",
         }}>
 
           {/* ── LEFT: KOI PANEL (Address / Hours / Contact) ──────────────────── */}
@@ -282,7 +280,7 @@ export default function ContactPage({
                           fontFamily: "'Cormorant Garamond', Georgia, serif",
                           fontSize: time === "Closed" ? "clamp(1.45rem, 1.9vw, 1.7rem)" : "clamp(1.2rem, 1.6vw, 1.45rem)",
                           fontWeight: time === "Closed" ? 900 : 800,
-                          color: "#FFFFFF",
+                          color: "#1A1A1A",
                           letterSpacing: time === "Closed" ? "0.08em" : "0.01em",
                           textTransform: time === "Closed" ? "uppercase" : undefined,
                           whiteSpace: "nowrap",
@@ -293,12 +291,12 @@ export default function ContactPage({
                           fontFamily: "'Cormorant Garamond', Georgia, serif",
                           fontSize: time === "Closed" ? "clamp(1.35rem, 1.8vw, 1.6rem)" : "clamp(1.1rem, 1.5vw, 1.3rem)",
                           fontWeight: time === "Closed" ? 900 : 800,
-                          color: time === "Closed" ? "rgba(255,255,255,0.55)" : "#FFFFFF",
+                          color: time === "Closed" ? "rgba(0,0,0,0.40)" : "#1A1A1A",
                           letterSpacing: time === "Closed" ? "0.12em" : "0.01em",
                           textTransform: time === "Closed" ? "uppercase" : undefined,
                           textAlign: "right", whiteSpace: "nowrap",
-                          background: "rgba(255,255,255,0.10)",
-                          border: "1px solid rgba(255,255,255,0.15)",
+                          background: "rgba(0,0,0,0.06)",
+                          border: "1px solid rgba(0,0,0,0.12)",
                           borderRadius: 6,
                           padding: "2px 10px",
                         }}>
@@ -352,59 +350,6 @@ export default function ContactPage({
             </div>
           </motion.div>
 
-          {/* ── RIGHT: SMALL MAP ──────────────────────────────────────────────── */}
-          <motion.div
-            initial={{ opacity: 0, x: 28 }}
-            animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 1.1, ease: EASE, delay: 0.15 }}
-            id="contact-map"
-            style={{ width: "clamp(130px, 16vw, 220px)", flexShrink: 0 }}
-          >
-            <div style={{
-              borderRadius: 20, overflow: "hidden",
-              aspectRatio: "1/1", position: "relative",
-              boxShadow: "0 12px 48px rgba(26,18,8,0.14), 0 2px 8px rgba(26,18,8,0.08)",
-              border: "1px solid rgba(198,167,107,0.18)",
-            }}>
-              <iframe
-                src="https://www.google.com/maps?q=80+Park+Ave,+Hoboken,+NJ+07030&output=embed"
-                width="100%" height="100%"
-                style={{
-                  border: 0, display: "block",
-                  width: "100%", height: "100%",
-                  position: "absolute", top: 0, left: 0, right: 0, bottom: 0,
-                  filter: "grayscale(20%) contrast(1.02)",
-                }}
-                allowFullScreen loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                title="Shear Madness location map"
-              />
-            </div>
-
-            {/* ── MAP BULLETS ─────────────────────────────────────── */}
-            <ul style={{
-              listStyle: "none", margin: "14px 0 0", padding: 0,
-              display: "flex", flexDirection: "column", gap: 8,
-            }}>
-              {MAP_BULLETS.map((bullet) => (
-                <li key={bullet} style={{
-                  display: "flex", alignItems: "center", gap: 8,
-                  fontFamily: "'Inter', sans-serif",
-                  fontSize: "clamp(0.68rem, 0.9vw, 0.78rem)",
-                  fontWeight: 500,
-                  color: "rgba(255,255,255,0.90)",
-                  letterSpacing: "0.02em",
-                  lineHeight: 1.45,
-                  textShadow: "0 1px 3px rgba(0,0,0,0.35)",
-                  whiteSpace: "nowrap",
-                }}>
-                  <span style={{ color: "#C6A76B", fontSize: "0.65rem", marginTop: "0.18em", flexShrink: 0 }}>◆</span>
-                  {bullet}
-                </li>
-              ))}
-            </ul>
-          </motion.div>
-
         </div>
       </div>
     </section>
@@ -433,7 +378,7 @@ function InfoBlock({
       }}>
         {label}
       </p>
-      <div className="contact-section-divider" style={{ height: 1, background: "rgba(255,255,255,0.22)", marginBottom: 11 }} />
+      <div className="contact-section-divider" style={{ height: 1, background: "rgba(0,0,0,0.15)", marginBottom: 11 }} />
       {children}
     </motion.div>
   );
@@ -444,14 +389,14 @@ function InfoLine({ children, primary, href, large }: { children: React.ReactNod
     fontFamily: "'Cormorant Garamond', Georgia, serif",
     fontSize: large ? "clamp(2.2rem, 3.2vw, 3rem)" : "clamp(1.45rem, 2vw, 1.8rem)",
     fontWeight: large ? 500 : 400, lineHeight: 1.45,
-    color: primary ? "#FFFFFF" : "rgba(255,255,255,0.82)",
+    color: primary ? "#1A1A1A" : "rgba(0,0,0,0.70)",
     letterSpacing: "0.01em",
   };
   if (href) {
     return (
       <a href={href} className={large ? "contact-info-line-large" : "contact-info-line"} style={{ ...style, display: "block", textDecoration: "none", transition: "color 0.2s" }}
         onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = "#C4A96A"; }}
-        onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = primary ? "#FFFFFF" : "rgba(255,255,255,0.82)"; }}
+        onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = primary ? "#1A1A1A" : "rgba(0,0,0,0.70)"; }}
       >
         {children}
       </a>

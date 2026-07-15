@@ -4,7 +4,7 @@ import Footer from "@/components/Footer";
 import BookingPageContent from "@/components/BookingPageContent";
 import { getSiteData, buildFooterHours } from "@/lib/site-data";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: "Book an Appointment | Shear Madness Hoboken",
@@ -38,6 +38,7 @@ export default async function BookingPage() {
         hoursSat={footerHours.hoursSat}
         hoursSunMon={footerHours.hoursSunMon}
         social={data.social}
+        mapsUrl={contact?.google_maps_url || undefined}
       />
     </>
   );

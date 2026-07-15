@@ -5,7 +5,7 @@ import GalleryPageContent from "@/components/GalleryPageContent";
 import { getSiteData, buildFooterHours } from "@/lib/site-data";
 import { getLocalGalleryImages } from "@/lib/local-gallery";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: "Gallery | Shear Madness Hoboken",
@@ -52,6 +52,7 @@ export default async function GalleryPage() {
         hoursSat={footerHours.hoursSat}
         hoursSunMon={footerHours.hoursSunMon}
         social={data.social}
+        mapsUrl={contact?.google_maps_url || undefined}
       />
     </>
   );

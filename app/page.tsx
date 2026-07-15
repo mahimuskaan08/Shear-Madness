@@ -9,7 +9,7 @@ import Footer from "@/components/Footer";
 import CustomCursor from "@/components/CustomCursor";
 import { getSiteData, buildFooterHours } from "@/lib/site-data";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: "Shear Madness Hoboken | Hair Salon for Men & Women",
@@ -109,6 +109,7 @@ export default async function Home() {
         hoursSat={footerHours.hoursSat}
         hoursSunMon={footerHours.hoursSunMon}
         social={data.social}
+        mapsUrl={contact?.google_maps_url || undefined}
       />
     </main>
   );

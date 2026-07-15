@@ -3,7 +3,7 @@ import Footer from "@/components/Footer";
 import ServicesPageContent from "@/components/ServicesPageContent";
 import { getSiteData, buildFooterHours } from "@/lib/site-data";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: "Salon Services | Shear Madness Hoboken",
@@ -35,6 +35,7 @@ export default async function ServicesPage() {
         hoursFri={footerHours.hoursFri}
         hoursSat={footerHours.hoursSat}
         hoursSunMon={footerHours.hoursSunMon}
+        mapsUrl={contact?.google_maps_url || undefined}
       />
     </>
   );
