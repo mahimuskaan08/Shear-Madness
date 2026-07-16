@@ -9,7 +9,7 @@ import Footer from "@/components/Footer";
 import CustomCursor from "@/components/CustomCursor";
 import { getSiteData, buildFooterHours } from "@/lib/site-data";
 
-export const revalidate = 60;
+export const revalidate = 10;
 
 export const metadata: Metadata = {
   title: "Shear Madness Hoboken | Hair Salon for Men & Women",
@@ -33,10 +33,12 @@ export default async function Home() {
       ?? (fallback ? data.backgrounds.find(b => b.section === fallback)?.image_url : null)
       ?? undefined) as string | undefined;
 
-  const heroBg    = bg("hero_desktop");
-  const aboutBg   = bg("about_desktop",   "about");
-  const artistBg  = bg("artist_desktop",  "artist");
-  const contactBg = bg("contact_desktop", "contact");
+  const heroBg       = bg("hero_desktop");
+  const heroBgMobile = bg("hero_mobile");
+  const aboutBg      = bg("about_desktop",   "about");
+  const artistBg     = bg("artist_desktop",  "artist");
+  const contactBg    = bg("contact_desktop", "contact");
+  const contactBgMobile = bg("contact_mobile");
   const oscar  = data.team.find(m => m.name.toLowerCase().includes("oscar"));
   const george = data.team.find(m => m.name.toLowerCase().includes("george"));
 
@@ -75,7 +77,7 @@ export default async function Home() {
       />
       <CustomCursor />
       <Navbar />
-      <HeroSection bgImage={heroBg} />
+      <HeroSection bgImage={heroBg} bgImageMobile={heroBgMobile} />
       <AboutSection
         bgImage={aboutBg}
       />
@@ -89,6 +91,7 @@ export default async function Home() {
       />
       <ContactSection
         bgImage={contactBg}
+        bgImageMobile={contactBgMobile}
         phone={contact?.phone || undefined}
         email={contact?.email || undefined}
         addressLine1={contact?.address_line_1 || undefined}

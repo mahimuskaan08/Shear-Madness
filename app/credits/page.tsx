@@ -3,7 +3,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { getSiteData, buildFooterHours } from "@/lib/site-data";
 
-export const revalidate = 60;
+export const revalidate = 10;
 
 export const metadata = {
   title: "Credits | Shear Madness Hoboken",

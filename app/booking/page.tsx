@@ -4,7 +4,7 @@ import Footer from "@/components/Footer";
 import BookingPageContent from "@/components/BookingPageContent";
 import { getSiteData, buildFooterHours } from "@/lib/site-data";
 
-export const revalidate = 60;
+export const revalidate = 10;
 
 export const metadata: Metadata = {
   title: "Book an Appointment | Shear Madness Hoboken",

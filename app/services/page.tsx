@@ -3,7 +3,7 @@ import Footer from "@/components/Footer";
 import ServicesPageContent from "@/components/ServicesPageContent";
 import { getSiteData, buildFooterHours } from "@/lib/site-data";
 
-export const revalidate = 60;
+export const revalidate = 10;
 
 export const metadata: Metadata = {
   title: "Salon Services | Shear Madness Hoboken",
@@ -22,10 +22,14 @@ export default async function ServicesPage() {
   const data = await getSiteData();
   const contact = data.contact;
   const footerHours = buildFooterHours(data.hours);
+  const servicesBg =
+    data.backgrounds.find(b => b.section === "services_desktop")?.image_url ??
+    data.backgrounds.find(b => b.section === "services")?.image_url ??
+    undefined;
 
   return (
     <>
-      <ServicesPageContent services={data.services} />
+      <ServicesPageContent services={data.services} bgImage={servicesBg} />
       <Footer
         phone={contact?.phone || undefined}
         email={contact?.email || undefined}

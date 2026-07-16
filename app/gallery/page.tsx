@@ -5,7 +5,7 @@ import GalleryPageContent from "@/components/GalleryPageContent";
 import { getSiteData, buildFooterHours } from "@/lib/site-data";
 import { getLocalGalleryImages } from "@/lib/local-gallery";
 
-export const revalidate = 60;
+export const revalidate = 10;
 
 export const metadata: Metadata = {
   title: "Gallery | Shear Madness Hoboken",

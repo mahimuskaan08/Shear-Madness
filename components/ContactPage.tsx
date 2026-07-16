@@ -61,8 +61,8 @@ const STYLES = `
   /* iPad: stack below info panel */
   #contact-grid { flex-direction: column !important; }
   #contact-info-panel { max-width: 100% !important; }
-  /* iPad: keep full bg coverage, no cropping */
-  #contact-bg-img { object-position: center center !important; object-fit: cover !important; }
+  /* iPad: full image visible, no cropping */
+  #contact-bg-img { object-position: center center !important; object-fit: contain !important; }
 }
 @media (max-width: 600px) {
   #contact-grid { flex-direction: column !important; }
@@ -91,6 +91,7 @@ const STYLES = `
 
 export default function ContactPage({
   bgImage,
+  bgImageMobile,
   phone,
   email,
   addressLine1,
@@ -101,16 +102,17 @@ export default function ContactPage({
   hoursSunMon,
   mapsUrl,
 }: {
-  bgImage?:      string;
-  phone?:        string;
-  email?:        string;
-  addressLine1?: string;
-  cityStateZip?: string;
-  hoursTueThu?:  string;
-  hoursFri?:     string;
-  hoursSat?:     string;
-  hoursSunMon?:  string;
-  mapsUrl?:      string;
+  bgImage?:        string;
+  bgImageMobile?:  string;
+  phone?:          string;
+  email?:          string;
+  addressLine1?:   string;
+  cityStateZip?:   string;
+  hoursTueThu?:    string;
+  hoursFri?:       string;
+  hoursSat?:       string;
+  hoursSunMon?:    string;
+  mapsUrl?:        string;
 }) {
   const ref = useRef<HTMLElement>(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
@@ -175,19 +177,19 @@ export default function ContactPage({
           style={{
             position: "absolute", top: 0, left: 0, right: 0, bottom: 0,
             width: "100%", height: "100%",
-            objectFit: "cover", objectPosition: "15% center",
+            objectFit: "contain", objectPosition: "center center",
             opacity: 0.90,
           }}
         />
         {/* Mobile-only background */}
         <img
           className="contact-bg-mobile"
-          src="/contact-koi-bg-mobile.png"
+          src={bgImageMobile ?? "/contact-koi-bg-mobile.png"}
           alt=""
           style={{
             position: "absolute", top: 0, left: 0, right: 0, bottom: 0,
             width: "100%", height: "100%",
-            objectFit: "cover", objectPosition: "center center",
+            objectFit: "contain", objectPosition: "center center",
             opacity: 0.90,
           }}
         />

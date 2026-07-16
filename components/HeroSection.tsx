@@ -92,8 +92,8 @@ const HERO_FADE = `
 @media (max-width: 767px) {
   .hero-bg-desktop { display: none !important; }
   .hero-bg-mobile-only {
-    object-fit: cover !important;
-    object-position: center center !important;
+    object-fit: contain !important;
+    object-position: center top !important;
   }
   .hero-bg-layer {
     background: #ede8e3 !important;
@@ -157,7 +157,7 @@ function PetalSVG({ size, color }: { size: number; color: string }) {
   );
 }
 
-export default function HeroSection({ bgImage }: { bgImage?: string }) {
+export default function HeroSection({ bgImage, bgImageMobile }: { bgImage?: string; bgImageMobile?: string }) {
   const sectionRef = useRef<HTMLElement>(null);
 
   const { scrollYProgress } = useScroll({
@@ -192,14 +192,14 @@ export default function HeroSection({ bgImage }: { bgImage?: string }) {
         />
         {/* Mobile-only image */}
         <Image
-          src="/hero-bg-mobile.png"
+          src={bgImageMobile ?? "/hero-bg-mobile.png"}
           alt=""
           aria-hidden="true"
           fill
           priority
           sizes="100vw"
           className="hero-bg-img hero-bg-mobile-only"
-          style={{ objectFit: "cover", objectPosition: "center center" }}
+          style={{ objectFit: "contain", objectPosition: "center top" }}
         />
       </motion.div>
 

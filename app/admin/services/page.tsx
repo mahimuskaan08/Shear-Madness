@@ -271,15 +271,24 @@ function CategoryPanel({ category }: CategoryPanelProps) {
         services.length > 0
           ? Math.max(...services.map((s) => s.display_order))
           : 0
-      const { error } = await supabase.from("services").insert({
+      const base = {
         name: values.name.trim(),
         price: values.price.trim(),
         category: values.category,
         is_visible: values.is_visible,
-        image_url: values.image_url ?? null,
         display_order: maxOrder + 1,
+      }
+      // Try with image_url; if column missing, save without it
+      const { error } = await supabase.from("services").insert({
+        ...base,
+        image_url: values.image_url ?? null,
       })
-      if (error) throw error
+      if (error?.message?.includes("image_url")) {
+        const { error: e2 } = await supabase.from("services").insert(base)
+        if (e2) throw e2
+      } else if (error) {
+        throw error
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["services", category] })
@@ -296,18 +305,27 @@ function CategoryPanel({ category }: CategoryPanelProps) {
       id: string
       values: ServiceFormState
     }) => {
+      const base = {
+        name: values.name.trim(),
+        price: values.price.trim(),
+        category: values.category,
+        is_visible: values.is_visible,
+        updated_at: new Date().toISOString(),
+      }
+      // Try with image_url; if column missing in schema cache, save without it
       const { error } = await supabase
         .from("services")
-        .update({
-          name: values.name.trim(),
-          price: values.price.trim(),
-          category: values.category,
-          is_visible: values.is_visible,
-          image_url: values.image_url ?? null,
-          updated_at: new Date().toISOString(),
-        })
+        .update({ ...base, image_url: values.image_url ?? null })
         .eq("id", id)
-      if (error) throw error
+      if (error?.message?.includes("image_url")) {
+        const { error: e2 } = await supabase
+          .from("services")
+          .update(base)
+          .eq("id", id)
+        if (e2) throw e2
+      } else if (error) {
+        throw error
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["services", category] })

@@ -4,7 +4,7 @@ import ContactSection from "@/components/ContactPage";
 import CustomCursor from "@/components/CustomCursor";
 import { getSiteData, buildFooterHours } from "@/lib/site-data";
 
-export const revalidate = 60;
+export const revalidate = 10;
 
 export const metadata: Metadata = {
   title: "Contact Us | Shear Madness Hoboken",
@@ -23,6 +23,8 @@ export default async function ContactPage() {
   const data = await getSiteData();
   const contact = data.contact;
   const footerHours = buildFooterHours(data.hours);
+  const bg = (section: string) =>
+    data.backgrounds.find(b => b.section === section)?.image_url ?? undefined;
 
   return (
     <main style={{ background: "#0B0B0B", minHeight: "100vh" }}>
@@ -37,6 +39,8 @@ export default async function ContactPage() {
         <Navbar />
       </div>
       <ContactSection
+        bgImage={bg("contact_desktop") ?? bg("contact")}
+        bgImageMobile={bg("contact_mobile")}
         phone={contact?.phone || undefined}
         email={contact?.email || undefined}
         addressLine1={contact?.address_line_1 || undefined}
