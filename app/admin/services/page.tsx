@@ -203,20 +203,6 @@ function ServiceDialog({
             </Select>
           </div>
 
-          <div className="space-y-1.5">
-            <Label className="text-zinc-300 text-sm">
-              Service Image <span className="text-zinc-500 font-normal">(optional)</span>
-            </Label>
-            <ImageUploader
-              bucket="services"
-              folder={form.category}
-              currentUrl={form.image_url}
-              onUploadComplete={(url) => setForm((f) => ({ ...f, image_url: url }))}
-              onRemove={() => setForm((f) => ({ ...f, image_url: null }))}
-              aspectHint="4:3 landscape"
-            />
-          </div>
-
           <div className="flex items-center justify-between rounded-lg border border-zinc-800 bg-zinc-800/30 px-4 py-3">
             <div>
               <p className="text-sm font-medium text-zinc-200">Visible on website</p>
@@ -271,24 +257,14 @@ function CategoryPanel({ category }: CategoryPanelProps) {
         services.length > 0
           ? Math.max(...services.map((s) => s.display_order))
           : 0
-      const base = {
+      const { error } = await supabase.from("services").insert({
         name: values.name.trim(),
         price: values.price.trim(),
         category: values.category,
         is_visible: values.is_visible,
         display_order: maxOrder + 1,
-      }
-      // Try with image_url; if column missing, save without it
-      const { error } = await supabase.from("services").insert({
-        ...base,
-        image_url: values.image_url ?? null,
       })
-      if (error?.message?.includes("image_url")) {
-        const { error: e2 } = await supabase.from("services").insert(base)
-        if (e2) throw e2
-      } else if (error) {
-        throw error
-      }
+      if (error) throw error
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["services", category] })
@@ -305,27 +281,17 @@ function CategoryPanel({ category }: CategoryPanelProps) {
       id: string
       values: ServiceFormState
     }) => {
-      const base = {
-        name: values.name.trim(),
-        price: values.price.trim(),
-        category: values.category,
-        is_visible: values.is_visible,
-        updated_at: new Date().toISOString(),
-      }
-      // Try with image_url; if column missing in schema cache, save without it
       const { error } = await supabase
         .from("services")
-        .update({ ...base, image_url: values.image_url ?? null })
+        .update({
+          name: values.name.trim(),
+          price: values.price.trim(),
+          category: values.category,
+          is_visible: values.is_visible,
+          updated_at: new Date().toISOString(),
+        })
         .eq("id", id)
-      if (error?.message?.includes("image_url")) {
-        const { error: e2 } = await supabase
-          .from("services")
-          .update(base)
-          .eq("id", id)
-        if (e2) throw e2
-      } else if (error) {
-        throw error
-      }
+      if (error) throw error
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["services", category] })
