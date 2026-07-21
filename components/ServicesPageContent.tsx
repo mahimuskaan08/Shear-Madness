@@ -476,13 +476,15 @@ function ServiceCard({ svc, catId }: { svc: Service; catId: string }) {
           </span>
           <div style={{ width:28, height:1, background:"rgba(198,167,107,0.40)" }}/>
         </div>
-        {/* Real image overlaid — hides if src 404s */}
-        <img
-          src={svc.imageSrc}
-          alt={svc.imageAlt}
-          style={{ position:"absolute", inset:0, width:"100%", height:"100%", objectFit:"cover", objectPosition: svc.imagePosition ?? "center top" }}
-          onError={e => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
-        />
+        {/* Real image overlaid — hides if src 404s. Skip entirely when no image is set. */}
+        {svc.imageSrc && (
+          <img
+            src={svc.imageSrc}
+            alt={svc.imageAlt}
+            style={{ position:"absolute", inset:0, width:"100%", height:"100%", objectFit:"cover", objectPosition: svc.imagePosition ?? "center top" }}
+            onError={e => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
+          />
+        )}
       </div>
 
       {/* ── BODY ──────────────────────────────────────────────────────── */}

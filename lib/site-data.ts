@@ -53,8 +53,10 @@ export type PortfolioAngleImage = {
 
 export type SitePortfolioImage = {
   id: string
-  url: string       // display / preview image (shown in the card)
-  full_url?: string // full image shown in lightbox; falls back to url if absent
+  url: string                     // legacy NOT NULL column; mirror of multiangle_url for old rows
+  multiangle_url?: string | null  // multi-angle collage shown in the lightbox on click
+  thumbnail_url?: string | null   // optional single portrait shown on the card preview; falls back to multiangle_url
+  full_url?: string               // legacy alias for lightbox image; falls back to url
   alt: string
   title: string
   category: "women" | "men" | "both"
@@ -125,15 +127,68 @@ export type SiteData = {
   social: SiteSocial[]
 }
 
+// PostgREST schema cache can lag behind newly added columns. Try the full
+// select first; on ANY error fall back to columns that always exist.
+async function fetchServices(
+  supabase: ReturnType<typeof getPublicClient>,
+): Promise<SiteService[]> {
+  const cols = "id, name, price, category, display_order, image_url"
+  const legacyCols = "id, name, price, category, display_order"
+
+  const res = await supabase
+    .from("services")
+    .select(cols)
+    .eq("is_visible", true)
+    .order("display_order")
+
+  if (res.error) {
+    const fb = await supabase
+      .from("services")
+      .select(legacyCols)
+      .eq("is_visible", true)
+      .order("display_order")
+    if (fb.error) return []
+    return ((fb.data as Array<Omit<SiteService, "image_url">>) ?? []).map((s) => ({
+      ...s,
+      image_url: null,
+    }))
+  }
+
+  return (res.data as SiteService[]) ?? []
+}
+
+async function fetchPortfolioImages(
+  supabase: ReturnType<typeof getPublicClient>,
+  category?: "women" | "men" | "both",
+): Promise<SitePortfolioImage[]> {
+  const cols = "id, url, multiangle_url, thumbnail_url, alt, title, category, featured, display_order"
+  const legacyCols = "id, url, alt, title, category, featured, display_order"
+
+  const withNew = category
+    ? supabase.from("portfolio_images").select(cols).eq("category", category).order("display_order")
+    : supabase.from("portfolio_images").select(cols).order("display_order")
+  const res = await withNew
+
+  if (res.error) {
+    const fallback = category
+      ? supabase.from("portfolio_images").select(legacyCols).eq("category", category).order("display_order")
+      : supabase.from("portfolio_images").select(legacyCols).order("display_order")
+    const fbRes = await fallback
+    return (fbRes.data as SitePortfolioImage[]) ?? []
+  }
+
+  return (res.data as SitePortfolioImage[]) ?? []
+}
+
 export async function getSiteData(): Promise<SiteData> {
   const supabase = getPublicClient()
 
   const [
     bgRes,
-    svcRes,
+    services,
     teamRes,
     testimonialRes,
-    portfolioRes,
+    portfolioImages,
     baRes,
     faqRes,
     hoursRes,
@@ -142,10 +197,10 @@ export async function getSiteData(): Promise<SiteData> {
     socialRes,
   ] = await Promise.all([
     supabase.from("backgrounds").select("section, image_url"),
-    supabase.from("services").select("id, name, price, category, display_order, image_url").eq("is_visible", true).order("display_order"),
+    fetchServices(supabase),
     supabase.from("team_members").select("id, name, position, bio, image_url, display_order").order("display_order"),
     supabase.from("testimonials").select("id, customer_name, customer_photo_url, review, rating").eq("is_visible", true).order("created_at", { ascending: false }),
-    supabase.from("portfolio_images").select("id, url, alt, title, category, featured, display_order").order("display_order"),
+    fetchPortfolioImages(supabase),
     supabase.from("before_after_gallery").select("id, title, before_image_url, after_image_url, display_order").order("display_order"),
     supabase.from("faq").select("id, question, answer, display_order").eq("is_visible", true).order("display_order"),
     supabase.from("opening_hours").select("day, open_time, close_time, is_closed, display_order").order("display_order"),
@@ -156,10 +211,10 @@ export async function getSiteData(): Promise<SiteData> {
 
   return {
     backgrounds: (bgRes.data as SiteBackground[]) ?? [],
-    services: (svcRes.data as SiteService[]) ?? [],
+    services,
     team: (teamRes.data as SiteTeamMember[]) ?? [],
     testimonials: (testimonialRes.data as SiteTestimonial[]) ?? [],
-    portfolioImages: (portfolioRes.data as SitePortfolioImage[]) ?? [],
+    portfolioImages,
     beforeAfter: (baRes.data as SiteBeforeAfter[]) ?? [],
     faq: (faqRes.data as SiteFAQ[]) ?? [],
     hours: (hoursRes.data as SiteHours[]) ?? [],
@@ -196,12 +251,7 @@ export async function getBackground(
 
 export async function getPortfolioByCategory(category: "women" | "men" | "both") {
   const supabase = getPublicClient()
-  const { data } = await supabase
-    .from("portfolio_images")
-    .select("id, url, alt, title, featured, display_order")
-    .eq("category", category)
-    .order("display_order")
-  return (data as SitePortfolioImage[]) ?? []
+  return fetchPortfolioImages(supabase, category)
 }
 
 export function buildFooterHours(hours: SiteHours[]): {

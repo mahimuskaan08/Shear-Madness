@@ -13,6 +13,7 @@ import {
   CalendarX2,
   Phone,
   Share2,
+  ArrowLeftRight,
   LayoutDashboard,
   LogOut,
   ChevronRight,
@@ -26,15 +27,16 @@ import { toast } from "sonner"
 const navItems = [
   { href: "/admin/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/admin/backgrounds", label: "Backgrounds", icon: Image },
-  { href: "/admin/portfolio", label: "Portfolio", icon: Grid3X3 },
   { href: "/admin/services", label: "Services", icon: Scissors },
   { href: "/admin/team", label: "Team Members", icon: Users },
-  { href: "/admin/testimonials", label: "Testimonials", icon: Star },
-  { href: "/admin/faq", label: "FAQ", icon: HelpCircle },
+  { href: "/admin/portfolio", label: "Portfolio", icon: Grid3X3 },
+  { href: "/admin/before-after", label: "Before & After", icon: ArrowLeftRight },
+  { href: "/admin/contact", label: "Contact Info", icon: Phone },
   { href: "/admin/hours", label: "Opening Hours", icon: Clock },
   { href: "/admin/holidays", label: "Holiday Hours", icon: CalendarX2 },
-  { href: "/admin/contact", label: "Contact Info", icon: Phone },
   { href: "/admin/social", label: "Social Media", icon: Share2 },
+  { href: "/admin/faq", label: "FAQ", icon: HelpCircle },
+  { href: "/admin/testimonials", label: "Testimonials", icon: Star },
 ]
 
 interface AdminSidebarProps {

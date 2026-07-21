@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useCallback } from "react"
+import { useState, useCallback, useEffect } from "react"
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { toast } from "sonner"
 import {
@@ -16,7 +16,7 @@ import {
   verticalListSortingStrategy,
   arrayMove,
 } from "@dnd-kit/sortable"
-import { Plus, Scissors, Eye, EyeOff, Pencil } from "lucide-react"
+import { Plus, Scissors, Eye, EyeOff, Pencil, Check, Loader2 } from "lucide-react"
 import { createSupabaseClient } from "@/lib/supabase/client"
 import { ImageUploader } from "@/components/admin/ImageUploader"
 import { PageHeader } from "@/components/admin/PageHeader"
@@ -163,6 +163,20 @@ function ServiceDialog({
 
         <div className="space-y-4 py-2">
           <div className="space-y-1.5">
+            <Label className="text-zinc-300 text-sm">Service Image</Label>
+            <ImageUploader
+              bucket="backgrounds"
+              folder={`service-images/${form.category}`}
+              currentUrl={form.image_url}
+              onUploadComplete={(url) =>
+                setForm((f) => ({ ...f, image_url: url }))
+              }
+              onRemove={() => setForm((f) => ({ ...f, image_url: null }))}
+              aspectHint="Landscape photo works best"
+            />
+          </div>
+
+          <div className="space-y-1.5">
             <Label className="text-zinc-300 text-sm">Service Name</Label>
             <Input
               placeholder="e.g. Balayage & Toner"
@@ -238,6 +252,67 @@ function ServiceDialog({
   )
 }
 
+interface PriceCellProps {
+  service: Service
+  onSave: (price: string) => void
+  isSaving: boolean
+}
+
+function PriceCell({ service, onSave, isSaving }: PriceCellProps) {
+  const [value, setValue] = useState(service.price)
+
+  useEffect(() => {
+    setValue(service.price)
+  }, [service.price])
+
+  const dirty = value.trim() !== service.price && value.trim().length > 0
+
+  const commit = () => {
+    if (dirty && !isSaving) onSave(value.trim())
+  }
+
+  return (
+    <div className="flex items-center gap-1 w-32 justify-end">
+      <Input
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            e.preventDefault()
+            commit()
+          }
+          if (e.key === "Escape") {
+            setValue(service.price)
+          }
+        }}
+        onPointerDown={(e) => e.stopPropagation()}
+        placeholder="£0"
+        aria-label={`Price for ${service.name}`}
+        className="h-8 w-20 bg-zinc-800/50 border-zinc-700 text-amber-400 text-sm font-mono text-right px-2"
+      />
+      {dirty && (
+        <Button
+          type="button"
+          size="sm"
+          onClick={commit}
+          disabled={isSaving}
+          className="h-8 px-2 bg-amber-500 hover:bg-amber-400 text-black font-semibold text-xs shrink-0"
+          aria-label="Save price"
+        >
+          {isSaving ? (
+            <Loader2 className="h-3.5 w-3.5 animate-spin" />
+          ) : (
+            <>
+              <Check className="h-3.5 w-3.5 mr-1" />
+              Save
+            </>
+          )}
+        </Button>
+      )}
+    </div>
+  )
+}
+
 interface CategoryPanelProps {
   category: ServiceCategory
 }
@@ -251,24 +326,64 @@ function CategoryPanel({ category }: CategoryPanelProps) {
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } })
   )
 
+  const revalidatePublic = async () => {
+    try {
+      await fetch("/api/revalidate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ paths: ["/services", "/"] }),
+      })
+    } catch {
+      // ISR fallback (revalidate=10) will still catch up
+    }
+  }
+
+  // Returns true if Supabase's error indicates image_url isn't in the schema cache.
+  // PostgREST uses code PGRST204 for schema-cache misses; also match the message text.
+  const isImageColMissing = (err: unknown) => {
+    if (!err || typeof err !== "object") return false
+    const anyErr = err as { code?: string; message?: string; details?: string }
+    if (anyErr.code === "PGRST204") return true
+    const haystack = `${anyErr.message ?? ""} ${anyErr.details ?? ""}`
+    return /image_url/i.test(haystack) && /schema cache|schema-cache/i.test(haystack)
+  }
+
   const insertMutation = useMutation({
     mutationFn: async (values: ServiceFormState) => {
       const maxOrder =
         services.length > 0
           ? Math.max(...services.map((s) => s.display_order))
           : 0
-      const { error } = await supabase.from("services").insert({
+      const base = {
         name: values.name.trim(),
         price: values.price.trim(),
         category: values.category,
         is_visible: values.is_visible,
         display_order: maxOrder + 1,
-      })
-      if (error) throw error
+      }
+      const withImage = { ...base, image_url: values.image_url }
+      const first = await supabase.from("services").insert(withImage)
+      if (first.error) {
+        console.warn("services.insert(withImage) error:", first.error)
+        if (isImageColMissing(first.error)) {
+          const retry = await supabase.from("services").insert(base)
+          if (retry.error) throw retry.error
+          return { skippedImage: true }
+        }
+        throw first.error
+      }
+      return { skippedImage: false }
     },
-    onSuccess: () => {
+    onSuccess: async (result) => {
       queryClient.invalidateQueries({ queryKey: ["services", category] })
-      toast.success("Service added")
+      await revalidatePublic()
+      if (result.skippedImage) {
+        toast.warning(
+          "Service added, but image not linked. Run NOTIFY pgrst, 'reload schema'; in Supabase SQL Editor, then edit the service to attach the image."
+        )
+      } else {
+        toast.success("Service added")
+      }
     },
     onError: (err: Error) => toast.error(`Failed to add: ${err.message}`),
   })
@@ -281,21 +396,36 @@ function CategoryPanel({ category }: CategoryPanelProps) {
       id: string
       values: ServiceFormState
     }) => {
-      const { error } = await supabase
-        .from("services")
-        .update({
-          name: values.name.trim(),
-          price: values.price.trim(),
-          category: values.category,
-          is_visible: values.is_visible,
-          updated_at: new Date().toISOString(),
-        })
-        .eq("id", id)
-      if (error) throw error
+      const base = {
+        name: values.name.trim(),
+        price: values.price.trim(),
+        category: values.category,
+        is_visible: values.is_visible,
+        updated_at: new Date().toISOString(),
+      }
+      const withImage = { ...base, image_url: values.image_url }
+      const first = await supabase.from("services").update(withImage).eq("id", id)
+      if (first.error) {
+        console.warn("services.update(withImage) error:", first.error)
+        if (isImageColMissing(first.error)) {
+          const retry = await supabase.from("services").update(base).eq("id", id)
+          if (retry.error) throw retry.error
+          return { skippedImage: true }
+        }
+        throw first.error
+      }
+      return { skippedImage: false }
     },
-    onSuccess: () => {
+    onSuccess: async (result) => {
       queryClient.invalidateQueries({ queryKey: ["services", category] })
-      toast.success("Service updated")
+      await revalidatePublic()
+      if (result.skippedImage) {
+        toast.warning(
+          "Saved without image. Run NOTIFY pgrst, 'reload schema'; in Supabase SQL Editor, then try attaching the image again."
+        )
+      } else {
+        toast.success("Service updated")
+      }
     },
     onError: (err: Error) => toast.error(`Failed to update: ${err.message}`),
   })
@@ -310,6 +440,35 @@ function CategoryPanel({ category }: CategoryPanelProps) {
       toast.success("Service deleted")
     },
     onError: (err: Error) => toast.error(`Failed to delete: ${err.message}`),
+  })
+
+  const updatePriceMutation = useMutation({
+    mutationFn: async ({ id, price }: { id: string; price: string }) => {
+      const { error } = await supabase
+        .from("services")
+        .update({ price, updated_at: new Date().toISOString() })
+        .eq("id", id)
+      if (error) throw error
+    },
+    onMutate: async ({ id, price }) => {
+      await queryClient.cancelQueries({ queryKey: ["services", category] })
+      const previous = queryClient.getQueryData<Service[]>(["services", category])
+      queryClient.setQueryData<Service[]>(["services", category], (old = []) =>
+        old.map((s) => (s.id === id ? { ...s, price } : s))
+      )
+      return { previous }
+    },
+    onError: (err: Error, _vars, ctx) => {
+      if (ctx?.previous) {
+        queryClient.setQueryData(["services", category], ctx.previous)
+      }
+      toast.error(`Failed to save price: ${err.message}`)
+    },
+    onSuccess: async () => {
+      queryClient.invalidateQueries({ queryKey: ["services", category] })
+      await revalidatePublic()
+      toast.success("Price saved — live on the website")
+    },
   })
 
   const toggleVisibilityMutation = useMutation({
@@ -386,7 +545,7 @@ function CategoryPanel({ category }: CategoryPanelProps) {
           <span className="flex-1 text-xs font-semibold text-zinc-400 uppercase tracking-wider">
             Service
           </span>
-          <span className="text-xs font-semibold text-zinc-400 uppercase tracking-wider text-right w-24">
+          <span className="text-xs font-semibold text-zinc-400 uppercase tracking-wider text-right w-32 pr-2">
             Price
           </span>
           <span className="text-xs font-semibold text-zinc-400 uppercase tracking-wider w-16 text-center">
@@ -452,10 +611,17 @@ function CategoryPanel({ category }: CategoryPanelProps) {
                     )}
                   </div>
 
-                  {/* Price */}
-                  <div className="text-sm font-mono text-amber-400 text-right w-24 truncate">
-                    {service.price}
-                  </div>
+                  {/* Price (inline editable) */}
+                  <PriceCell
+                    service={service}
+                    isSaving={
+                      updatePriceMutation.isPending &&
+                      updatePriceMutation.variables?.id === service.id
+                    }
+                    onSave={(price) =>
+                      updatePriceMutation.mutate({ id: service.id, price })
+                    }
+                  />
 
                   {/* Visibility toggle */}
                   <div className="w-16 flex justify-center">
@@ -550,7 +716,7 @@ export default function ServicesPage() {
     <div>
       <PageHeader
         title="Services"
-        description="Manage your service menu and pricing. Drag to reorder."
+        description="Type a new price and click Save. Drag rows to reorder."
         action={
           <div className="flex items-center gap-2 text-xs text-zinc-500">
             <div className="h-2 w-2 rounded-full bg-emerald-400" />

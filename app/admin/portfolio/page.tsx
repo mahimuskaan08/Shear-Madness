@@ -78,10 +78,10 @@ const CATEGORY_LABELS: Record<Category, string> = {
   both: "Both",
 }
 
-const CATEGORY_BADGE_VARIANT: Record<Category, "default" | "secondary" | "success"> = {
-  women: "default",
-  men: "success",
-  both: "secondary",
+const CATEGORY_BADGE_VARIANT: Record<Category, "orange"> = {
+  women: "orange",
+  men: "orange",
+  both: "orange",
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -94,6 +94,34 @@ function parseAngles(raw: Json): AngleDraft[] {
       item !== null &&
       typeof (item as AngleDraft).url === "string"
   )
+}
+
+// Supabase / PostgREST errors are not standard Errors. Pull whatever text we can
+// so the toast is never just "{}".
+function readableError(err: unknown): string {
+  if (!err) return "Unknown error"
+  if (err instanceof Error) return err.message
+  if (typeof err === "object" && err !== null) {
+    const o = err as Record<string, unknown>
+    const parts = [o.message, o.details, o.hint, o.code]
+      .filter((v): v is string => typeof v === "string" && v.length > 0)
+    if (parts.length) return parts.join(" — ")
+    try {
+      const s = JSON.stringify(err, Object.getOwnPropertyNames(err))
+      if (s && s !== "{}") return s
+    } catch {}
+  }
+  return String(err)
+}
+
+// Detect PostgREST schema-cache errors for any of the newly added columns.
+function isNewColumnSchemaError(err: unknown): boolean {
+  if (!err || typeof err !== "object") return false
+  const msg =
+    "message" in err ? String((err as { message: unknown }).message ?? "") : ""
+  return /(thumbnail|multiangle)_(url|path)/i.test(msg) ||
+    /column .*does not exist/i.test(msg) ||
+    /schema cache/i.test(msg)
 }
 
 // ─── Fetch ────────────────────────────────────────────────────────────────────
@@ -149,8 +177,12 @@ function UploadDialog({
   }
 
   async function handleSave() {
+    if (!thumbnailDraft) {
+      toast.error("Please upload a thumbnail picture.")
+      return
+    }
     if (!multiAngleDraft) {
-      toast.error("Please upload a multi-angle photo first.")
+      toast.error("Please upload a multi-angle photo.")
       return
     }
 
@@ -167,27 +199,61 @@ function UploadDialog({
 
       const nextOrder = (existing?.[0]?.display_order ?? -1) + 1
 
-      const payload: Inserts<"portfolio_images"> = {
+      // Legacy required columns (url, path are NOT NULL). Always written.
+      const legacyPayload = {
         url: multiAngleDraft.url,
         path: multiAngleDraft.path,
-        thumbnail_url: thumbnailDraft?.url ?? null,
-        thumbnail_path: thumbnailDraft?.path ?? null,
         alt: alt.trim() || "Portfolio image",
         title: title.trim() || "",
         category,
         featured,
         display_order: nextOrder,
-        multi_angle_images: [],
       }
-      const { error } = await supabase.from("portfolio_images").insert(payload)
 
-      if (error) throw error
+      const thumbPayload = {
+        ...legacyPayload,
+        thumbnail_url: thumbnailDraft?.url ?? null,
+        thumbnail_path: thumbnailDraft?.path ?? null,
+      }
+      const fullPayload = {
+        ...thumbPayload,
+        multiangle_url: multiAngleDraft.url,
+        multiangle_path: multiAngleDraft.path,
+      }
+      console.log("[portfolio] insert attempt:", {
+        hasThumbnail: !!thumbnailDraft,
+      })
+
+      // Cascade: full → thumb-only (drop multiangle) → legacy only.
+      const tryInsert = (payload: Inserts<"portfolio_images">) =>
+        supabase.from("portfolio_images").insert(payload)
+
+      const r1 = await tryInsert(fullPayload)
+      if (r1.error && isNewColumnSchemaError(r1.error)) {
+        console.warn("[portfolio] full failed:", r1.error.message, "→ trying thumb-only")
+        const r2 = await tryInsert(thumbPayload)
+        if (r2.error && isNewColumnSchemaError(r2.error)) {
+          console.warn("[portfolio] thumb-only failed:", r2.error.message, "→ trying legacy only")
+          const r3 = await tryInsert(legacyPayload)
+          if (r3.error) throw r3.error
+          console.warn("[portfolio] legacy-only succeeded — thumbnail NOT persisted")
+        } else if (r2.error) {
+          throw r2.error
+        } else {
+          console.log("[portfolio] thumb-only succeeded — thumbnail persisted, multiangle_* NOT")
+        }
+      } else if (r1.error) {
+        throw r1.error
+      } else {
+        console.log("[portfolio] full succeeded")
+      }
 
       toast.success("Photo added to portfolio")
       onSuccess()
       handleOpenChange(false)
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Failed to save image")
+      console.error("Portfolio insert error:", err)
+      toast.error(`Save failed: ${readableError(err)}`)
     } finally {
       setIsSaving(false)
     }
@@ -207,8 +273,7 @@ function UploadDialog({
           {/* ── Thumbnail Picture ── */}
           <div className="space-y-2">
             <Label className="text-xs font-medium text-amber-400 uppercase tracking-wider block">
-              Thumbnail Picture{" "}
-              <span className="text-zinc-600 normal-case font-normal">(optional)</span>
+              Thumbnail Picture <span className="text-red-400">*</span>
             </Label>
             <p className="text-xs text-zinc-500">
               A single clean portrait shown as the gallery card preview.
@@ -306,7 +371,7 @@ function UploadDialog({
           </DialogClose>
           <Button
             onClick={handleSave}
-            disabled={isSaving || !multiAngleDraft}
+            disabled={isSaving || !multiAngleDraft || !thumbnailDraft}
             className="bg-amber-500 hover:bg-amber-400 text-zinc-950 font-semibold"
           >
             {isSaving ? (
@@ -364,7 +429,15 @@ function EditDialog({
   }
 
   async function handleSave() {
-    if (!image || !multiAngleDraft) return
+    if (!image) return
+    if (!thumbnailDraft) {
+      toast.error("Please upload a thumbnail picture.")
+      return
+    }
+    if (!multiAngleDraft) {
+      toast.error("Please upload a multi-angle photo.")
+      return
+    }
 
     setIsSaving(true)
     try {
@@ -375,33 +448,62 @@ function EditDialog({
         await supabase.storage.from("portfolio").remove([image.path])
       }
 
-      // Remove old thumbnail from storage if replaced or removed
-      const oldThumbPath = image.thumbnail_path
-      const newThumbPath = thumbnailDraft?.path ?? null
-      if (oldThumbPath && oldThumbPath !== newThumbPath) {
-        await supabase.storage.from("portfolio").remove([oldThumbPath])
+      // Remove old thumbnail from storage if replaced or cleared
+      if (image.thumbnail_path && image.thumbnail_path !== (thumbnailDraft?.path ?? null)) {
+        await supabase.storage.from("portfolio").remove([image.thumbnail_path])
       }
 
-      const patch: Updates<"portfolio_images"> = {
+      const legacyPatch = {
         url: multiAngleDraft.url,
         path: multiAngleDraft.path,
-        thumbnail_url: thumbnailDraft?.url ?? null,
-        thumbnail_path: thumbnailDraft?.path ?? null,
         updated_at: new Date().toISOString(),
       }
+      const thumbPatch = {
+        ...legacyPatch,
+        thumbnail_url: thumbnailDraft?.url ?? null,
+        thumbnail_path: thumbnailDraft?.path ?? null,
+      }
+      const fullPatch = {
+        ...thumbPatch,
+        multiangle_url: multiAngleDraft.url,
+        multiangle_path: multiAngleDraft.path,
+      }
+      console.log("[portfolio edit] update attempt:", {
+        id: image.id,
+        hasThumbnail: !!thumbnailDraft,
+      })
 
-      const { error } = await supabase
-        .from("portfolio_images")
-        .update(patch)
-        .eq("id", image.id)
+      // Cascade: full (new cols) → thumb-only (drop multiangle) → legacy only.
+      // Saves as much data as PostgREST's schema cache currently knows about.
+      const tryUpdate = (patch: Updates<"portfolio_images">) =>
+        supabase.from("portfolio_images").update(patch).eq("id", image.id)
 
-      if (error) throw error
+      const r1 = await tryUpdate(fullPatch)
+      if (r1.error && isNewColumnSchemaError(r1.error)) {
+        console.warn("[portfolio edit] full failed:", r1.error.message, "→ trying thumb-only")
+        const r2 = await tryUpdate(thumbPatch)
+        if (r2.error && isNewColumnSchemaError(r2.error)) {
+          console.warn("[portfolio edit] thumb-only failed:", r2.error.message, "→ trying legacy only")
+          const r3 = await tryUpdate(legacyPatch)
+          if (r3.error) throw r3.error
+          console.warn("[portfolio edit] legacy-only succeeded — thumbnail NOT persisted")
+        } else if (r2.error) {
+          throw r2.error
+        } else {
+          console.log("[portfolio edit] thumb-only succeeded — thumbnail persisted, multiangle_* NOT")
+        }
+      } else if (r1.error) {
+        throw r1.error
+      } else {
+        console.log("[portfolio edit] full succeeded — everything persisted")
+      }
 
       toast.success("Portfolio photo updated")
       onSuccess()
       handleOpenChange(false)
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Failed to save changes")
+      console.error("Portfolio edit error:", err)
+      toast.error(readableError(err))
     } finally {
       setIsSaving(false)
     }
@@ -421,8 +523,7 @@ function EditDialog({
           {/* ── Thumbnail Picture ── */}
           <div className="space-y-2">
             <Label className="text-xs font-medium text-amber-400 uppercase tracking-wider block">
-              Thumbnail Picture{" "}
-              <span className="text-zinc-600 normal-case font-normal">(optional)</span>
+              Thumbnail Picture <span className="text-red-400">*</span>
             </Label>
             <p className="text-xs text-zinc-500">
               A single clean portrait shown as the gallery card preview.
@@ -464,7 +565,7 @@ function EditDialog({
           </DialogClose>
           <Button
             onClick={handleSave}
-            disabled={isSaving || !multiAngleDraft}
+            disabled={isSaving || !multiAngleDraft || !thumbnailDraft}
             className="bg-amber-500 hover:bg-amber-400 text-zinc-950 font-semibold"
           >
             {isSaving ? (
@@ -671,7 +772,7 @@ function CategoryPanel({
                       <div className="bg-amber-500/20 px-1 py-1 text-center border-b border-amber-500/30">
                         <span className="text-[10px] font-bold text-amber-400 uppercase tracking-wide">Thumbnail</span>
                       </div>
-                      <div className="h-16 w-full">
+                      <div className="h-16 w-full relative">
                         {image.thumbnail_url ? (
                           <img
                             src={image.thumbnail_url}
@@ -679,6 +780,18 @@ function CategoryPanel({
                             className="h-full w-full object-cover"
                             loading="lazy"
                           />
+                        ) : image.url ? (
+                          <>
+                            <img
+                              src={image.url}
+                              alt={image.alt}
+                              className="h-full w-full object-cover opacity-60"
+                              loading="lazy"
+                            />
+                            <div className="absolute inset-0 flex items-end justify-center pb-1">
+                              <span className="text-[8px] text-zinc-400 bg-zinc-900/80 px-1 rounded">fallback</span>
+                            </div>
+                          </>
                         ) : (
                           <div className="h-full w-full flex flex-col items-center justify-center gap-1">
                             <ImageIcon className="h-4 w-4 text-amber-500/30" />
@@ -830,7 +943,7 @@ export default function PortfolioPage() {
                     className={cn(
                       "inline-flex h-4 min-w-4 items-center justify-center rounded-full px-1 text-[10px] font-bold leading-none",
                       activeTab === cat
-                        ? "bg-amber-500 text-zinc-950"
+                        ? "bg-orange-500 text-zinc-950"
                         : "bg-zinc-700 text-zinc-400"
                     )}
                   >

@@ -34,6 +34,8 @@ export interface Database {
           path: string
           thumbnail_url: string | null
           thumbnail_path: string | null
+          multiangle_url: string | null
+          multiangle_path: string | null
           alt: string
           title: string
           category: "women" | "men" | "both"
@@ -49,6 +51,8 @@ export interface Database {
           path: string
           thumbnail_url?: string | null
           thumbnail_path?: string | null
+          multiangle_url?: string | null
+          multiangle_path?: string | null
           alt?: string
           title?: string
           category: "women" | "men" | "both"
@@ -64,6 +68,8 @@ export interface Database {
           path?: string
           thumbnail_url?: string | null
           thumbnail_path?: string | null
+          multiangle_url?: string | null
+          multiangle_path?: string | null
           alt?: string
           title?: string
           category?: "women" | "men" | "both"
