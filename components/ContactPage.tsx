@@ -64,12 +64,35 @@ const STYLES = `
   /* iPad: full image visible, no cropping */
   #contact-bg-img { object-position: center center !important; object-fit: contain !important; }
 }
+/* Tablet + mobile: keep hours row inside the viewport, right-aligned times */
+@media (max-width: 900px) {
+  #contact-info-panel { max-width: 100% !important; width: 100% !important; }
+  .contact-hours-row {
+    flex-wrap: nowrap !important;
+    gap: 8px !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+  .contact-hours-day {
+    flex: 0 0 auto !important;
+  }
+  .contact-hours-time {
+    text-align: right !important;
+    letter-spacing: 0.04em !important;
+    padding: 2px 8px !important;
+    margin-left: auto !important;
+    flex: 0 1 auto !important;
+    min-width: 0 !important;
+  }
+}
 @media (max-width: 600px) {
   #contact-grid { flex-direction: column !important; }
-  /* Prevent hours row from overflowing on narrow screens */
-  .contact-hours-row { flex-wrap: wrap !important; gap: 4px !important; }
-  .contact-hours-time { font-size: 1.35rem !important; }
+  .contact-hours-time { font-size: 1.15rem !important; }
   .contact-hours-day  { font-size: 1.35rem !important; }
+  /* Give the hours block a bit more breathing room on narrow screens */
+  .contact-info-block-box { padding-left: 10px !important; padding-right: 10px !important; }
 }
 /* ── Mobile background image swap ── */
 .contact-bg-mobile { display: none; }
@@ -292,15 +315,16 @@ export default function ContactPage({
                         <span className="contact-hours-time" style={{
                           fontFamily: "'Cormorant Garamond', Georgia, serif",
                           fontSize: time === "Closed" ? "clamp(1.35rem, 1.8vw, 1.6rem)" : "clamp(1.1rem, 1.5vw, 1.3rem)",
-                          fontWeight: time === "Closed" ? 900 : 800,
-                          color: time === "Closed" ? "rgba(0,0,0,0.40)" : "#1A1A1A",
+                          fontWeight: 900,
+                          color: time === "Closed" ? "rgba(0,0,0,0.55)" : "#000000",
                           letterSpacing: time === "Closed" ? "0.12em" : "0.01em",
                           textTransform: time === "Closed" ? "uppercase" : undefined,
                           textAlign: "right", whiteSpace: "nowrap",
-                          background: "rgba(0,0,0,0.06)",
-                          border: "1px solid rgba(0,0,0,0.12)",
+                          background: "rgba(255,252,245,0.85)",
+                          border: "1px solid rgba(0,0,0,0.22)",
                           borderRadius: 6,
-                          padding: "2px 10px",
+                          padding: "3px 12px",
+                          boxShadow: "0 1px 2px rgba(0,0,0,0.08)",
                         }}>
                           {time}
                         </span>
