@@ -124,6 +124,20 @@ function isNewColumnSchemaError(err: unknown): boolean {
     /schema cache/i.test(msg)
 }
 
+// Bust the ISR cache for the public /gallery page so admin edits show up
+// immediately instead of waiting for the 10s revalidate window.
+async function revalidatePublic() {
+  try {
+    await fetch("/api/revalidate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ paths: ["/gallery"] }),
+    })
+  } catch {
+    // ISR fallback (revalidate=10) will still catch up
+  }
+}
+
 // ─── Fetch ────────────────────────────────────────────────────────────────────
 
 async function fetchPortfolioImages(category: Category): Promise<PortfolioImage[]> {
@@ -249,6 +263,7 @@ function UploadDialog({
       }
 
       toast.success("Photo added to portfolio")
+      await revalidatePublic()
       onSuccess()
       handleOpenChange(false)
     } catch (err) {
@@ -499,6 +514,7 @@ function EditDialog({
       }
 
       toast.success("Portfolio photo updated")
+      await revalidatePublic()
       onSuccess()
       handleOpenChange(false)
     } catch (err) {
@@ -626,8 +642,9 @@ function CategoryPanel({
         )
       )
     },
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ["portfolio", category] })
+      await revalidatePublic()
       setLocalOrder(null)
     },
     onError: (err: Error) => {
@@ -649,9 +666,10 @@ function CategoryPanel({
         .eq("id", image.id)
       if (error) throw error
     },
-    onSuccess: (_, image) => {
+    onSuccess: async (_, image) => {
       toast.success(image.featured ? "Removed from featured" : "Marked as featured")
       queryClient.invalidateQueries({ queryKey: ["portfolio", category] })
+      await revalidatePublic()
     },
     onError: (err: Error) => {
       toast.error(`Failed to update: ${err.message}`)
@@ -687,9 +705,10 @@ function CategoryPanel({
         .eq("id", image.id)
       if (error) throw error
     },
-    onSuccess: () => {
+    onSuccess: async () => {
       toast.success("Photo deleted")
       queryClient.invalidateQueries({ queryKey: ["portfolio", category] })
+      await revalidatePublic()
     },
     onError: (err: Error) => {
       toast.error(`Failed to delete: ${err.message}`)
