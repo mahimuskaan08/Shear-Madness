@@ -673,7 +673,7 @@ function BrandMarquee() {
 // ─────────────────────────────────────────────────────────────────────────────
 function HeroSection() {
   return (
-    <section style={{ position:"relative", minHeight:"50svh", display:"flex", flexDirection:"column", justifyContent:"center" }}>
+    <section style={{ position:"relative", display:"flex", flexDirection:"column", justifyContent:"center" }}>
 
       {/* Petals */}
       <div aria-hidden style={{ position:"absolute", inset:0, overflow:"hidden", pointerEvents:"none", zIndex:1 }}>
@@ -690,12 +690,12 @@ function HeroSection() {
 
           <motion.h1 initial={{ opacity:0, y:26 }} animate={{ opacity:1, y:0 }} transition={{ duration:1.1, ease:EASE, delay:0.34 }}
             className="svc-hero-h1"
-            style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"clamp(2.8rem,6vw,5.0rem)", fontWeight:600, lineHeight:1.0, letterSpacing:"0.01em", color:"#556B2F", marginBottom:18 }}>
+            style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"clamp(2.8rem,6vw,5.0rem)", fontWeight:600, lineHeight:1.0, letterSpacing:"0.01em", color:"#556B2F", marginBottom:8 }}>
             <span style={{ background:"rgba(252,248,240,0.55)", backdropFilter:"blur(8px)", WebkitBackdropFilter:"blur(8px)", borderRadius:8, padding:"4px 16px" }}>Salon <em>Services</em></span>
           </motion.h1>
 
           <motion.div initial={{ opacity:0, scaleX:0 }} animate={{ opacity:1, scaleX:1 }} transition={{ duration:1.0, ease:EASE, delay:0.50 }}
-            style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:10, marginBottom:16 }}>
+            style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:10, marginBottom:8 }}>
             <div style={{ height:1, width:52, background:"linear-gradient(to right,transparent,rgba(198,167,107,0.70))" }}/>
             <div style={{ width:4, height:4, borderRadius:"50%", background:"#C6A76B", opacity:0.90 }}/>
             <div style={{ height:1, width:52, background:"linear-gradient(to left,transparent,rgba(198,167,107,0.70))" }}/>
@@ -703,7 +703,7 @@ function HeroSection() {
 
           <motion.p initial={{ opacity:0, y:14 }} animate={{ opacity:1, y:0 }} transition={{ duration:1.0, ease:EASE, delay:0.62 }}
             className="svc-hero-subtitle"
-            style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"clamp(1.05rem,1.5vw,1.25rem)", fontStyle:"italic", fontWeight:400, lineHeight:1.75, color:"#111111", letterSpacing:"0.01em", marginBottom:28 }}>
+            style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"clamp(1.05rem,1.5vw,1.25rem)", fontStyle:"italic", fontWeight:400, lineHeight:1.75, color:"#111111", letterSpacing:"0.01em", marginBottom:14 }}>
             <span style={{ background:"rgba(252,248,240,0.55)", backdropFilter:"blur(8px)", WebkitBackdropFilter:"blur(8px)", borderRadius:4, padding:"2px 10px" }}>Tailored beauty, precision styling, and elevated care for every occasion.</span>
           </motion.p>
 

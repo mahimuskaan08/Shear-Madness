@@ -53,7 +53,7 @@ const STYLES = `
 .contact-info-block-box {
   background: none;
   border-radius: 14px;
-  padding: clamp(14px, 2.2vw, 20px) clamp(16px, 2.5vw, 24px);
+  padding: clamp(4px, 0.5vw, 6px) clamp(16px, 2.5vw, 24px);
   border: none;
 }
 /* ── RESPONSIVE ─────────────────────────────────────────────────── */
@@ -106,6 +106,11 @@ const STYLES = `
   /* Larger text on mobile */
   .contact-info-line { font-size: 1.7rem !important; }
   .contact-info-line-large { font-size: 2.2rem !important; }
+  /* Email is too long at 2.2rem — shrink only the mailto link */
+  a.contact-info-line-large[href^="mailto:"] {
+    font-size: clamp(0.88rem, 4.2vw, 1.1rem) !important;
+    word-break: break-all;
+  }
   .contact-section-divider {
     background: rgba(0,0,0,0.15) !important;
   }
@@ -200,7 +205,7 @@ export default function ContactPage({
           style={{
             position: "absolute", top: 0, left: 0, right: 0, bottom: 0,
             width: "100%", height: "100%",
-            objectFit: "contain", objectPosition: "center center",
+            objectFit: "cover", objectPosition: "center center",
             opacity: 0.90,
           }}
         />
@@ -241,7 +246,7 @@ export default function ContactPage({
           initial={{ opacity: 0, y: 24 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 1.0, ease: EASE }}
-          style={{ marginBottom: "clamp(36px, 5vh, 56px)" }}
+          style={{ marginBottom: "clamp(12px, 1.5vh, 18px)" }}
         >
           <h2 style={{
             fontFamily: "'Cormorant Garamond', Georgia, serif",
@@ -288,7 +293,7 @@ export default function ContactPage({
 
             <div style={{
               display: "flex", flexDirection: "column",
-              gap: "clamp(28px, 4vh, 44px)",
+              gap: "clamp(10px, 1.2vh, 16px)",
               position: "relative", zIndex: 1,
             }}>
 

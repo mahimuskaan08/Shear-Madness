@@ -150,6 +150,15 @@ const STYLES = `
   @media (max-width: 480px) {
     .joi-name-row { grid-template-columns: 1fr; }
   }
+
+  /* ── EMAIL LINE (mobile shrink) ─────────────────────── */
+  @media (max-width: 640px) {
+    .joi-email-line { font-size: 0.78rem !important; }
+    .joi-email-link { border-bottom-width: 1px !important; }
+  }
+  @media (max-width: 380px) {
+    .joi-email-line { font-size: 0.72rem !important; }
+  }
 `;
 
 function ApplicationForm() {
@@ -293,7 +302,7 @@ function ApplicationForm() {
         <button type="submit" className="joi-submit" disabled={loading}>
           {loading ? "Submitting…" : "Submit Application"}
         </button>
-        <p style={{
+        <p className="joi-email-line" style={{
           fontFamily: "'Inter', sans-serif",
           fontSize: "clamp(0.88rem, 1.05vw, 1.0rem)",
           fontWeight: 700,
@@ -302,13 +311,14 @@ function ApplicationForm() {
           lineHeight: 1.6,
         }}>
           Or email your résumé to{" "}
-          <a href="mailto:info@shearmadnesshoboken.com" style={{
+          <a href="mailto:info@shearmadnesshoboken.com" className="joi-email-link" style={{
             color: "#000",
             fontWeight: 800,
             textDecoration: "none",
             borderBottom: "2px solid #000",
             paddingBottom: "1px",
             transition: "border-color 0.3s",
+            wordBreak: "break-all",
           }}
             onMouseEnter={e => (e.currentTarget.style.borderColor = "#C6A76B")}
             onMouseLeave={e => (e.currentTarget.style.borderColor = "#000")}

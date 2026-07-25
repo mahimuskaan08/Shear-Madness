@@ -27,14 +27,8 @@ export default async function ContactPage() {
     data.backgrounds.find(b => b.section === section)?.image_url ?? undefined;
 
   return (
-    <main style={{ background: "#0B0B0B", minHeight: "100vh" }}>
+    <main style={{ background: "#ECEAE7", minHeight: "100vh" }}>
       <CustomCursor />
-      <style>{`
-        .contact-page header { background: rgba(14,14,14,0.0) !important; }
-        .contact-page header a,
-        .contact-page header span { color: #F5F2ED !important; }
-        .contact-page header button span { background: #F5F2ED !important; }
-      `}</style>
       <div className="contact-page">
         <Navbar />
       </div>

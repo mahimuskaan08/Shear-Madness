@@ -33,7 +33,7 @@ function NavPillButton({ href, label }: { href: string; label: string }) {
       href={href}
       className="
         group relative inline-flex items-center justify-center rounded-full
-        uppercase font-semibold text-white overflow-hidden
+        uppercase font-semibold text-black overflow-hidden
         transition-all duration-300 hover:-translate-y-0.5
         text-[10px] tracking-[0.14em] px-[18px] py-[9px]
         lg:text-[12px] lg:tracking-[0.16em] lg:px-[26px] lg:py-[11px]
@@ -42,6 +42,7 @@ function NavPillButton({ href, label }: { href: string; label: string }) {
       style={{
         fontFamily: "'Neue World', Georgia, serif",
         fontWeight: 700,
+        color: "#000000",
         background: "linear-gradient(135deg, #C9A96E 0%, #B8935A 55%, #C4A96A 100%)",
         boxShadow: "0 4px 18px rgba(196,169,106,0.40), inset 0 1px 0 rgba(255,255,255,0.20)",
       }}
@@ -69,19 +70,21 @@ export default function Navbar() {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const { scrollY } = useScroll();
   const pathname = usePathname();
-  const showBranding = pathname !== "/" || scrolled;
+  const forceScrolled = pathname === "/contact";
+  const isScrolled = scrolled || forceScrolled;
+  const showBranding = pathname !== "/" || isScrolled;
 
   useMotionValueEvent(scrollY, "change", (y) => {
     setScrolled(y > 50);
   });
 
   const glassPillStyle: React.CSSProperties = {
-    background: scrolled ? "transparent" : "rgba(255,255,255,0.14)",
-    backdropFilter: scrolled ? "none" : "blur(20px) saturate(1.8)",
-    WebkitBackdropFilter: scrolled ? "none" : "blur(20px) saturate(1.8)",
-    border: scrolled ? "1px solid transparent" : "1px solid rgba(255,255,255,0.38)",
+    background: isScrolled ? "transparent" : "rgba(255,255,255,0.14)",
+    backdropFilter: isScrolled ? "none" : "blur(20px) saturate(1.8)",
+    WebkitBackdropFilter: isScrolled ? "none" : "blur(20px) saturate(1.8)",
+    border: isScrolled ? "1px solid transparent" : "1px solid rgba(255,255,255,0.38)",
     borderRadius: 100,
-    boxShadow: scrolled ? "none" : "0 2px 18px rgba(0,0,0,0.07), inset 0 1px 0 rgba(255,255,255,0.55)",
+    boxShadow: isScrolled ? "none" : "0 2px 18px rgba(0,0,0,0.07), inset 0 1px 0 rgba(255,255,255,0.55)",
     transition: "background 0.5s ease, box-shadow 0.5s ease, border-color 0.5s ease",
   };
 
@@ -97,8 +100,8 @@ export default function Navbar() {
         >
           <a
             href={link.href}
-            className={`${textClass} relative text-[#2C2A25] uppercase font-black whitespace-nowrap transition-colors duration-300 hover:text-[#C4A96A] flex items-center gap-0.5`}
-            style={{ fontFamily: "'Neue World', Georgia, serif", fontWeight: 900 }}
+            className={`${textClass} relative text-black uppercase font-black whitespace-nowrap transition-colors duration-300 hover:text-[#C4A96A] flex items-center gap-0.5`}
+            style={{ fontFamily: "'Neue World', Georgia, serif", fontWeight: 900, color: "#000000" }}
           >
             {link.label}
             <svg
@@ -135,7 +138,7 @@ export default function Navbar() {
                     <a
                       key={item.label}
                       href={item.href}
-                      className="block text-[#2C2A25] hover:text-[#C4A96A] hover:bg-[rgba(196,169,106,0.06)] transition-all duration-200"
+                      className="block text-black hover:text-[#C4A96A] hover:bg-[rgba(196,169,106,0.06)] transition-all duration-200"
                       style={{ fontFamily: "'Neue World', Georgia, serif", fontSize: "10px", letterSpacing: "0.12em", textTransform: "uppercase", fontWeight: 700, padding: "9px 18px" }}
                     >
                       {item.label}
@@ -150,8 +153,8 @@ export default function Navbar() {
         <a
           key={link.label}
           href={link.href}
-          className={`${textClass} relative text-[#2C2A25] uppercase font-black whitespace-nowrap transition-colors duration-300 hover:text-[#C4A96A] group`}
-          style={{ fontFamily: "'Neue World', Georgia, serif", fontWeight: 900 }}
+          className={`${textClass} relative text-black uppercase font-black whitespace-nowrap transition-colors duration-300 hover:text-[#C4A96A] group`}
+          style={{ fontFamily: "'Neue World', Georgia, serif", fontWeight: 900, color: "#000000" }}
         >
           {link.label}
           <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-[#C4A96A] transition-all duration-300 group-hover:w-full" />
@@ -167,11 +170,12 @@ export default function Navbar() {
         transition={{ duration: 1, ease: EASE, delay: 0.1 }}
         className="fixed top-0 left-0 right-0 z-50 transition-all duration-500"
         style={{
-          background: scrolled ? "rgba(252,249,244,0.92)" : "transparent",
-          backdropFilter: scrolled ? "blur(18px) saturate(1.4)" : "none",
-          WebkitBackdropFilter: scrolled ? "blur(18px) saturate(1.4)" : "none",
-          borderBottom: scrolled ? "1px solid rgba(196,169,106,0.18)" : "1px solid rgba(196,169,106,0)",
-          boxShadow: scrolled ? "0 2px 32px rgba(58,56,50,0.07)" : "none",
+          background: isScrolled ? "rgba(252,249,244,0.92)" : "transparent",
+          backdropFilter: isScrolled ? "blur(18px) saturate(1.4)" : "none",
+          WebkitBackdropFilter: isScrolled ? "blur(18px) saturate(1.4)" : "none",
+          borderBottom: isScrolled ? "1px solid rgba(196,169,106,0.18)" : "1px solid rgba(196,169,106,0)",
+          boxShadow: isScrolled ? "0 2px 32px rgba(58,56,50,0.07)" : "none",
+          color: "#000000",
         }}
       >
         {/*
@@ -230,9 +234,9 @@ export default function Navbar() {
             className="md:hidden absolute right-4 z-[60] flex items-center justify-center w-11 h-11"
           >
             <div className="flex flex-col justify-center gap-[5px] w-6 h-6 pointer-events-none">
-              <motion.span animate={menuOpen ? { rotate: 45, y: 5 } : { rotate: 0, y: 0 }} transition={{ duration: 0.28 }} className="block h-px w-full bg-[#2C2A25]" />
-              <motion.span animate={menuOpen ? { opacity: 0, scaleX: 0 } : { opacity: 1, scaleX: 1 }} transition={{ duration: 0.2 }} className="block h-px w-full bg-[#2C2A25]" />
-              <motion.span animate={menuOpen ? { rotate: -45, y: -5 } : { rotate: 0, y: 0 }} transition={{ duration: 0.28 }} className="block h-px w-4/5 bg-[#2C2A25]" />
+              <motion.span animate={menuOpen ? { rotate: 45, y: 5 } : { rotate: 0, y: 0 }} transition={{ duration: 0.28 }} className="block h-px w-full bg-black" />
+              <motion.span animate={menuOpen ? { opacity: 0, scaleX: 0 } : { opacity: 1, scaleX: 1 }} transition={{ duration: 0.2 }} className="block h-px w-full bg-black" />
+              <motion.span animate={menuOpen ? { rotate: -45, y: -5 } : { rotate: 0, y: 0 }} transition={{ duration: 0.28 }} className="block h-px w-4/5 bg-black" />
             </div>
           </button>
         </div>
@@ -258,7 +262,7 @@ export default function Navbar() {
                   initial={{ opacity: 0, y: 18 }}
                   animate={menuOpen ? { opacity: 1, y: 0 } : { opacity: 0, y: 18 }}
                   transition={{ duration: 0.38, ease: EASE, delay: 0.05 + i * 0.07 }}
-                  className="text-[#2C2A25] hover:text-[#C4A96A] transition-colors duration-300"
+                  className="text-black hover:text-[#C4A96A] transition-colors duration-300"
                   style={{ fontFamily: "'Neue World', Georgia, serif", fontSize: "clamp(1.7rem, 5vw, 2.4rem)", fontWeight: 300 }}
                 >
                   {link.label}
@@ -289,7 +293,7 @@ export default function Navbar() {
                 initial={{ opacity: 0, y: 18 }}
                 animate={menuOpen ? { opacity: 1, y: 0 } : { opacity: 0, y: 18 }}
                 transition={{ duration: 0.38, ease: EASE, delay: 0.05 + i * 0.07 }}
-                className="text-[#2C2A25] hover:text-[#C4A96A] transition-colors duration-300"
+                className="text-black hover:text-[#C4A96A] transition-colors duration-300"
                 style={{ fontFamily: "'Neue World', Georgia, serif", fontSize: "clamp(1.7rem, 5vw, 2.4rem)", fontWeight: 300 }}
               >
                 {link.label}
@@ -306,7 +310,7 @@ export default function Navbar() {
             <a
               href="/contact"
               onClick={() => setMenuOpen(false)}
-              className="rounded-full text-[10px] tracking-[0.2em] uppercase text-white px-7 py-3 transition-all duration-300"
+              className="rounded-full text-[10px] tracking-[0.2em] uppercase text-black px-7 py-3 transition-all duration-300"
               style={{ fontFamily: "'Neue World', Georgia, serif", background: "linear-gradient(135deg, #C9A96E, #B8935A)", boxShadow: "0 4px 18px rgba(196,169,106,0.45)" }}
             >
               Hrs & Loc
@@ -314,7 +318,7 @@ export default function Navbar() {
             <a
               href="/booking"
               onClick={() => setMenuOpen(false)}
-              className="rounded-full text-[10px] tracking-[0.2em] uppercase text-white px-5 py-3 transition-all duration-300"
+              className="rounded-full text-[10px] tracking-[0.2em] uppercase text-black px-5 py-3 transition-all duration-300"
               style={{ fontFamily: "'Neue World', Georgia, serif", background: "linear-gradient(135deg, #C9A96E, #B8935A)", boxShadow: "0 4px 18px rgba(196,169,106,0.45)" }}
             >
               Set an Appt.

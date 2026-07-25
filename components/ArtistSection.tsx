@@ -214,6 +214,7 @@ export default function ArtistSection({
       style={{
         position: "relative",
         overflow: "hidden",
+        scrollMarginTop: "calc(var(--navbar-h, 72px) + 24px)",
         padding: isMobile
           ? "clamp(64px, 9vh, 112px) clamp(24px, 7vw, 96px) clamp(36px, 5vh, 60px)"
           : isTablet
