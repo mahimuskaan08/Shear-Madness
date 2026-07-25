@@ -114,12 +114,12 @@ function readableError(err: unknown): string {
   return String(err)
 }
 
-// Detect PostgREST schema-cache errors for any of the newly added columns.
-function isNewColumnSchemaError(err: unknown): boolean {
+// Detect PostgREST schema-cache errors for the thumbnail columns.
+function isThumbnailSchemaError(err: unknown): boolean {
   if (!err || typeof err !== "object") return false
   const msg =
     "message" in err ? String((err as { message: unknown }).message ?? "") : ""
-  return /(thumbnail|multiangle)_(url|path)/i.test(msg) ||
+  return /thumbnail_(url|path)/i.test(msg) ||
     /column .*does not exist/i.test(msg) ||
     /schema cache/i.test(msg)
 }
@@ -172,6 +172,13 @@ function UploadDialog({
   const [featured, setFeatured] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
 
+  // Re-sync category to whatever tab is active every time the dialog opens.
+  // Radix onOpenChange doesn't fire when the parent flips `open` programmatically,
+  // so relying on it alone leaves `category` stale on the second open.
+  useEffect(() => {
+    if (open) setCategory(defaultCategory)
+  }, [open, defaultCategory])
+
   function resetForm() {
     setThumbnailDraft(null)
     setMultiAngleDraft(null)
@@ -182,11 +189,7 @@ function UploadDialog({
   }
 
   function handleOpenChange(next: boolean) {
-    if (next) {
-      setCategory(defaultCategory)
-    } else {
-      resetForm()
-    }
+    if (!next) resetForm()
     onOpenChange(next)
   }
 
@@ -213,7 +216,8 @@ function UploadDialog({
 
       const nextOrder = (existing?.[0]?.display_order ?? -1) + 1
 
-      // Legacy required columns (url, path are NOT NULL). Always written.
+      // url/path are the multi-angle collage (NOT NULL columns). thumbnail_url/path
+      // are the single portrait shown on the gallery card.
       const legacyPayload = {
         url: multiAngleDraft.url,
         path: multiAngleDraft.path,
@@ -223,43 +227,23 @@ function UploadDialog({
         featured,
         display_order: nextOrder,
       }
-
       const thumbPayload = {
         ...legacyPayload,
-        thumbnail_url: thumbnailDraft?.url ?? null,
-        thumbnail_path: thumbnailDraft?.path ?? null,
+        thumbnail_url: thumbnailDraft.url,
+        thumbnail_path: thumbnailDraft.path,
       }
-      const fullPayload = {
-        ...thumbPayload,
-        multiangle_url: multiAngleDraft.url,
-        multiangle_path: multiAngleDraft.path,
-      }
-      console.log("[portfolio] insert attempt:", {
-        hasThumbnail: !!thumbnailDraft,
-      })
 
-      // Cascade: full → thumb-only (drop multiangle) → legacy only.
       const tryInsert = (payload: Inserts<"portfolio_images">) =>
         supabase.from("portfolio_images").insert(payload)
 
-      const r1 = await tryInsert(fullPayload)
-      if (r1.error && isNewColumnSchemaError(r1.error)) {
-        console.warn("[portfolio] full failed:", r1.error.message, "→ trying thumb-only")
-        const r2 = await tryInsert(thumbPayload)
-        if (r2.error && isNewColumnSchemaError(r2.error)) {
-          console.warn("[portfolio] thumb-only failed:", r2.error.message, "→ trying legacy only")
-          const r3 = await tryInsert(legacyPayload)
-          if (r3.error) throw r3.error
-          console.warn("[portfolio] legacy-only succeeded — thumbnail NOT persisted")
-        } else if (r2.error) {
-          throw r2.error
-        } else {
-          console.log("[portfolio] thumb-only succeeded — thumbnail persisted, multiangle_* NOT")
-        }
+      const r1 = await tryInsert(thumbPayload)
+      if (r1.error && isThumbnailSchemaError(r1.error)) {
+        console.warn("[portfolio] thumb insert failed:", r1.error.message, "→ retrying without thumbnail_*")
+        const r2 = await tryInsert(legacyPayload)
+        if (r2.error) throw r2.error
+        console.warn("[portfolio] legacy-only succeeded — thumbnail NOT persisted; reload PostgREST schema cache")
       } else if (r1.error) {
         throw r1.error
-      } else {
-        console.log("[portfolio] full succeeded")
       }
 
       toast.success("Photo added to portfolio")
@@ -475,42 +459,21 @@ function EditDialog({
       }
       const thumbPatch = {
         ...legacyPatch,
-        thumbnail_url: thumbnailDraft?.url ?? null,
-        thumbnail_path: thumbnailDraft?.path ?? null,
+        thumbnail_url: thumbnailDraft.url,
+        thumbnail_path: thumbnailDraft.path,
       }
-      const fullPatch = {
-        ...thumbPatch,
-        multiangle_url: multiAngleDraft.url,
-        multiangle_path: multiAngleDraft.path,
-      }
-      console.log("[portfolio edit] update attempt:", {
-        id: image.id,
-        hasThumbnail: !!thumbnailDraft,
-      })
 
-      // Cascade: full (new cols) → thumb-only (drop multiangle) → legacy only.
-      // Saves as much data as PostgREST's schema cache currently knows about.
       const tryUpdate = (patch: Updates<"portfolio_images">) =>
         supabase.from("portfolio_images").update(patch).eq("id", image.id)
 
-      const r1 = await tryUpdate(fullPatch)
-      if (r1.error && isNewColumnSchemaError(r1.error)) {
-        console.warn("[portfolio edit] full failed:", r1.error.message, "→ trying thumb-only")
-        const r2 = await tryUpdate(thumbPatch)
-        if (r2.error && isNewColumnSchemaError(r2.error)) {
-          console.warn("[portfolio edit] thumb-only failed:", r2.error.message, "→ trying legacy only")
-          const r3 = await tryUpdate(legacyPatch)
-          if (r3.error) throw r3.error
-          console.warn("[portfolio edit] legacy-only succeeded — thumbnail NOT persisted")
-        } else if (r2.error) {
-          throw r2.error
-        } else {
-          console.log("[portfolio edit] thumb-only succeeded — thumbnail persisted, multiangle_* NOT")
-        }
+      const r1 = await tryUpdate(thumbPatch)
+      if (r1.error && isThumbnailSchemaError(r1.error)) {
+        console.warn("[portfolio edit] thumb update failed:", r1.error.message, "→ retrying without thumbnail_*")
+        const r2 = await tryUpdate(legacyPatch)
+        if (r2.error) throw r2.error
+        console.warn("[portfolio edit] legacy-only succeeded — thumbnail NOT persisted; reload PostgREST schema cache")
       } else if (r1.error) {
         throw r1.error
-      } else {
-        console.log("[portfolio edit] full succeeded — everything persisted")
       }
 
       toast.success("Portfolio photo updated")

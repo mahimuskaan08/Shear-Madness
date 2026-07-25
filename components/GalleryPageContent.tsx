@@ -39,17 +39,15 @@ function buildGalleryItems(portfolioImages: SitePortfolioImage[]): GalleryItem[]
     const myIdx   = sameCat.findIndex(x => x.id === img.id)
     const next    = sameCat[(myIdx + 1) % sameCat.length]
     // Card shows the thumbnail (single clean portrait). If none was uploaded,
-    // fall back to the multi-angle collage so the card is never empty.
-    const multiAngle     = img.multiangle_url  || img.url
-    const nextMultiAngle = next?.multiangle_url || next?.url || multiAngle
-    const cardPreview    = img.thumbnail_url   || multiAngle
-    const nextPreview    = next?.thumbnail_url || nextMultiAngle
+    // fall back to the multi-angle collage (img.url) so the card is never empty.
+    const cardPreview = img.thumbnail_url || img.url
+    const nextPreview = next?.thumbnail_url || next?.url || cardPreview
     return {
       id:           i + 1,
       previewImage: cardPreview,
       backImage:    nextPreview,
       // Lightbox opens the multi-angle collage. full_url kept as legacy override.
-      fullImage:    img.full_url ?? multiAngle,
+      fullImage:    img.full_url ?? img.url,
       alt:          img.alt || img.title || "Gallery image",
       category:     CATEGORY_MAP[img.category] ?? "Men",
     }

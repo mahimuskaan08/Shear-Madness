@@ -53,9 +53,8 @@ export type PortfolioAngleImage = {
 
 export type SitePortfolioImage = {
   id: string
-  url: string                     // legacy NOT NULL column; mirror of multiangle_url for old rows
-  multiangle_url?: string | null  // multi-angle collage shown in the lightbox on click
-  thumbnail_url?: string | null   // optional single portrait shown on the card preview; falls back to multiangle_url
+  url: string                     // multi-angle collage shown in the lightbox on click
+  thumbnail_url?: string | null   // single portrait shown on the card preview; falls back to url
   full_url?: string               // legacy alias for lightbox image; falls back to url
   alt: string
   title: string
@@ -161,7 +160,7 @@ async function fetchPortfolioImages(
   supabase: ReturnType<typeof getPublicClient>,
   category?: "women" | "men" | "both",
 ): Promise<SitePortfolioImage[]> {
-  const cols = "id, url, multiangle_url, thumbnail_url, alt, title, category, featured, display_order"
+  const cols = "id, url, thumbnail_url, alt, title, category, featured, display_order"
   const legacyCols = "id, url, alt, title, category, featured, display_order"
 
   const withNew = category
