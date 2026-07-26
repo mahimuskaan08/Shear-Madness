@@ -15,7 +15,7 @@ const POSITIONS = [
   "Other",
 ];
 
-const STYLES = `
+const getStyles = (tabletBg: string) => `
   html, body { overflow-x: hidden; }
 
   .joi-page {
@@ -54,7 +54,7 @@ const STYLES = `
     .joi-bg-desktop { display: none; }
     .joi-bg-tablet  { display: none; }
     .joi-page {
-      background-image: url('/join-bg-tablet.png');
+      background-image: url('${tabletBg}');
       background-attachment: fixed;
       background-size: 100% auto;
       background-repeat: no-repeat;
@@ -332,10 +332,18 @@ function ApplicationForm() {
   );
 }
 
-export default function JoinUsPageContent({ bgImage }: { bgImage?: string }) {
+export default function JoinUsPageContent({
+  bgImage,
+  bgImageTablet,
+  bgImageMobile,
+}: {
+  bgImage?: string;
+  bgImageTablet?: string;
+  bgImageMobile?: string;
+}) {
   return (
     <>
-      <style dangerouslySetInnerHTML={{ __html: STYLES }} />
+      <style dangerouslySetInnerHTML={{ __html: getStyles(bgImageTablet ?? "/join-bg-tablet.png") }} />
       <CustomCursor />
       <Navbar />
 
@@ -353,13 +361,13 @@ export default function JoinUsPageContent({ bgImage }: { bgImage?: string }) {
           />
           <img
             className="joi-bg-tablet"
-            src="/join-bg-tablet.png"
+            src={bgImageTablet ?? "/join-bg-tablet.png"}
             alt=""
             style={{ width: "100%", height: "100%", objectFit: "contain", objectPosition: "center top" }}
           />
           <img
             className="joi-bg-mobile"
-            src="/join-bg-mobile.png"
+            src={bgImageMobile ?? "/join-bg-mobile.png"}
             alt=""
             style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center top" }}
           />

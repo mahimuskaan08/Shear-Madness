@@ -4,7 +4,7 @@ import { createSupabaseServerClient } from "@/lib/supabase/server"
 
 export const dynamic = "force-dynamic"
 
-const PUBLIC_PATHS = ["/", "/services", "/gallery", "/contact", "/booking", "/join-us"] as const
+const PUBLIC_PATHS = ["/", "/services", "/gallery", "/contact", "/booking", "/join-us", "/credits"] as const
 
 export async function POST(req: Request) {
   const supabase = await createSupabaseServerClient()

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import JoinUsPageContent from "@/components/JoinUsPageContent";
-import { getSiteImages } from "@/lib/site-images";
+import { getSiteData } from "@/lib/site-data";
 
 export const dynamic = "force-dynamic";
 
@@ -18,7 +18,15 @@ export const metadata: Metadata = {
 };
 
 export default async function JoinUsPage() {
-  const imgs = await getSiteImages();
+  const data = await getSiteData();
+  const bg = (section: string) =>
+    data.backgrounds.find(b => b.section === section)?.image_url ?? undefined;
 
-  return <JoinUsPageContent bgImage={imgs.join_background_image ?? undefined} />;
+  return (
+    <JoinUsPageContent
+      bgImage={bg("join_desktop")}
+      bgImageTablet={bg("join_tablet")}
+      bgImageMobile={bg("join_mobile")}
+    />
+  );
 }

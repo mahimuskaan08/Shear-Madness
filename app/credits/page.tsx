@@ -14,7 +14,10 @@ export default async function CreditsPage() {
   const data = await getSiteData();
   const contact = data.contact;
   const footerHours = buildFooterHours(data.hours);
-  const creditsBg = "/credits-bg.jpg";
+  const bg = (section: string) =>
+    data.backgrounds.find(b => b.section === section)?.image_url ?? undefined;
+  const creditsBg = bg("credits_desktop") ?? "/credits-bg.jpg";
+  const creditsBgMobile = bg("credits_mobile") ?? "/credits-bg-mobile.png";
 
   return (
     <>
@@ -45,7 +48,7 @@ export default async function CreditsPage() {
           }
           @media (max-width: 640px) {
             .credits-bg-fixed {
-              background-image: url('/credits-bg-mobile.png') !important;
+              background-image: url('${creditsBgMobile}') !important;
               background-size: cover !important;
               background-position: center center !important;
             }
