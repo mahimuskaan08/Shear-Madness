@@ -7,6 +7,7 @@ import { SortableContext, verticalListSortingStrategy, arrayMove } from "@dnd-ki
 import { toast } from "sonner"
 import { Plus, Pencil, ChevronDown, ChevronUp, HelpCircle, Eye, EyeOff } from "lucide-react"
 import { createSupabaseClient } from "@/lib/supabase/client"
+import { revalidatePublic } from "@/lib/admin/revalidate-public"
 import { PageHeader } from "@/components/admin/PageHeader"
 import { EmptyState } from "@/components/admin/EmptyState"
 import { SortableItem } from "@/components/admin/SortableItem"
@@ -83,8 +84,9 @@ export default function FAQPage() {
         if (error) throw error
       }
     },
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ["faq"] })
+      await revalidatePublic()
       toast.success(editingItem ? "Question updated" : "Question added")
       closeDialog()
     },
@@ -97,8 +99,9 @@ export default function FAQPage() {
       const { error } = await supabase.from("faq").delete().eq("id", id)
       if (error) throw error
     },
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ["faq"] })
+      await revalidatePublic()
       toast.success("Question deleted")
     },
     onError: () => toast.error("Failed to delete question"),
@@ -110,7 +113,10 @@ export default function FAQPage() {
       const { error } = await supabase.from("faq").update({ is_visible }).eq("id", id)
       if (error) throw error
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["faq"] }),
+    onSuccess: async () => {
+      queryClient.invalidateQueries({ queryKey: ["faq"] })
+      await revalidatePublic()
+    },
     onError: () => toast.error("Failed to update visibility"),
   })
 
@@ -127,7 +133,10 @@ export default function FAQPage() {
       const { error } = await supabase.from("faq").upsert(updates)
       if (error) throw error
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["faq"] }),
+    onSuccess: async () => {
+      queryClient.invalidateQueries({ queryKey: ["faq"] })
+      await revalidatePublic()
+    },
     onError: () => toast.error("Failed to save order"),
   })
 

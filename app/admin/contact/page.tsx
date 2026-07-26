@@ -5,6 +5,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { toast } from "sonner"
 import { Save, Phone, Mail, MapPin, Globe, Link as LinkIcon, Building2 } from "lucide-react"
 import { createSupabaseClient } from "@/lib/supabase/client"
+import { revalidatePublic } from "@/lib/admin/revalidate-public"
 import { PageHeader } from "@/components/admin/PageHeader"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -167,8 +168,9 @@ export default function ContactPage() {
         setForm((f) => ({ ...f, id: data.id }))
       }
     },
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ["contact"] })
+      await revalidatePublic()
       toast.success("Contact info saved")
     },
     onError: () => toast.error("Failed to save contact info"),

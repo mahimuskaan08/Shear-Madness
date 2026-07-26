@@ -20,6 +20,7 @@ import { Plus, Users, Pencil, GripVertical } from "lucide-react"
 import { useSortable } from "@dnd-kit/sortable"
 import { CSS } from "@dnd-kit/utilities"
 import { createSupabaseClient } from "@/lib/supabase/client"
+import { revalidatePublic } from "@/lib/admin/revalidate-public"
 import { PageHeader } from "@/components/admin/PageHeader"
 import { EmptyState } from "@/components/admin/EmptyState"
 import { ImageUploader } from "@/components/admin/ImageUploader"
@@ -347,8 +348,9 @@ export default function TeamPage() {
       })
       if (error) throw error
     },
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ["team"] })
+      await revalidatePublic()
       toast.success("Team member added")
     },
     onError: (err: Error) => toast.error(`Failed to add: ${err.message}`),
@@ -375,8 +377,9 @@ export default function TeamPage() {
         .eq("id", id)
       if (error) throw error
     },
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ["team"] })
+      await revalidatePublic()
       toast.success("Team member updated")
     },
     onError: (err: Error) => toast.error(`Failed to update: ${err.message}`),
@@ -396,8 +399,9 @@ export default function TeamPage() {
         .eq("id", member.id)
       if (error) throw error
     },
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ["team"] })
+      await revalidatePublic()
       toast.success("Team member removed")
     },
     onError: (err: Error) => toast.error(`Failed to delete: ${err.message}`),
@@ -414,6 +418,9 @@ export default function TeamPage() {
       const results = await Promise.all(updates)
       const failed = results.find((r) => r.error)
       if (failed?.error) throw failed.error
+    },
+    onSuccess: async () => {
+      await revalidatePublic()
     },
     onError: () => {
       queryClient.invalidateQueries({ queryKey: ["team"] })

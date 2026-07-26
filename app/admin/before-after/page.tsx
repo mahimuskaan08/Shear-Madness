@@ -28,6 +28,7 @@ import {
 import { useSortable } from "@dnd-kit/sortable"
 import { CSS } from "@dnd-kit/utilities"
 import { createSupabaseClient } from "@/lib/supabase/client"
+import { revalidatePublic } from "@/lib/admin/revalidate-public"
 import { BeforeAfterSchema, type BeforeAfterFormData } from "@/lib/validations/schemas"
 import { PageHeader } from "@/components/admin/PageHeader"
 import { EmptyState } from "@/components/admin/EmptyState"
@@ -139,6 +140,7 @@ function BeforeAfterDialog({
 
       setOpen(false)
       onSuccess()
+      await revalidatePublic()
     } catch (e: unknown) {
       toast.error((e as Error).message ?? "Failed to save")
     } finally {
@@ -318,6 +320,9 @@ export default function BeforeAfterPage() {
       const failed = results.find((r) => r.error)
       if (failed?.error) throw failed.error
     },
+    onSuccess: async () => {
+      await revalidatePublic()
+    },
     onError: () => {
       queryClient.invalidateQueries({ queryKey: ["before-after"] })
       toast.error("Failed to save order")
@@ -345,8 +350,9 @@ export default function BeforeAfterPage() {
         .eq("id", item.id)
       if (error) throw error
     },
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ["before-after"] })
+      await revalidatePublic()
       toast.success("Transformation deleted")
     },
     onError: (e: Error) => toast.error(e.message),

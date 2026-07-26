@@ -5,6 +5,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { toast } from "sonner"
 import { Clock, Save } from "lucide-react"
 import { createSupabaseClient } from "@/lib/supabase/client"
+import { revalidatePublic } from "@/lib/admin/revalidate-public"
 import { PageHeader } from "@/components/admin/PageHeader"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -105,8 +106,9 @@ export default function HoursPage() {
       )
       if (error) throw error
     },
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ["hours"] })
+      await revalidatePublic()
       toast.success("Opening hours saved")
     },
     onError: () => toast.error("Failed to save opening hours"),

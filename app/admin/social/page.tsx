@@ -5,6 +5,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { toast } from "sonner"
 import { Save, Camera, Globe, Music2, ExternalLink } from "lucide-react"
 import { createSupabaseClient } from "@/lib/supabase/client"
+import { revalidatePublic } from "@/lib/admin/revalidate-public"
 import { PageHeader } from "@/components/admin/PageHeader"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -125,8 +126,9 @@ export default function SocialPage() {
         .upsert(upsertPayload, { onConflict: "platform" })
       if (error) throw error
     },
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ["social"] })
+      await revalidatePublic()
       toast.success("Social media links saved")
     },
     onError: () => toast.error("Failed to save social media links"),

@@ -5,6 +5,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { toast } from "sonner"
 import { Plus, Pencil, CalendarX2, Clock } from "lucide-react"
 import { createSupabaseClient } from "@/lib/supabase/client"
+import { revalidatePublic } from "@/lib/admin/revalidate-public"
 import { PageHeader } from "@/components/admin/PageHeader"
 import { EmptyState } from "@/components/admin/EmptyState"
 import { ConfirmDelete } from "@/components/admin/ConfirmDelete"
@@ -102,8 +103,9 @@ export default function HolidaysPage() {
         if (error) throw error
       }
     },
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ["holidays"] })
+      await revalidatePublic()
       toast.success(editingItem ? "Holiday updated" : "Holiday added")
       closeDialog()
     },
@@ -116,8 +118,9 @@ export default function HolidaysPage() {
       const { error } = await supabase.from("holiday_hours").delete().eq("id", id)
       if (error) throw error
     },
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ["holidays"] })
+      await revalidatePublic()
       toast.success("Holiday deleted")
     },
     onError: () => toast.error("Failed to delete holiday"),

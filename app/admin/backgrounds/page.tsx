@@ -5,6 +5,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { toast } from "sonner"
 import { Loader2, Save, ImageIcon, Monitor, Tablet, Smartphone, RotateCcw } from "lucide-react"
 import { createSupabaseClient } from "@/lib/supabase/client"
+import { revalidatePublic } from "@/lib/admin/revalidate-public"
 import { type Tables, type Inserts } from "@/lib/types/database"
 import { ImageUploader } from "@/components/admin/ImageUploader"
 import { PageHeader } from "@/components/admin/PageHeader"
@@ -297,9 +298,10 @@ export default function BackgroundsPage() {
         .upsert(payloads, { onConflict: "section" })
       if (error) throw error
     },
-    onSuccess: (_, { section }) => {
+    onSuccess: async (_, { section }) => {
       toast.success(`${formatSectionName(section)} backgrounds saved`)
       queryClient.invalidateQueries({ queryKey: ["backgrounds"] })
+      await revalidatePublic()
       setDrafts((prev) => {
         const next = { ...prev }
         delete next[section]

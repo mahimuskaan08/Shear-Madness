@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { toast } from "sonner"
 import { createSupabaseClient } from "@/lib/supabase/client"
+import { revalidatePublic } from "@/lib/admin/revalidate-public"
 import { TestimonialSchema, type TestimonialFormData } from "@/lib/validations/schemas"
 import { PageHeader } from "@/components/admin/PageHeader"
 import { EmptyState } from "@/components/admin/EmptyState"
@@ -140,6 +141,7 @@ function TestimonialDialog({
 
       setOpen(false)
       onSuccess()
+      await revalidatePublic()
     } catch (e: unknown) {
       toast.error((e as Error).message ?? "Failed to save")
     } finally {
@@ -245,8 +247,9 @@ export default function TestimonialsPage() {
       const { error } = await supabase.from("testimonials").delete().eq("id", t.id)
       if (error) throw error
     },
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ["testimonials"] })
+      await revalidatePublic()
       toast.success("Testimonial deleted")
     },
     onError: (e: Error) => toast.error(e.message),
@@ -260,7 +263,10 @@ export default function TestimonialsPage() {
         .eq("id", t.id)
       if (error) throw error
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["testimonials"] }),
+    onSuccess: async () => {
+      queryClient.invalidateQueries({ queryKey: ["testimonials"] })
+      await revalidatePublic()
+    },
     onError: (e: Error) => toast.error(e.message),
   })
 
