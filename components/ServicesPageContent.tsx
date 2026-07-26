@@ -376,6 +376,17 @@ const STYLES = `
     align-self: center;
   }
 
+  /* ── TABLET BACKGROUND OVERRIDE ───────────────────────
+     Image comes from the --svc-bg-tablet custom property (set inline per-
+     render from CMS data), same approach as the mobile override below. ── */
+  @media (min-width: 641px) and (max-width: 1024px) {
+    .svc-bg-layer {
+      background-image: var(--svc-bg-tablet, url('/services-bg.png')) !important;
+      background-size: cover !important;
+      background-position: center top !important;
+    }
+  }
+
   /* ── MOBILE BACKGROUND OVERRIDE ──────────────────────
      Image itself comes from the --svc-bg-mobile custom property (set inline
      per-render from CMS data) so the !important override still wins the
@@ -732,7 +743,7 @@ function HeroSection() {
 // ─────────────────────────────────────────────────────────────────────────────
 // PAGE ROOT
 // ─────────────────────────────────────────────────────────────────────────────
-export default function ServicesPageContent({ bgImage, bgImageMobile, services = [] }: { bgImage?: string; bgImageMobile?: string; services?: SiteService[] }) {
+export default function ServicesPageContent({ bgImage, bgImageTablet, bgImageMobile, services = [] }: { bgImage?: string; bgImageTablet?: string; bgImageMobile?: string; services?: SiteService[] }) {
   const displayCategories = buildCategoriesFromServices(services);
   const cats = displayCategories.length > 0 ? displayCategories : CATEGORIES;
 
@@ -760,6 +771,7 @@ export default function ServicesPageContent({ bgImage, bgImageMobile, services =
             mixBlendMode: "multiply",
             opacity: 0.85,
             zIndex: 1,
+            "--svc-bg-tablet": `url('${bgImageTablet ?? "/services-bg.png"}')`,
             "--svc-bg-mobile": `url('${bgImageMobile ?? "/services-mobile.png"}')`,
           } as React.CSSProperties} />
 
