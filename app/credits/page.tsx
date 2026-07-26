@@ -37,15 +37,7 @@ export default async function CreditsPage() {
           backgroundColor: "#FAF6EF",
           transform: "translateZ(0)",
         }} />
-        <div aria-hidden style={{
-          position: "fixed", inset: 0, zIndex: 0, pointerEvents: "none",
-          background: "rgba(236,234,231,0.45)",
-        }} />
         <style>{`
-          .credits-box { background: rgba(245,242,237,0.02); }
-          @media (min-width: 600px) and (max-width: 1199px) {
-            .credits-box { background: rgba(245,242,237,0.005); }
-          }
           @media (max-width: 640px) {
             .credits-bg-fixed {
               background-image: url('${creditsBgMobile}') !important;
@@ -56,11 +48,8 @@ export default async function CreditsPage() {
         `}</style>
         <div className="credits-box" style={{
           maxWidth: 760, margin: "0 auto", position: "relative", zIndex: 1,
-          backdropFilter: "blur(6px)",
-          WebkitBackdropFilter: "blur(6px)",
           borderRadius: 16,
           padding: "clamp(32px, 5vw, 60px) clamp(24px, 5vw, 56px)",
-          boxShadow: "0 4px 32px rgba(0,0,0,0.06)",
         }}>
 
           {/* ── HEADER ──────────────────────────────────────────────────── */}
