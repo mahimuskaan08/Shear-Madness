@@ -39,6 +39,8 @@ export default async function Home() {
   const artistBg     = bg("artist_desktop",  "artist");
   const contactBg    = bg("contact_desktop", "contact");
   const contactBgMobile = bg("contact_mobile");
+  const servicesBg       = bg("services_desktop", "services");
+  const servicesBgMobile = bg("services_mobile");
   const oscar  = data.team.find(m => m.name.toLowerCase().includes("oscar"));
   const george = data.team.find(m => m.name.toLowerCase().includes("george"));
 
@@ -81,7 +83,7 @@ export default async function Home() {
       <AboutSection
         bgImage={aboutBg}
       />
-      <ServicesSection />
+      <ServicesSection bgImage={servicesBg} bgImageMobile={servicesBgMobile} />
       <ArtistSection
         artistBg={artistBg}
         oscarImage={oscar?.image_url ?? undefined}

@@ -376,10 +376,13 @@ const STYLES = `
     align-self: center;
   }
 
-  /* ── MOBILE BACKGROUND OVERRIDE ────────────────────── */
+  /* ── MOBILE BACKGROUND OVERRIDE ──────────────────────
+     Image itself comes from the --svc-bg-mobile custom property (set inline
+     per-render from CMS data) so the !important override still wins the
+     cascade over the desktop inline style, without hardcoding the URL. ── */
   @media (max-width: 640px) {
     .svc-bg-layer {
-      background-image: url('/services-mobile.png') !important;
+      background-image: var(--svc-bg-mobile) !important;
       background-size: cover !important;
       background-position: center center !important;
     }
@@ -729,7 +732,7 @@ function HeroSection() {
 // ─────────────────────────────────────────────────────────────────────────────
 // PAGE ROOT
 // ─────────────────────────────────────────────────────────────────────────────
-export default function ServicesPageContent({ bgImage, services = [] }: { bgImage?: string; services?: SiteService[] }) {
+export default function ServicesPageContent({ bgImage, bgImageMobile, services = [] }: { bgImage?: string; bgImageMobile?: string; services?: SiteService[] }) {
   const displayCategories = buildCategoriesFromServices(services);
   const cats = displayCategories.length > 0 ? displayCategories : CATEGORIES;
 
@@ -757,7 +760,8 @@ export default function ServicesPageContent({ bgImage, services = [] }: { bgImag
             mixBlendMode: "multiply",
             opacity: 0.85,
             zIndex: 1,
-          }} />
+            "--svc-bg-mobile": `url('${bgImageMobile ?? "/services-mobile.png"}')`,
+          } as React.CSSProperties} />
 
           {/* Layer 3: all content — hero flows straight into sections, no seam */}
           <div style={{ position: "relative", zIndex: 2 }}>

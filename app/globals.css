@@ -355,9 +355,12 @@ img {
     background-attachment: scroll !important;
   }
 
-  /* ── Services section (home page) koi/watercolor layer ── */
+  /* ── Services section (home page) koi/watercolor layer ──
+     Image comes from the --services-bg-mobile custom property (set inline
+     per-render from CMS data) so this override still wins the cascade
+     without hardcoding the URL. ── */
   .services-fixed-bg {
-    background-image: url('/services-koi-bg-mobile.png') !important;
+    background-image: var(--services-bg-mobile) !important;
     background-size: cover !important;
     background-position: center top !important;
     background-repeat: no-repeat !important;

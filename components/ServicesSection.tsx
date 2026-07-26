@@ -35,7 +35,7 @@ const SERVICES = [
   },
 ];
 
-export default function ServicesSection() {
+export default function ServicesSection({ bgImage, bgImageMobile }: { bgImage?: string; bgImageMobile?: string }) {
   const ref = useRef<HTMLElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
 
@@ -52,20 +52,24 @@ export default function ServicesSection() {
         overflow: "clip",
       }}
     >
-      {/* ── FIXED BACKGROUND IMAGE ───────────────────────────────────────────── */}
+      {/* ── FIXED BACKGROUND IMAGE ─────────────────────────────────────────────
+          --services-bg-mobile carries the CMS mobile image (set inline so it
+          varies per-render); the mobile media query in globals.css swaps to
+          it via the custom property instead of a hardcoded url(). ── */}
       <div
         aria-hidden="true"
         className="services-fixed-bg"
         style={{
           position: "absolute", inset: 0, zIndex: 0, pointerEvents: "none",
-          backgroundImage: "url('/services-koi-bg.png')",
+          backgroundImage: `url('${bgImage ?? "/services-koi-bg.png"}')`,
           backgroundAttachment: "scroll",
           backgroundSize: "contain",
           backgroundRepeat: "no-repeat",
           backgroundPosition: "center top",
           opacity: 0.72,
           mixBlendMode: "multiply",
-        }}
+          "--services-bg-mobile": `url('${bgImageMobile ?? "/services-koi-bg-mobile.png"}')`,
+        } as React.CSSProperties}
       />
 
       {/* ── SUBTLE GRAIN ────────────────────────────────────────────────────── */}

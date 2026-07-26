@@ -26,10 +26,11 @@ export default async function ServicesPage() {
     data.backgrounds.find(b => b.section === "services_desktop")?.image_url ??
     data.backgrounds.find(b => b.section === "services")?.image_url ??
     undefined;
+  const servicesBgMobile = data.backgrounds.find(b => b.section === "services_mobile")?.image_url ?? undefined;
 
   return (
     <>
-      <ServicesPageContent services={data.services} bgImage={servicesBg} />
+      <ServicesPageContent services={data.services} bgImage={servicesBg} bgImageMobile={servicesBgMobile} />
       <Footer
         phone={contact?.phone || undefined}
         email={contact?.email || undefined}
