@@ -304,10 +304,10 @@ export default function Footer({
             {/* Logo below hours */}
             <div style={{ marginTop: 24, display: "flex", justifyContent: "center" }}>
               <img
-                src="/hero-logo.png"
-                alt="Shear Madness"
+                src="/logo-web.png"
+                alt="Shear Madness — A Salon For Men & Women"
                 style={{
-                  width: "clamp(100px, 14vw, 160px)",
+                  width: "clamp(140px, 18vw, 220px)",
                   height: "auto",
                   opacity: 0.55,
                   filter: "brightness(0) invert(1)",

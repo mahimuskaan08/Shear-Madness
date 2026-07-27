@@ -59,7 +59,7 @@ function NavPillButton({ href, label }: { href: string; label: string }) {
         className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"
         style={{ background: "linear-gradient(105deg, transparent 38%, rgba(255,255,255,0.18) 50%, transparent 62%)" }}
       />
-      <span className="relative z-10">{label}</span>
+      <span className="relative z-10 whitespace-nowrap">{label}</span>
     </a>
   );
 }
@@ -196,9 +196,9 @@ export default function Navbar() {
             transition={{ duration: 0.4, ease: EASE }}
           >
             <img
-              src="/hero-logo.png"
-              alt="Shear Madness"
-              className="h-[28px] lg:h-[34px] xl:h-[38px]"
+              src="/logo-web.png"
+              alt="Shear Madness — A Salon For Men & Women"
+              className="h-[46px] lg:h-[58px] xl:h-[66px]"
               style={{ width: "auto", objectFit: "contain" }}
             />
           </motion.a>
@@ -224,7 +224,7 @@ export default function Navbar() {
               xl:   absolutely pinned to right edge.                      */}
           <div className="hidden md:flex items-center gap-2 lg:gap-3 flex-shrink-0 xl:absolute xl:right-10">
             <NavPillButton href="/contact" label="Hrs & Loc" />
-            <NavPillButton href="/booking" label="Set an Appt." />
+            <NavPillButton href="/booking" label="Set an Appointment" />
           </div>
 
           {/* ── MOBILE HAMBURGER — hidden from md up ─────────────────── */}
@@ -321,7 +321,7 @@ export default function Navbar() {
               className="rounded-full text-[10px] tracking-[0.2em] uppercase text-black px-5 py-3 transition-all duration-300"
               style={{ fontFamily: "'Neue World', Georgia, serif", background: "linear-gradient(135deg, #C9A96E, #B8935A)", boxShadow: "0 4px 18px rgba(196,169,106,0.45)" }}
             >
-              Set an Appt.
+              Set an Appointment
             </a>
           </motion.div>
         </div>

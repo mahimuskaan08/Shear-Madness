@@ -478,7 +478,7 @@ export default function ArtistSection({
                 <Image
                   className="portrait-main"
                   src={georgeImage ?? "/george-fraggos.jpg"}
-                  alt="George Fraggos — Stylist, Shear Madness Hoboken"
+                  alt="George Fraggos — Master Stylist, Shear Madness Hoboken"
                   width={600} height={750}
                   style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top center", display: "block" }}
                 />
@@ -493,7 +493,7 @@ export default function ArtistSection({
                     George <em>Fraggos</em>
                   </h3>
                   <p className="artist-overlay-role" style={{ fontFamily: "'Inter', sans-serif", fontSize: "0.52rem", fontWeight: 700, letterSpacing: "0.20em", textTransform: "uppercase", color: "rgba(198,167,107,0.80)" }}>
-                    Stylist
+                    Master Stylist
                   </p>
                   <span className="tap-hint" style={{ fontFamily: "'Inter', sans-serif", fontSize: "0.46rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(255,255,255,0.40)", marginTop: 5 }}>
                     {hoveredArtist === "george" ? "tap to close ↑" : "tap for bio ↓"}
