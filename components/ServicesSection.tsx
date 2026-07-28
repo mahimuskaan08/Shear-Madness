@@ -45,9 +45,9 @@ export default function ServicesSection({ bgImage, bgImageMobile }: { bgImage?: 
       id="services"
       style={{
         width: "100%",
-        minHeight: "110vh",
+        minHeight: "78vh",
         background: "#ECEAE7",
-        padding: "clamp(36px, 5vh, 60px) clamp(24px, 6vw, 80px) clamp(100px, 14vh, 160px)",
+        padding: "clamp(36px, 5vh, 60px) clamp(24px, 6vw, 80px) clamp(48px, 6vh, 80px)",
         position: "relative",
         overflow: "clip",
       }}
@@ -63,7 +63,7 @@ export default function ServicesSection({ bgImage, bgImageMobile }: { bgImage?: 
           position: "absolute", inset: 0, zIndex: 0, pointerEvents: "none",
           backgroundImage: `url('${bgImage ?? "/services-koi-bg.png"}')`,
           backgroundAttachment: "scroll",
-          backgroundSize: "contain",
+          backgroundSize: "cover",
           backgroundRepeat: "no-repeat",
           backgroundPosition: "center top",
           opacity: 0.72,

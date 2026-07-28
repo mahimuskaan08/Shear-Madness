@@ -332,7 +332,7 @@ export default function HeroSection({ bgImage, bgImageMobile }: { bgImage?: stri
                 el.style.transform  = "translateY(0)";
               }}
             >
-              Set an Appointment
+              Book Appointment
             </a>
 
             <a

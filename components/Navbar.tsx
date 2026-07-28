@@ -198,7 +198,7 @@ export default function Navbar() {
             <img
               src="/logo-web.png"
               alt="Shear Madness — A Salon For Men & Women"
-              className="h-[46px] lg:h-[58px] xl:h-[66px]"
+              className="h-[42px] lg:h-[52px] xl:h-[58px]"
               style={{ width: "auto", objectFit: "contain" }}
             />
           </motion.a>
@@ -223,8 +223,8 @@ export default function Navbar() {
               md/lg: in flex flow (flex-shrink-0) at the end of the row.
               xl:   absolutely pinned to right edge.                      */}
           <div className="hidden md:flex items-center gap-2 lg:gap-3 flex-shrink-0 xl:absolute xl:right-10">
-            <NavPillButton href="/contact" label="Hrs & Loc" />
-            <NavPillButton href="/booking" label="Set an Appointment" />
+            <NavPillButton href="/contact" label="Hours" />
+            <NavPillButton href="/booking" label="Book Appointment" />
           </div>
 
           {/* ── MOBILE HAMBURGER — hidden from md up ─────────────────── */}
@@ -313,7 +313,7 @@ export default function Navbar() {
               className="rounded-full text-[10px] tracking-[0.2em] uppercase text-black px-7 py-3 transition-all duration-300"
               style={{ fontFamily: "'Neue World', Georgia, serif", background: "linear-gradient(135deg, #C9A96E, #B8935A)", boxShadow: "0 4px 18px rgba(196,169,106,0.45)" }}
             >
-              Hrs & Loc
+              Hours
             </a>
             <a
               href="/booking"
@@ -321,7 +321,7 @@ export default function Navbar() {
               className="rounded-full text-[10px] tracking-[0.2em] uppercase text-black px-5 py-3 transition-all duration-300"
               style={{ fontFamily: "'Neue World', Georgia, serif", background: "linear-gradient(135deg, #C9A96E, #B8935A)", boxShadow: "0 4px 18px rgba(196,169,106,0.45)" }}
             >
-              Set an Appointment
+              Book Appointment
             </a>
           </motion.div>
         </div>
