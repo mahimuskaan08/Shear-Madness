@@ -226,7 +226,7 @@ export default function Navbar() {
               2xl:      absolutely pinned to right edge.                    */}
           <div className="hidden md:flex items-center gap-2 lg:gap-3 flex-shrink-0 2xl:absolute 2xl:right-10">
             <NavPillButton href="/contact" label="Hours" />
-            <NavPillButton href="/booking" label="Appointment" />
+            <NavPillButton href="/booking" label="Appointments" />
           </div>
 
           {/* ── MOBILE HAMBURGER — hidden from md up ─────────────────── */}
@@ -323,7 +323,7 @@ export default function Navbar() {
               className="rounded-full text-[10px] tracking-[0.2em] uppercase text-black px-5 py-3 transition-all duration-300"
               style={{ fontFamily: "'Neue World', Georgia, serif", background: "linear-gradient(135deg, #C9A96E, #B8935A)", boxShadow: "0 4px 18px rgba(196,169,106,0.45)" }}
             >
-              Appointment
+              Appointments
             </a>
           </motion.div>
         </div>
