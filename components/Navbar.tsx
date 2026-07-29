@@ -180,18 +180,20 @@ export default function Navbar() {
       >
         {/*
           Layout strategy:
-          • md/lg (tablet + iPad): normal flex row → [logo | flex-1 centered pill | buttons]
+          • md → xl (tablet, iPad, and most laptop/Mac windows up to 1535px):
+            normal flex row → [logo | flex-1 centered pill | buttons].
             No absolute positioning so elements can NEVER overlap each other.
-          • xl (desktop): all three become absolute so the pill can be viewport-centred.
+          • 2xl (large desktop, 1536px+): all three become absolute so the
+            pill can be viewport-centred.
         */}
         <div className="w-full flex items-center h-[64px] lg:h-[68px] xl:h-[72px] px-4 md:px-5 lg:px-8 xl:px-10 relative">
 
           {/* ── LOGO ─────────────────────────────────────────────────────
-              md/lg: in flex flow (flex-shrink-0) at the start of the row.
-              xl:   absolutely pinned to left edge.                        */}
+              md → xl: in flex flow (flex-shrink-0) at the start of the row.
+              2xl:      absolutely pinned to left edge.                    */}
           <motion.a
             href="/"
-            className="flex-shrink-0 z-10 flex items-center gap-3 xl:absolute xl:left-10"
+            className="flex-shrink-0 z-10 flex items-center gap-3 2xl:absolute 2xl:left-10"
             animate={{ opacity: showBranding ? 1 : 0, pointerEvents: showBranding ? "auto" : "none" }}
             transition={{ duration: 0.4, ease: EASE }}
           >
@@ -203,14 +205,14 @@ export default function Navbar() {
             />
           </motion.a>
 
-          {/* ── TABLET / IPAD NAV (md → lg) ──────────────────────────────
+          {/* ── TABLET / IPAD / LAPTOP NAV (md → xl) ─────────────────────
               A flex-1 wrapper centres the pill between logo and buttons.
-              `xl:contents` dissolves the wrapper at desktop so the pill
-              participates directly in xl absolute-positioning.           */}
-          <div className="hidden md:flex xl:contents flex-1 justify-center items-center">
+              `2xl:contents` dissolves the wrapper at large desktop so the
+              pill participates directly in 2xl absolute-positioning.      */}
+          <div className="hidden md:flex 2xl:contents flex-1 justify-center items-center">
             <nav
               className="flex items-center
-                         xl:absolute xl:left-1/2 xl:-translate-x-1/2
+                         2xl:absolute 2xl:left-1/2 2xl:-translate-x-1/2
                          gap-2 lg:gap-3 xl:gap-6
                          px-[16px] py-[9px] lg:px-[22px] lg:py-[10px] xl:px-[16px] xl:py-[7px]"
               style={glassPillStyle}
@@ -220,11 +222,11 @@ export default function Navbar() {
           </div>
 
           {/* ── RIGHT BUTTONS ────────────────────────────────────────────
-              md/lg: in flex flow (flex-shrink-0) at the end of the row.
-              xl:   absolutely pinned to right edge.                      */}
-          <div className="hidden md:flex items-center gap-2 lg:gap-3 flex-shrink-0 xl:absolute xl:right-10">
+              md → xl: in flex flow (flex-shrink-0) at the end of the row.
+              2xl:      absolutely pinned to right edge.                    */}
+          <div className="hidden md:flex items-center gap-2 lg:gap-3 flex-shrink-0 2xl:absolute 2xl:right-10">
             <NavPillButton href="/contact" label="Hours" />
-            <NavPillButton href="/booking" label="Book Appointment" />
+            <NavPillButton href="/booking" label="Appointment" />
           </div>
 
           {/* ── MOBILE HAMBURGER — hidden from md up ─────────────────── */}
@@ -321,7 +323,7 @@ export default function Navbar() {
               className="rounded-full text-[10px] tracking-[0.2em] uppercase text-black px-5 py-3 transition-all duration-300"
               style={{ fontFamily: "'Neue World', Georgia, serif", background: "linear-gradient(135deg, #C9A96E, #B8935A)", boxShadow: "0 4px 18px rgba(196,169,106,0.45)" }}
             >
-              Book Appointment
+              Appointment
             </a>
           </motion.div>
         </div>
