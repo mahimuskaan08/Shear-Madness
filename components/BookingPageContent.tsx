@@ -763,8 +763,10 @@ function FallingPetals() {
 }
 
 /* ─── Main component ────────────────────────────────────────────────────── */
-export default function BookingPageContent({ bgImage, storeHours }: { bgImage?: string; storeHours?: StoreHoursEntry[] }) {
+export default function BookingPageContent({ bgImage, bgImageTablet, bgImageMobile, storeHours }: { bgImage?: string; bgImageTablet?: string; bgImageMobile?: string; storeHours?: StoreHoursEntry[] }) {
   const resolvedBg = bgImage ?? "/booking-bg.jpg";
+  const resolvedBgTablet = bgImageTablet ?? resolvedBg;
+  const resolvedBgMobile = bgImageMobile ?? "/booking-bg-mobile.png";
 
   /* form state */
   const [name,     setName]     = useState("");
@@ -834,7 +836,9 @@ export default function BookingPageContent({ bgImage, storeHours }: { bgImage?: 
         backgroundPosition: "center top",
         backgroundColor: "#FAF6EF",
         transform: "translateZ(0)",
-      }} />
+        "--booking-bg-tablet": `url('${resolvedBgTablet}')`,
+        "--booking-bg-mobile": `url('${resolvedBgMobile}')`,
+      } as React.CSSProperties} />
 
       {/* ── Falling petals layer (z-index 1, pointer-events: none) ─── */}
       <FallingPetals />
@@ -1149,9 +1153,14 @@ export default function BookingPageContent({ bgImage, storeHours }: { bgImage?: 
       <style>{`
         @media (max-width: 640px) {
           .booking-bg-fixed {
-            background-image: url('/booking-bg-mobile.png') !important;
+            background-image: var(--booking-bg-mobile) !important;
             background-size: cover !important;
             background-position: center center !important;
+          }
+        }
+        @media (min-width: 641px) and (max-width: 1024px) {
+          .booking-bg-fixed {
+            background-image: var(--booking-bg-tablet) !important;
           }
         }
         @media (max-width: 540px) {

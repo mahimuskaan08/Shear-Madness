@@ -23,11 +23,22 @@ export default async function BookingPage() {
   const data = await getSiteData();
   const contact = data.contact;
   const footerHours = buildFooterHours(data.hours);
+  const bookingBg =
+    data.backgrounds.find(b => b.section === "booking_desktop")?.image_url ??
+    data.backgrounds.find(b => b.section === "booking")?.image_url ??
+    undefined;
+  const bookingBgTablet = data.backgrounds.find(b => b.section === "booking_tablet")?.image_url ?? undefined;
+  const bookingBgMobile = data.backgrounds.find(b => b.section === "booking_mobile")?.image_url ?? undefined;
 
   return (
     <>
       <Navbar />
-      <BookingPageContent storeHours={data.hours} />
+      <BookingPageContent
+        storeHours={data.hours}
+        bgImage={bookingBg}
+        bgImageTablet={bookingBgTablet}
+        bgImageMobile={bookingBgMobile}
+      />
       <Footer
         phone={contact?.phone || undefined}
         email={contact?.email || undefined}
