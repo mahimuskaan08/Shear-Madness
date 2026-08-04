@@ -896,13 +896,10 @@ export default function BookingPageContent({ bgImage, bgImageTablet, bgImageMobi
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, ease: EASE, delay: 0.15 }}
           style={{
-            /* ── Semi-transparent card — lets the floral bg breathe through ── */
-            background: "rgba(253,250,244,0.03)",
-            backdropFilter: "blur(10px) saturate(1.3)",
-            WebkitBackdropFilter: "blur(10px) saturate(1.3)",
+            /* ── Fully transparent card — background image shows through unfiltered ── */
+            background: "transparent",
             border: "1px solid rgba(196,169,106,0.28)",
             borderRadius: 16,
-            boxShadow: "0 8px 48px rgba(58,56,50,0.10), 0 2px 8px rgba(58,56,50,0.06), inset 0 1px 0 rgba(255,255,255,0.55)",
             padding: "clamp(28px, 5vw, 52px)",
           }}
         >
