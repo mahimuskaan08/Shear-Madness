@@ -593,7 +593,7 @@ function TestimonialCard({ t }: { t: SiteTestimonial }) {
           {t.customer_name}
         </p>
         <p style={{ fontSize: "0.75rem", color: "rgba(58,56,50,0.48)", marginTop: 2, letterSpacing: "0.04em" }}>
-          Google Review
+          {t.source === "fresha" ? "Fresha Review" : "Google Review"}
         </p>
       </div>
     </div>

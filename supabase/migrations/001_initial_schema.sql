@@ -200,7 +200,7 @@ CREATE TABLE IF NOT EXISTS social_media (
 
 -- Pre-seed all platforms
 INSERT INTO social_media (platform) VALUES
-  ('instagram'), ('facebook'), ('tiktok')
+  ('instagram'), ('facebook'), ('pinterest')
 ON CONFLICT (platform) DO NOTHING;
 
 -- ─── UPDATED_AT TRIGGERS ─────────────────────────────────────

@@ -9,6 +9,7 @@ import { toast } from "sonner"
 import { Toaster } from "sonner"
 import { createSupabaseClient } from "@/lib/supabase/client"
 import { LoginSchema, type LoginFormData } from "@/lib/validations/schemas"
+import { toLoginEmail } from "@/lib/auth/login-email"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -32,12 +33,14 @@ export default function LoginPage() {
       const supabase = createSupabaseClient()
 
       const { error } = await supabase.auth.signInWithPassword({
-        email: data.email,
+        // Staff accounts are created from a username; toLoginEmail() turns it
+        // back into the address Supabase stores.
+        email: toLoginEmail(data.email),
         password: data.password,
       })
 
       if (error) {
-        toast.error("Incorrect email or password. Please try again.")
+        toast.error("Incorrect username or password. Please try again.")
         return
       }
 
@@ -77,12 +80,14 @@ export default function LoginPage() {
         <div className="bg-zinc-900 rounded-2xl border border-zinc-800 p-6 shadow-2xl">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email">Email address</Label>
+              <Label htmlFor="email">Username or email</Label>
               <Input
                 id="email"
-                type="email"
-                placeholder="admin@shearmadnesshoboken.com"
-                autoComplete="email"
+                type="text"
+                placeholder="admin"
+                autoComplete="username"
+                autoCapitalize="none"
+                spellCheck={false}
                 {...register("email")}
               />
               {errors.email && (

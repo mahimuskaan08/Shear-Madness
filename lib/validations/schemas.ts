@@ -19,6 +19,7 @@ export const TestimonialSchema = z.object({
   customer_name: z.string().min(1, "Name is required").max(100),
   review: z.string().min(1, "Review is required").max(2000),
   rating: z.number().int().min(1).max(5),
+  source: z.enum(["google", "fresha"]),
   is_visible: z.boolean(),
 })
 
@@ -69,8 +70,21 @@ export const PortfolioImageSchema = z.object({
 })
 
 export const LoginSchema = z.object({
-  email: z.string().email("Invalid email address"),
+  // Accepts a bare username too — normalised to an email by toLoginEmail().
+  email: z.string().min(1, "Username or email is required"),
   password: z.string().min(6, "Password must be at least 6 characters"),
+})
+
+export const AdminUserSchema = z.object({
+  username: z
+    .string()
+    .min(3, "Username must be at least 3 characters")
+    .max(64)
+    .regex(
+      /^[a-zA-Z0-9._+-]+(@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})?$/,
+      "Use letters, numbers, dots, dashes or a full email address"
+    ),
+  password: z.string().min(8, "Password must be at least 8 characters").max(72),
 })
 
 export type ServiceFormData = z.infer<typeof ServiceSchema>
@@ -84,3 +98,4 @@ export type ContactFormData = z.infer<typeof ContactSchema>
 export type SocialMediaFormData = z.infer<typeof SocialMediaSchema>
 export type PortfolioImageFormData = z.infer<typeof PortfolioImageSchema>
 export type LoginFormData = z.infer<typeof LoginSchema>
+export type AdminUserFormData = z.infer<typeof AdminUserSchema>

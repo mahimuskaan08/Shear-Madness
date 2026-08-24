@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { toast } from "sonner"
-import { Save, Camera, Globe, Music2, ExternalLink } from "lucide-react"
+import { Save, Camera, Globe, Pin, ExternalLink } from "lucide-react"
 import { createSupabaseClient } from "@/lib/supabase/client"
 import { revalidatePublic } from "@/lib/admin/revalidate-public"
 import { PageHeader } from "@/components/admin/PageHeader"
@@ -17,20 +17,20 @@ import { cn } from "@/lib/utils"
 
 type SocialMedia = {
   id: string
-  platform: "instagram" | "facebook" | "tiktok"
+  platform: "instagram" | "facebook" | "pinterest"
   url: string
   is_enabled: boolean
 }
 
 type SocialDraft = {
   id: string
-  platform: "instagram" | "facebook" | "tiktok"
+  platform: "instagram" | "facebook" | "pinterest"
   url: string
   is_enabled: boolean
 }
 
 const PLATFORMS: {
-  key: "instagram" | "facebook" | "tiktok"
+  key: "instagram" | "facebook" | "pinterest"
   label: string
   icon: React.ElementType
   placeholder: string
@@ -60,14 +60,14 @@ const PLATFORMS: {
     borderColor: "border-blue-500/20",
   },
   {
-    key: "tiktok",
-    label: "TikTok",
-    icon: Music2,
-    placeholder: "https://tiktok.com/@yoursalon",
-    color: "from-zinc-700/30 to-zinc-800/30",
-    iconColor: "text-zinc-300",
-    bgColor: "bg-zinc-700/20",
-    borderColor: "border-zinc-600/30",
+    key: "pinterest",
+    label: "Pinterest",
+    icon: Pin,
+    placeholder: "https://www.pinterest.com/yoursalon",
+    color: "from-red-500/10 to-rose-600/10",
+    iconColor: "text-red-400",
+    bgColor: "bg-red-500/10",
+    borderColor: "border-red-500/20",
   },
 ]
 
@@ -90,7 +90,7 @@ export default function SocialPage() {
       const { data, error } = await supabase
         .from("social_media")
         .select("*")
-        .in("platform", ["instagram", "facebook", "tiktok"])
+        .in("platform", ["instagram", "facebook", "pinterest"])
       if (error) throw error
       return (data ?? []) as SocialMedia[]
     },

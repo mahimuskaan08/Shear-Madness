@@ -16,6 +16,7 @@ import {
   ArrowLeftRight,
   LayoutDashboard,
   LogOut,
+  UserCog,
   ChevronRight,
   X,
 } from "lucide-react"
@@ -37,6 +38,7 @@ const navItems = [
   { href: "/admin/social", label: "Social Media", icon: Share2 },
   { href: "/admin/faq", label: "FAQ", icon: HelpCircle },
   { href: "/admin/testimonials", label: "Testimonials", icon: Star },
+  { href: "/admin/users", label: "Users", icon: UserCog },
 ]
 
 interface AdminSidebarProps {

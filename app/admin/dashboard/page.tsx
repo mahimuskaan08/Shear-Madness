@@ -13,6 +13,7 @@ import {
   Phone,
   Share2,
   TrendingUp,
+  UserCog,
 } from "lucide-react"
 import { formatDate } from "@/lib/utils"
 
@@ -106,7 +107,7 @@ const sections = [
   {
     href: "/admin/social",
     label: "Social Media",
-    description: "Manage Instagram, Facebook & TikTok",
+    description: "Manage Instagram, Facebook & Pinterest",
     icon: Share2,
     bg: "bg-fuchsia-600",
     iconBg: "bg-fuchsia-500",
@@ -126,6 +127,14 @@ const sections = [
     icon: Star,
     bg: "bg-yellow-500",
     iconBg: "bg-yellow-400",
+  },
+  {
+    href: "/admin/users",
+    label: "Users",
+    description: "Add or remove admin logins",
+    icon: UserCog,
+    bg: "bg-slate-600",
+    iconBg: "bg-slate-500",
   },
 ]
 

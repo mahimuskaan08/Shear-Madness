@@ -155,6 +155,7 @@ export interface Database {
           customer_photo_path: string | null
           review: string
           rating: number
+          source: "google" | "fresha"
           is_visible: boolean
           created_at: string
           updated_at: string
@@ -166,6 +167,7 @@ export interface Database {
           customer_photo_path?: string | null
           review: string
           rating: number
+          source?: "google" | "fresha"
           is_visible?: boolean
           created_at?: string
           updated_at?: string
@@ -177,6 +179,7 @@ export interface Database {
           customer_photo_path?: string | null
           review?: string
           rating?: number
+          source?: "google" | "fresha"
           is_visible?: boolean
           created_at?: string
           updated_at?: string

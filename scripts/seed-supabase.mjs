@@ -159,7 +159,7 @@ console.log("Seeding social media...")
 const socials = [
   { platform: "instagram", url: "https://www.instagram.com/shearmadnesshoboken/", is_enabled: true },
   { platform: "facebook",  url: "https://www.facebook.com/ShearMadnessHobokenNJ/", is_enabled: true },
-  { platform: "tiktok",    url: "", is_enabled: false },
+  { platform: "pinterest", url: "https://www.pinterest.com/ShearMadnessHob/", is_enabled: true },
 ]
 for (const s of socials) {
   const { error } = await supabase.from("social_media")

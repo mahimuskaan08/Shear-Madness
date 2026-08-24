@@ -44,6 +44,8 @@ export type SiteTestimonial = {
   customer_photo_url: string | null
   review: string
   rating: number
+  /** Where the review was copied from. Absent on rows predating the column. */
+  source?: "google" | "fresha" | null
 }
 
 export type PortfolioAngleImage = {
@@ -156,6 +158,31 @@ async function fetchServices(
   return (res.data as SiteService[]) ?? []
 }
 
+async function fetchTestimonials(
+  supabase: ReturnType<typeof getPublicClient>,
+): Promise<SiteTestimonial[]> {
+  const cols = "id, customer_name, customer_photo_url, review, rating, source"
+  const legacyCols = "id, customer_name, customer_photo_url, review, rating"
+
+  const res = await supabase
+    .from("testimonials")
+    .select(cols)
+    .eq("is_visible", true)
+    .order("created_at", { ascending: false })
+
+  if (res.error) {
+    const fb = await supabase
+      .from("testimonials")
+      .select(legacyCols)
+      .eq("is_visible", true)
+      .order("created_at", { ascending: false })
+    if (fb.error) return []
+    return (fb.data as SiteTestimonial[]) ?? []
+  }
+
+  return (res.data as SiteTestimonial[]) ?? []
+}
+
 async function fetchPortfolioImages(
   supabase: ReturnType<typeof getPublicClient>,
   category?: "women" | "men" | "both",
@@ -186,7 +213,7 @@ export async function getSiteData(): Promise<SiteData> {
     bgRes,
     services,
     teamRes,
-    testimonialRes,
+    testimonials,
     portfolioImages,
     baRes,
     faqRes,
@@ -198,7 +225,7 @@ export async function getSiteData(): Promise<SiteData> {
     supabase.from("backgrounds").select("section, image_url"),
     fetchServices(supabase),
     supabase.from("team_members").select("id, name, position, bio, image_url, display_order").order("display_order"),
-    supabase.from("testimonials").select("id, customer_name, customer_photo_url, review, rating").eq("is_visible", true).order("created_at", { ascending: false }),
+    fetchTestimonials(supabase),
     fetchPortfolioImages(supabase),
     supabase.from("before_after_gallery").select("id, title, before_image_url, after_image_url, display_order").order("display_order"),
     supabase.from("faq").select("id, question, answer, display_order").eq("is_visible", true).order("display_order"),
@@ -212,7 +239,7 @@ export async function getSiteData(): Promise<SiteData> {
     backgrounds: (bgRes.data as SiteBackground[]) ?? [],
     services,
     team: (teamRes.data as SiteTeamMember[]) ?? [],
-    testimonials: (testimonialRes.data as SiteTestimonial[]) ?? [],
+    testimonials,
     portfolioImages,
     beforeAfter: (baRes.data as SiteBeforeAfter[]) ?? [],
     faq: (faqRes.data as SiteFAQ[]) ?? [],
